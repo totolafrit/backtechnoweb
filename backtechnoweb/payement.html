@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="payement.css">
+</head>
+<body>
+    <div class="cart-container">
+        <h1>Votre Panier</h1>
+        <div class="cart-items">
+            <!-- Dynamically generated items go here -->
+            <div class="cart-item">
+                <img src="product.jpg" alt="Produit">
+                <div class="item-details">
+                    <h2>Nom du Produit</h2>
+                    <p>Prix : $XX</p>
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+        </div>
+        <div class="cart-total">
+            <h2>Total : $XX.XX</h2>
+            <button id="checkout-button">Procéder au Paiement</button>
+        </div>
+    </div>
+</body>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="app.js"></script>
+</html>
