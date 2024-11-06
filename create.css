@@ -1,0 +1,89 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #D8CFC4; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.signup-container { /* Changement de nom de classe */
+    background-color: #738b66; 
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.836);
+    width: 400px;
+    text-align: center;
+}
+
+.logo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; 
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 2em;
+    margin-bottom: 30px;
+    color: #f4f4f4; 
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: #f4f4f4; /* Texte en blanc */
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2em;
+    border: 1px solid #f4f4f4; /* Bordure blanche */
+    border-radius: 8px;
+    background-color: #f4f4f4;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2em;
+    background-color: #000000; /* Bouton noir */
+    color: white; /* Texte du bouton en blanc */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #1a1a1a; /* Bouton devient plus foncé au survol */
+}
+
+p {
+    margin-top: 20px;
+    font-size: 1.1em;
+    color: #f4f4f4; /* Texte en blanc */
+}
+
+p a {
+    color: #f4f4f4; /* Liens en blanc */
+    text-decoration: none;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
