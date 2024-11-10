@@ -1,16 +1,16 @@
-require('dotenv').config();
-const express = require('express');
-const mysql = require('mysql');
-const cors = require('cors');
+require('dotenv').config(); // recup les infos de info.env
+const express = require('express'); // créer et gerer le serv web
+const mysql = require('mysql'); // se connecter à la db, vérifiez les infos dans info.env
+const cors = require('cors'); // recommander pour gérer certaines API
 
-require('dotenv').config({ path: './info.env' }); // faites att ici à vos infos du fichier info.env
+require('dotenv').config({ path: './info.env' }); // pour éviter des problèmes de chemins 
 
 
 const app = express();
 const PORT = process.env.PORT || 3000; 
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); //analyse les requees post
 app.use(express.urlencoded({ extended: true }));
 
 // connexion a la db "dbtechnoback" 
@@ -21,7 +21,7 @@ const db = mysql.createConnection({
     database: process.env.DB_NAME,
 });
 
-db.connect((err) => { // si erreur ici vérifiez le port - si votre db est correct -
+db.connect((err) => { // si erreur ici vérifiez le port ou les variables dans du fichier .env
     if (err) {
         console.error("Erreur de connexion à la database :", err);
         return;
@@ -37,11 +37,11 @@ app.get('/', (req, res) => { // test serveur - voir console
 app.post('/register', (req, res) => {
     const { username, email, password } = req.body;
 
-    if (!username || !email || !password) {
+    if (!username || !email || !password) { // envoie l'erreur 400 s'il manque une des variables
         return res.status(400).json({ message: "Les champs nom d'utilisateur, email, et mot de passe sont requis." });
     }
 
-    const query = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
+    const query = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)'; // ajout des infos dans la db
 
     db.query(query, [username, email, password], (err, result) => {
         if (err) {
@@ -52,7 +52,7 @@ app.post('/register', (req, res) => {
     });
 });
 
-// route POst pour la connexion
+// route Post pour la connexion
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
 
@@ -60,7 +60,7 @@ app.post('/login', (req, res) => {
         return res.status(400).json({ message: "Nom d'utilisateur et mot de passe requis." });
     }
 
-    const query = 'SELECT * FROM users WHERE username = ?'; 
+    const query = 'SELECT * FROM users WHERE username = ?'; // simple commande pour récup facilement toutes les infos
     db.query(query, [username], (err, results) => {
         if (err) {
             console.error("Erreur lors de la connexion :", err);
@@ -72,6 +72,7 @@ app.post('/login', (req, res) => {
         }
 
         return res.json({ message: 'Connexion réussie!' });
+       
     });
 });
 
