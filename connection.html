@@ -24,33 +24,40 @@
         <p>Pas encore de compte ? <a href="create.html">S'inscrire</a></p>
     </div>
 
-    <script> // on récup ici les infos de la DB pour vérifier les infos
-        document.querySelector('form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value; // recup de l'username - voir db
-            const password = document.getElementById('password').value;
-          
-            try {
-              const response = await fetch('http://localhost:3000/login', { // vous mettrez votre localhost
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+    <script>
+      // on récupère ici les infos de la DB pour vérifier les infos
+      document.querySelector('form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const username = document.getElementById('username').value;
+          const password = document.getElementById('password').value;
+
+          try {
+              const response = await fetch('http://localhost:3000/login', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ username, password })
               });
-          
+
               if (!response.ok) {
-                const errorData = await response.json();
-                alert(`Erreur : ${errorData.message}`);
+                  const errorData = await response.json();
+                  alert(`Erreur : ${errorData.message}`);
               } else {
-                const result = await response.json();
-                //alert(result.message);
-                
-                window.location.href = 'accueil.html';// redirec vers accueil.html
+                  const result = await response.json();
+                  // Stocker l'information de connexion
+                  localStorage.setItem('isLoggedIn', 'true');
+                  localStorage.setItem('redirectAfterLogin', window.location.href);  // Stocker l'URL actuelle avant la connexion
+
+                  
+                      window.location.href = 'accueil.html';
+
+
               }
-            } catch (error) {
+          } catch (error) {
               console.error("Erreur lors de la requête :", error);
               alert("Erreur de connexion au serveur.");
-            }
-          });
-    </script>
+          }
+      });
+  </script>
+  
 </body>
 </html>

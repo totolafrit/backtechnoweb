@@ -24,6 +24,8 @@
                 <li><a href="project.html">Project</a></li>
                 <li><a href="actualites.html">Actuality</a></li>
                 <li><a href="conseils.html">Advices</a></li>
+                <!-- on mettra panier.html plus tard-->
+                <li><a href="fakepanier.html">Mon panier</a></li> 
             </ul>
         </nav>
     </header>
@@ -37,11 +39,23 @@
             </div>
 
             <div class="product-details">
-                <h1>Nom du Produit</h1>
+              <!--  <h1>Nom du Produit</h1>
+                On precise la class "product-name" pour pourvoir gérer le produit dans le localstorage et l'add au panier
+              -->
+                <h1 class="product-name">Troçonneuse TechnoWeb</h1>
                 <p class="price">€49,99</p>
                 <p class="description">Ce produit est parfait pour le jardinage, avec des matériaux de haute qualité et une durabilité exceptionnelle. Il est idéal pour améliorer votre jardin et créer un espace magnifique.</p>
                 
-                <button class="add-to-cart">Ajouter au panier</button>
+                <!--  <button class="add-to-cart">Ajouter au panier</button>   -->
+                 <!--
+
+                 ajout de la fonction addToCart() qui va recup les infos(nom/prix) 
+                 - voir la fonction js apres le footer
+                  
+                 -->
+                <button class="add-to-cart" onclick="addToCart()">Ajouter au panier</button> 
+               
+
 
                 <!-- Informations additionnelles -->
                 <div class="additional-info">
@@ -92,6 +106,51 @@
         <p>&copy; 2024 L'Arbre En Vie - Tous droits réservés</p>
     </footer>
 
+    <!-- fonction pour gérer l'ajout d'un produit dans le localstorage
+     
+    verif s’il existe déjà un panier dans lelocalstorage. si oui, ajoute le produit a la lste qui exite deja sinon crée un nouveau tableau dans le panier . et enregistre le panier maj dans le localsorage.
+    -->
+    <script>
+        function addToCart() {
+           
+            const productNameElement = document.querySelector('.product-name');
+            const productPriceElement = document.querySelector('.price');
+        
+            if (!productNameElement || !productPriceElement) { // verifie que l'élément existe avant de l'utiliser
+                console.error("Erreur: l'élément du nom ou du prix du produit est introuvable.");
+                return;
+            }
+        
+            const productName = productNameElement.textContent;
+            const productPriceText = productPriceElement.textContent;
+        
+            // remplace la virgule par un point pour eviter les problemes de format pour recup les donnees
+            const productPrice = parseFloat(productPriceText.replace('€', '').trim().replace(',', '.'));
+        
+            
+            const product = {// on cree un objet avec les caracteristique qu'on lui attribue
+                name: productName,
+                price: productPrice,
+                quantity: 1,
+            };
+        
+            // recup du panier actuel depuis le localstorage
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+            const existingProduct = cart.find(item => item.name === product.name); // on verifie si le produit est déjà dans le panier
+        
+            if (existingProduct) {  
+                existingProduct.quantity += 1;     // si le produit est déjà dans le panier alors +1
+            } else {
+                cart.push(product);             // mais si il n'estpas dans le panier, on l'ajoute au cart du localstorage
+            }
+        
+           
+            localStorage.setItem('cart', JSON.stringify(cart)); // sauvegarde du panier mis à jour dans localstorage
+
+            alert('Produit ajouté au panier');
+        }
+    </script>
 </body>
 
 </html>
