@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+   <meta charset="UTF-8">
+
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>Manage News</title>
+
+   <link rel="stylesheet" href="admin.css">
+
+</head>
+
+<body>
+
+
+   <header>
+
+       <h1>Manage News</h1>
+
+       <nav>
+
+           <ul class="nav-menu">
+
+               <li><a href="admin.html">Dashboard</a></li>
+
+               <li><a href="logout.html">Logout</a></li>
+
+           </ul>
+
+       </nav>
+
+   </header>
+
+
+   <main>
+
+       <section class="admin-section">
+
+           <h2>News Management</h2>
+
+           <button onclick="addNews()">Add News</button>
+
+           <button onclick="toggleVisibility('news-list')" class="toggle-button">Show News</button>
+
+           <div id="news-list" class="toggle-content">
+
+               <div class="admin-item">
+
+                   <h3>Tree Pruning Conference</h3>
+
+                   <button onclick="editNews('Tree Pruning Conference')">Edit</button>
+
+                   <button onclick="deleteNews('Tree Pruning Conference')">Delete</button>
+
+               </div>
+
+               <!-- Add more news items here -->
+
+           </div>
+
+       </section>
+
+   </main>
+
+
+   <footer>
+
+       <p>&copy; 2024 L'Arbre En Vie - All Rights Reserved</p>
+
+   </footer>
+
+
+   <script src="admin.js"></script>
+
+</body>
+
+</html>
+
+
+

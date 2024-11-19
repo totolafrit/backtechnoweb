@@ -4,9 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart</title>
-    <link rel="stylesheet" href="payement.css">
+    <!--<link rel="stylesheet" href="payement.css"> -->
+    <link rel="stylesheet" href="fakepanier.css">
 </head>
 <body>
+    <header>
+        <nav>
+            <ul class="nav-menu">
+                <button id="logoutButton">Déconnexion</button>
+                <li><a href="accueil.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="project.html">Project</a></li>
+                <li><a href="actualites.html">Actuality</a></li>
+                <li><a href="conseils.html">Advices</a></li>
+                 <!-- on mettra panier.html plus tard-->
+                 <li><a href="fakepanier.html">Mon panier</a></li> 
+            </ul>
+        </nav>
+    </header>
     <div class="cart-container">
         <h1>Votre Panier</h1>
         <div class="cart-items">
@@ -26,6 +42,17 @@
         </div>
     </div>
 </body>
+
 <script src="https://js.stripe.com/v3/"></script>
 <script src="app.js"></script>
+
+<script> //Fonction pour déconnecter l'utilisateur
+    document.getElementById('logoutButton').addEventListener('click', function() {
+        // Supprimer l'information de connexion du localStorage
+        localStorage.removeItem('isLoggedIn');
+        
+        // Rediriger vers la page d'accueil après déconnexion
+        window.location.href = 'accueil.html';
+    });
+    </script>
 </html>

@@ -57,7 +57,8 @@
                 alert(`Erreur: ${errorData.message}`);
             } else {
                 const result = await response.json();
-                alert(result.message);
+                //alert(result.message);
+                window.location.href = 'connection.html';// redirec  auto vers connexionhtml
             }
         });
     </script>

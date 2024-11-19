@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+   <meta charset="UTF-8">
+
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>Manage Orders</title>
+
+   <link rel="stylesheet" href="manage-order.css">
+
+</head>
+
+<body>
+
+
+   <header>
+
+       <h1>Manage Orders</h1>
+
+       <nav>
+
+           <ul class="nav-menu">
+
+               <li><a href="admin.html">Dashboard</a></li>
+
+               <li><a href="logout.html">Logout</a></li>
+
+           </ul>
+
+       </nav>
+
+   </header>
+
+
+   <main>
+
+       <section class="admin-section">
+
+           <h2>Order Management</h2>
+
+           <button onclick="toggleVisibility('order-list')" class="toggle-button">Show Orders</button>
+
+           <div id="order-list" class="toggle-content">
+
+               <!-- Order Example -->
+
+               <div class="admin-item">
+
+                   <h3>Order #001</h3>
+
+                   <p>Customer: John Doe</p>
+
+                   <p>Product: Garden Pruning Shears</p>
+
+                   <p>Status: <span class="order-status">Not Prepared</span></p>
+
+                   <div class="order-actions">
+
+                       <button onclick="updateOrderStatus('Order #001', 'Being Prepared')">Mark as Being Prepared</button>
+
+                       <button onclick="updateOrderStatus('Order #001', 'Ready for Pickup')">Mark as Ready for Pickup</button>
+
+                       <button onclick="updateOrderStatus('Order #001', 'Delivered')">Mark as Delivered</button>
+
+                       <button onclick="cancelOrder('Order #001')">Cancel Order</button>
+
+                       <button onclick="viewOrderDetails('Order #001')">View Details</button>
+
+                   </div>
+
+               </div>
+
+               <!-- Add More Orders Here -->
+
+               <div class="admin-item">
+
+                   <h3>Order #002</h3>
+
+                   <p>Customer: Jane Smith</p>
+
+                   <p>Product: Organic Fertilizer</p>
+
+                   <p>Status: <span class="order-status">Being Prepared</span></p>
+
+                   <div class="order-actions">
+
+                       <button onclick="updateOrderStatus('Order #002', 'Ready for Pickup')">Mark as Ready for Pickup</button>
+
+                       <button onclick="updateOrderStatus('Order #002', 'Delivered')">Mark as Delivered</button>
+
+                       <button onclick="cancelOrder('Order #002')">Cancel Order</button>
+
+                       <button onclick="viewOrderDetails('Order #002')">View Details</button>
+
+                   </div>
+
+               </div>
+
+           </div>
+
+       </section>
+
+   </main>
+
+
+   <footer>
+
+       <p>&copy; 2024 L'Arbre En Vie - All Rights Reserved</p>
+
+   </footer>
+
+
+   <script src="admin.js"></script>
+
+</body>
+
+</html>
+
+

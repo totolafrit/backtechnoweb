@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Panier</title>
+    <link rel="stylesheet" href="fakepanier.css"> <!-- met le css approprié-->
+
+</head>
+<body>
+    <!-- En-tête -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <button id="logoutButton">Déconnexion</button>
+                <li><a href="accueil.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="project.html">Project</a></li>
+                <li><a href="actualites.html">Actuality</a></li>
+                <li><a href="conseils.html">Advices</a></li>
+                 <!-- on mettra panier.html plus tard-->
+                 <li><a href="fakepanier.html">Mon panier</a></li> 
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Page Panier -->
+    <main class="cart-page">
+        <h1>Votre panier</h1>
+        <div id="cart-items">
+        
+        </div>
+        <div id="cart-total"> <!-- somme total -->
+         
+        </div>
+        
+        <button class="clear-cart-button" onclick="clearCart()">Vider le panier</button> <!--petite class CSS pour la beauté-->
+
+<button id="checkout-btn" onclick="validateOrder()">Passer la commande</button>
+
+    </main>
+
+    <!-- Pied de page -->
+    <footer>
+        <p>&copy; 2024 L'Arbre En Vie - Tous droits réservés</p>
+    </footer>
+
+    <script>
+        // Fonction pour formater le prix selon qu'il soit entier ou avec centimes
+        function formatPrice(price) {
+            return price.toFixed(2).replace('.', ','); // Toujours avec 2 décimales et remplace le point par une virgule
+        }
+
+        function loadCart() {
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || []; 
+            const cartContainer = document.getElementById('cart-items');
+            const cartTotalContainer = document.getElementById('cart-total');
+            cartContainer.innerHTML = '';  // Réinitialise le contenu du panier à chaque chargement
+
+            let totalSum = 0;  // Variable pour stocker la somme totale des articles
+
+            if (cartItems.length === 0) {
+                cartContainer.innerHTML = '<p>Votre panier est vide.</p>';
+                cartTotalContainer.innerHTML = ''; // Si le panier est vide, aucune somme affichée
+            } else {
+                // Pour chaque article du panier
+                cartItems.forEach(item => {
+                    let existingCartItemDiv = document.getElementById('cart-item-' + item.name);
+
+                    if (!existingCartItemDiv) {
+                        // Si l'élément n'existe pas encore dans le DOM, on le crée
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = 'cart-item';
+                        itemDiv.id = 'cart-item-' + item.name; // ID unique pour l'article
+                        itemDiv.innerHTML = `
+                            <h2>${item.name}</h2>
+                            <p>Prix unitaire : €${formatPrice(item.price)}</p>
+                            <p>Quantité : <span id="quantity-${item.name}">${item.quantity}</span></p>
+                            <p>Prix total : €${formatPrice(item.price * item.quantity)}</p>
+                            <button onclick="updateQuantity('${item.name}', 1)">+1</button>
+                            <button onclick="updateQuantity('${item.name}', -1)">-1</button>
+                        `;
+                        cartContainer.appendChild(itemDiv);
+                    } else {
+                        // Si l'élément existe déjà, on met à jour sa quantité et le prix total
+                        existingCartItemDiv.querySelector('p:nth-child(3)').textContent = `Quantité : ${item.quantity}`;
+                        existingCartItemDiv.querySelector('p:nth-child(4)').textContent = `Prix total : €${formatPrice(item.price * item.quantity)}`;
+                    }
+
+                    // Ajout du prix de cet article à la somme totale
+                    totalSum += item.price * item.quantity;
+                });
+
+                // Affichage de la somme totale des articles dans le panier
+                cartTotalContainer.innerHTML = `
+                    <h3>Total de votre panier : €${formatPrice(totalSum)}</h3>
+                `;
+            }
+        }
+
+        function updateQuantity(productName, change) {
+            let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            const item = cartItems.find(cartItem => cartItem.name === productName);
+
+            if (item) {
+                item.quantity += change;
+                // Si la quantité devient 0 ou moins, on supprime l'article
+                if (item.quantity <= 0) {
+                    cartItems = cartItems.filter(cartItem => cartItem.name !== productName);
+                }
+                // Mise à jour du panier dans le localStorage
+                localStorage.setItem('cart', JSON.stringify(cartItems));
+                loadCart(); // Recharger le panier
+            }
+        }
+
+        function clearCart() {
+            localStorage.removeItem('cart');
+            loadCart();
+        }
+
+        window.onload = loadCart;
+    </script>
+
+    <script> // pour passer la commande
+            function validateOrder() {
+                const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+                
+                if (cartItems.length === 0) {
+                    alert("Votre panier est vide. Ajoutez des articles pour passer la commande.");
+                    return;
+                }else {
+       // Vérifier si l'utilisateur est connecté
+              
+       if (!localStorage.getItem('isLoggedIn')) {
+        // Si non connecté, rediriger vers connexion.html
+        alert('Veuillez vous connecter avant de payer!');
+        window.location.href = 'connection.html';
+    } else {
+       
+                window.location.href = 'payement.html'; 
+    } 
+                }
+            } 
+        </script>
+        
+
+       
+       
+        <script> //Fonction pour déconnecter l'utilisateur 
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            // Supprimer l'information de connexion du localStorage
+            localStorage.removeItem('isLoggedIn');
+            
+            // Rediriger vers la page d'accueil après déconnexion
+            window.location.href = 'accueil.html';
+        });
+        </script>
+</body>
+</html>
