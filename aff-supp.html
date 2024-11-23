@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="aff-supp.css">
+    <title>Document</title>
+</head>
+<body>
+    <table id="products-table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prix</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Supprimer</th>
+            </tr>
+        </thead>
+        <tbody id="products-list">
+            <!-- Les produits seront insérés ici -->
+        </tbody>
+    </table>
+    
+    <script>
+        async function fetchProducts() {
+            try {
+                const response = await fetch('http://localhost:3000/api/products');
+                const products = await response.json();
+        
+                const productsList = document.getElementById('products-list');
+                productsList.innerHTML = '';
+        
+                console.log('Products:', products);  // Vérifie que 'products' contient bien les données
+                
+                // Boucle sur les produits pour les afficher
+                products.forEach(product => {
+                    console.log('Product:', product);  // Vérifie l'objet 'product'
+                    console.log('Image URL:', product.image_url);  // Affiche l'URL de l'image
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${product.name}</td>
+                        <td>${product.price} €</td>
+                        <td>${product.description}</td>
+                        <td>
+                            <img src="http://localhost:3000/images/${product.image_url}" alt="${product.name}" width="100">
+                        </td>
+                        <td><button onclick="deleteProduct(${product.id})">Supprimer</button></td>
+                    `;
+                    productsList.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Erreur lors de la récupération des produits :', error);
+            }
+        }
+    
+        async function deleteProduct(id) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/products/${id}`, {
+                    method: 'DELETE',
+                });
+    
+                if (response.ok) {
+                    alert('Produit supprimé');
+                    fetchProducts(); // Rafraîchit la liste des produits après suppression
+                } else {
+                    const data = await response.json();
+                    alert('Erreur : ' + data.message);
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Erreur lors de la suppression du produit');
+            }
+        }
+    
+        // Récupérer les produits au chargement de la page
+        fetchProducts();
+    </script>
+    
+    
+</body>
+</html>

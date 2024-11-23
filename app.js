@@ -2,6 +2,7 @@ require('dotenv').config(); // Charger les informations de info.env
 const express = require('express'); // Créer et gérer le serveur web
 const mysql = require('mysql'); // Se connecter à la base de données
 const cors = require('cors'); // Recommandé pour gérer certaines API
+const path = require('path'); // Ajoute cette ligne pour définir 'path'
 
 require('dotenv').config({ path: './info.env' }); // Éviter les problèmes de chemins
 
@@ -11,6 +12,13 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json()); // Analyser les requêtes POST
 app.use(express.urlencoded({ extended: true }));
+
+// Middleware pour servir les fichiers statiques (images)
+
+app.use('/images', express.static('images'));
+
+//app.use('/images', express.static(path.join(__dirname, 'public/images')));
+
 
 // Connexion à la base de données "dbtechnoback"
 const db = mysql.createConnection({
@@ -128,6 +136,54 @@ app.delete('/delete-user/:id', checkAdminRole, (req, res) => {
         res.json({ message: "Utilisateur supprimé avec succès." });
     });
 });
+
+// Ajout d'un produit
+app.post('/api/products', (req, res) => {
+    const { name, price, description, image_url } = req.body;
+
+    // Vérifier que l'image_url est valide (ajouter un contrôle ici si nécessaire)
+    if (!image_url || !name || !price || !description) {
+        return res.status(400).json({ message: 'Tous les champs sont requis' });
+    }
+
+    const query = 'INSERT INTO products (name, price, description, image_url) VALUES (?, ?, ?, ?)';
+    db.query(query, [name, price, description, image_url], (err, result) => {
+        if (err) {
+            console.error('Erreur lors de l\'ajout du produit :', err);
+            return res.status(500).json({ message: 'Erreur lors de l\'ajout du produit' });
+        }
+        res.status(200).json({ message: 'Produit ajouté avec succès' });
+    });
+});
+
+
+// Route pour récupérer tous les produits
+app.get('/api/products', (req, res) => {
+    const query = 'SELECT * FROM products';
+    db.query(query, (err, result) => {
+        if (err) {
+            console.error('Erreur lors de la récupération des produits:', err);
+            return res.status(500).json({ message: 'Erreur lors de la récupération des produits' });
+        }
+        res.status(200).json(result);  // Renvoie la liste des produits au format JSON
+    });
+});
+
+
+// Route pour supprimer un produit
+app.delete('/api/products/:id', (req, res) => {
+    const productId = req.params.id;
+
+    const query = 'DELETE FROM products WHERE id = ?';
+    db.query(query, [productId], (err, result) => {
+        if (err) {
+            console.error('Erreur lors de la suppression du produit :', err);
+            return res.status(500).json({ message: 'Erreur lors de la suppression du produit' });
+        }
+        res.status(200).json({ message: 'Produit supprimé avec succès' });
+    });
+});
+
 
 app.listen(PORT, () => {
     console.log(`Serveur démarré sur le port ${PORT}`);
