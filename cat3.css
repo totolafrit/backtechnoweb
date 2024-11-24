@@ -68,9 +68,10 @@ header {
 }
 
 .article img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
+    max-width: 200px; /* Limite la largeur maximale de l'image */
+    height: auto; /* Maintient le ratio d'aspect */
+    display: block;
+    margin: 0 auto; /* Centrer l'image */
 }
 
 .article h2 {

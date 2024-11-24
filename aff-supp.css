@@ -1,117 +1,146 @@
-/* Style général */
+/* Styles généraux */
 body {
     font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
     margin: 0;
-    padding: 0;
+    padding: 20px;
     color: #333;
-    background-color: #f4f4f4; /* Fond clair pour la page */
 }
 
-/* Style du tableau des produits */
-table {
-    width: 90%;
-    margin: 40px auto;
-    border-collapse: collapse; /* Fusionner les bordures */
-    background-color: #fff; /* Fond blanc pour la table */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Légère ombre autour de la table */
+/* Table des produits */
+#products-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-th, td {
-    padding: 12px;
+#products-table th,
+#products-table td {
     text-align: left;
-    border-bottom: 1px solid #ddd; /* Séparateurs de ligne */
+    padding: 12px;
+    border: 1px solid #ddd;
 }
 
-th {
-    background-color: #4CAF50; /* Fond vert pour les en-têtes */
-    color: white; /* Texte blanc pour les en-têtes */
+#products-table th {
+    background-color: #4CAF50;
+    color: white;
     font-weight: bold;
 }
 
-td img {
-    width: 100px;
-    border-radius: 5px;
+#products-table tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
+#products-table tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+#products-table img {
+    max-width: 100px;
+    border-radius: 8px;
+}
+
+/* Boutons */
 button {
-    background-color: #f44336; /* Fond rouge pour les boutons de suppression */
-    color: white;
     padding: 8px 12px;
     border: none;
-    cursor: pointer;
     border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
     transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #d32f2f; /* Rouge foncé au survol */
+    opacity: 0.9;
 }
 
-/* Style de la page et mise en page */
-#products-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+button:active {
+    transform: scale(0.98);
 }
 
-/* Ajouter un espacement entre les produits dans le tableau */
-tr {
+button:nth-child(1) {
+    background-color: #e74c3c; /* Rouge pour supprimer */
+}
+
+button:nth-child(2) {
+    background-color: #3498db; /* Bleu pour modifier */
+}
+
+/* Formulaire de modification */
+#edit-form-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+#edit-form-container h2 {
     margin-bottom: 20px;
-}
-
-/* Style des messages d'alerte */
-.alert {
-    background-color: #ff9800; /* Orange pour l'alerte */
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    margin: 10px 0;
+    color: #4CAF50;
     text-align: center;
 }
 
-/* Style pour les produits dans le tableau */
-.product-info {
+#edit-form-container form {
     display: flex;
-    gap: 30px;
-    margin-bottom: 40px;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.product-image img {
-    width: 100%;
-    max-width: 200px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
-
-.product-details {
-    max-width: 600px;
-}
-
-.product-details h1 {
-    font-size: 2em;
-    margin: 0;
+#edit-form-container label {
+    font-size: 14px;
+    font-weight: bold;
     color: #333;
 }
 
-.price {
-    font-size: 1.8em;
-    color: #4CAF50;
-    margin: 15px 0;
+#edit-form-container input,
+#edit-form-container textarea {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
 }
 
-.description {
-    font-size: 1.1em;
-    line-height: 1.6;
+#edit-form-container textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+#edit-form-container button {
+    background-color: #4CAF50;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #products-table {
+        font-size: 14px;
+    }
+
+    #edit-form-container {
+        width: 90%;
+    }
+}
+
+#filter-container {
     margin-bottom: 20px;
-    color: #555;
+    display: flex;
+    gap: 10px;
 }
 
-/* Le footer */
-footer {
-    background-color: #f1f1f1;
-    text-align: center;
-    padding: 15px;
-    margin-top: 40px;
-    font-size: 0.9em;
-    border-top: 1px solid #ddd;
+#search-bar {
+    padding: 5px;
+    width: 200px;
+}
+
+#sort-options {
+    padding: 5px;
 }

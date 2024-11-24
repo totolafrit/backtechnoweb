@@ -139,15 +139,15 @@ app.delete('/delete-user/:id', checkAdminRole, (req, res) => {
 
 // Ajout d'un produit
 app.post('/api/products', (req, res) => {
-    const { name, price, description, image_url } = req.body;
+    const { name, price, description, image_url, category } = req.body;
 
     // Vérifier que l'image_url est valide (ajouter un contrôle ici si nécessaire)
-    if (!image_url || !name || !price || !description) {
+    if (!image_url || !name || !price || !description || !category) {
         return res.status(400).json({ message: 'Tous les champs sont requis' });
     }
 
-    const query = 'INSERT INTO products (name, price, description, image_url) VALUES (?, ?, ?, ?)';
-    db.query(query, [name, price, description, image_url], (err, result) => {
+    const query = 'INSERT INTO products (name, price, description, image_url, category) VALUES (?, ?, ?, ?, ?)';
+    db.query(query, [name, price, description, image_url, category], (err, result) => {
         if (err) {
             console.error('Erreur lors de l\'ajout du produit :', err);
             return res.status(500).json({ message: 'Erreur lors de l\'ajout du produit' });
@@ -170,6 +170,8 @@ app.get('/api/products', (req, res) => {
 });
 
 
+
+
 // Route pour supprimer un produit
 app.delete('/api/products/:id', (req, res) => {
     const productId = req.params.id;
@@ -183,6 +185,84 @@ app.delete('/api/products/:id', (req, res) => {
         res.status(200).json({ message: 'Produit supprimé avec succès' });
     });
 });
+
+// Route pour récupérer un produit spécifique par son ID
+app.get('/api/products/:id', (req, res) => {
+    const productId = req.params.id;
+
+    const query = 'SELECT * FROM products WHERE id = ?';
+    db.query(query, [productId], (err, result) => {
+        if (err) {
+            console.error('Erreur lors de la récupération du produit :', err);
+            return res.status(500).json({ message: 'Erreur serveur lors de la récupération du produit' });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ message: 'Produit non trouvé' });
+        }
+
+        res.status(200).json(result[0]);  // Renvoie le produit spécifique au format JSON
+    });
+});
+
+
+// // Récupérer les articles par catégorie (admin vers shop)
+// app.get('/api/products/category/:categoryId', (req, res) => {
+//     const categoryId = req.params.categoryId;  // Récupère l'ID de la catégorie depuis l'URL
+//     console.log('ID de la catégorie demandé :', categoryId);
+
+//     // Requête SQL pour récupérer les produits ayant la catégorie spécifiée
+//     db.query('SELECT * FROM products WHERE category = ?', [categoryId], (err, results) => {
+//         if (err) {
+//             console.error('Erreur SQL:', err.message);
+//             return res.status(500).json({ error: err.message });
+//         }
+
+//         if (results.length === 0) {
+//             return res.status(404).json({ message: 'Aucun produit trouvé pour cette catégorie' });
+//         }
+
+//         res.json(results);  // Retourne les produits trouvés
+//     });
+// });
+
+app.get('/api/products/category/:categoryId', (req, res) => {
+    const categoryId = req.params.categoryId;
+    db.query('SELECT * FROM products WHERE category = ?', [categoryId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json(results);
+    });
+});
+
+
+
+app.put('/api/products/:id', (req, res) => {
+    const productId = req.params.id;
+    const { name, price, description, image_url, category } = req.body;
+
+    // Vérifiez que tous les champs requis sont fournis
+    if (!name || !price || !description || !image_url || !category) {
+        return res.status(400).json({ message: 'Tous les champs sont requis' });
+    }
+
+    const query = 'UPDATE products SET name = ?, price = ?, description = ?, image_url = ?, category = ? WHERE id = ?';
+    db.query(query, [name, price, description, image_url, category, productId], (err, result) => {
+        if (err) {
+            console.error('Erreur lors de la mise à jour du produit :', err);
+            return res.status(500).json({ message: 'Erreur serveur' });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Produit non trouvé' });
+        }
+
+        res.status(200).json({ message: 'Produit mis à jour avec succès' });
+    });
+});
+
+
 
 
 app.listen(PORT, () => {
