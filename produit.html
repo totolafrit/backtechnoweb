@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produit Détail</title>
+    <link rel="stylesheet" href="produit.css">
+</head>
+
+<body>
+
+    <!-- En-tête -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="accueil.html">Home</a></li>
+                <li><a href="aboutus.html">About us</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="project.html">Projects</a></li>
+                <li><a href="actualites.html">Actuality</a></li>
+                <li><a href="conseils.html">Advices</a></li>
+                <li><a href="fakepanier.html">Mon panier</a></li>
+                <li><a href="connection.html">Connexion</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Page Produit -->
+    <main class="product-page">
+        <section class="product-info">
+            <div class="product-image">
+                <img id="product-image" src="" alt="Produit">
+            </div>
+            <div class="product-details">
+                <h1 id="product-name"></h1>
+                <p id="product-price"></p>
+                <p id="product-description"></p>
+                <button class="add-to-cart" onclick="addToCart()">Ajouter au panier</button>
+                <div class="additional-info">
+                    <h2>Caractéristiques</h2>
+                    <ul id="product-characteristics"></ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="customer-reviews">
+            <h2>Avis des clients</h2>
+            <div id="reviews"></div>
+        </section>
+    </main>
+
+    <!-- Pied de page -->
+    <footer>
+        <p>&copy; 2024 L'Arbre En Vie - Tous droits réservés</p>
+    </footer>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        // Fetch product details based on the product ID
+        fetch(`http://localhost:3000/api/products/${productId}`)
+            .then(response => response.json())
+            .then(product => {
+                document.getElementById('product-image').src = `http://localhost:3000/images/${product.image_url}`;
+                document.getElementById('product-name').textContent = product.name;
+                document.getElementById('product-price').textContent = `${product.price}€`;
+                document.getElementById('product-description').textContent = product.description;
+
+                const characteristicsList = document.getElementById('product-characteristics');
+                product.characteristics.forEach(charac => {
+                    const li = document.createElement('li');
+                    li.textContent = charac;
+                    characteristicsList.appendChild(li);
+                });
+
+                // Show reviews
+                const reviewsContainer = document.getElementById('reviews');
+                product.reviews.forEach(review => {
+                    const reviewElement = document.createElement('div');
+                    reviewElement.classList.add('review');
+                    reviewElement.innerHTML = `
+                        <p><strong>${review.author}</strong> - ★${review.rating}</p>
+                        <p>${review.comment}</p>
+                    `;
+                    reviewsContainer.appendChild(reviewElement);
+                });
+            })
+            .catch(error => {
+                console.error('Erreur lors de la récupération du produit:', error);
+            });
+
+        // Ajouter au panier (localStorage)
+        function addToCart() {
+            const productName = document.getElementById('product-name').textContent;
+            const productPrice = parseFloat(document.getElementById('product-price').textContent.replace('€', '').trim());
+
+            const product = {
+                name: productName,
+                price: productPrice,
+                quantity: 1,
+            };
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingProduct = cart.find(item => item.name === product.name);
+            if (existingProduct) {
+                existingProduct.quantity += 1;
+            } else {
+                cart.push(product);
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert('Produit ajouté au panier');
+        }
+    </script>
+</body>
+
+</html>

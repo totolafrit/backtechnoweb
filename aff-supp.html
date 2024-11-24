@@ -6,7 +6,25 @@
     <link rel="stylesheet" href="aff-supp.css">
     <title>Document</title>
 </head>
+
+<header>
+    <nav>
+        <ul class="nav-menu">
+            <li><a href="shop.html">Shop</a></li>
+        </ul>
+    </nav>
+</header>
 <body>
+    <div id="filter-container">
+        <input type="text" id="search-bar" placeholder="Rechercher par nom..." oninput="filterProducts()">
+        <select id="sort-options" onchange="sortProducts()">
+            <option value="">Trier par</option>
+            <option value="price-asc">Prix croissant</option>
+            <option value="price-desc">Prix décroissant</option>
+            <option value="category">Catégorie</option>
+        </select>
+    </div>
+    
     <table id="products-table">
         <thead>
             <tr>
@@ -14,7 +32,9 @@
                 <th>Prix</th>
                 <th>Description</th>
                 <th>Image</th>
+                <th>Catégorie</th>
                 <th>Supprimer</th>
+                <th>Modifier</th>
             </tr>
         </thead>
         <tbody id="products-list">
@@ -22,45 +42,82 @@
         </tbody>
     </table>
     
+    <!-- Formulaire pour modifier un produit -->
+    <div id="edit-form-container" style="display: none;">
+        <h2>Modifier le produit</h2>
+        <form id="edit-product-form">
+            <label for="edit-name">Nom du produit :</label>
+            <input type="text" id="edit-name" required>
+
+            <label for="edit-price">Prix :</label>
+            <input type="number" id="edit-price" step="0.01" required> <!-- Modification ici -->
+
+            <label for="edit-description">Description :</label>
+            <textarea id="edit-description" required></textarea>
+
+            <label for="edit-image-url">URL de l'image :</label>
+            <input type="text" id="edit-image-url" required>
+
+            <label for="edit-category">Catégorie :</label>
+            <input type="number" id="edit-category" required>
+
+            <input type="hidden" id="edit-product-id">
+            <button type="submit">Sauvegarder les modifications</button>
+        </form>
+    </div>
+    
     <script>
+
+        let allProducts = []; // Tous les produits récupérés du serveur
+
         async function fetchProducts() {
             try {
                 const response = await fetch('http://localhost:3000/api/products');
                 const products = await response.json();
-        
+
+                allProducts = products; // Stocker les produits récupérés
+                displayProducts(products); // Affiche initialement tous les produits
+                // Vérifie si 'products' contient des données
+                console.log('Produits récupérés :', products);
+
                 const productsList = document.getElementById('products-list');
                 productsList.innerHTML = '';
-        
-                console.log('Products:', products);  // Vérifie que 'products' contient bien les données
-                
-                // Boucle sur les produits pour les afficher
-                products.forEach(product => {
-                    console.log('Product:', product);  // Vérifie l'objet 'product'
-                    console.log('Image URL:', product.image_url);  // Affiche l'URL de l'image
-                    
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${product.name}</td>
-                        <td>${product.price} €</td>
-                        <td>${product.description}</td>
-                        <td>
-                            <img src="http://localhost:3000/images/${product.image_url}" alt="${product.name}" width="100">
-                        </td>
-                        <td><button onclick="deleteProduct(${product.id})">Supprimer</button></td>
-                    `;
-                    productsList.appendChild(row);
-                });
+
+                if (Array.isArray(products) && products.length > 0) {
+                    // Boucle sur les produits pour les afficher
+                    products.forEach(product => {
+                        console.log('Produit:', product);  // Vérifie l'objet 'product'
+                        console.log('Image URL:', product.image_url);  // Affiche l'URL de l'image
+                        
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${product.name}</td>
+                            <td>${product.price} €</td>
+                            <td>${product.description}</td>
+                            <td>
+                                <img src="http://localhost:3000/images/${product.image_url}" alt="${product.name}" width="100">
+                            </td>
+                            <td>${product.category}</td>
+                            <td><button onclick="deleteProduct(${product.id})">Supprimer</button></td>
+                            <td><button onclick="editProduct(${product.id})">Modifier</button></td>
+                        `;
+                        productsList.appendChild(row);
+                    });
+                } else {
+                    console.log("Aucun produit trouvé.");
+                    alert("Aucun produit trouvé.");
+                }
             } catch (error) {
                 console.error('Erreur lors de la récupération des produits :', error);
             }
         }
-    
+
         async function deleteProduct(id) {
             try {
                 const response = await fetch(`http://localhost:3000/api/products/${id}`, {
                     method: 'DELETE',
                 });
-    
+
                 if (response.ok) {
                     alert('Produit supprimé');
                     fetchProducts(); // Rafraîchit la liste des produits après suppression
@@ -73,11 +130,115 @@
                 alert('Erreur lors de la suppression du produit');
             }
         }
-    
-        // Récupérer les produits au chargement de la page
+
+        // Fonction pour mettre à jour le produit
+        document.getElementById('edit-product-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const id = document.getElementById('edit-product-id').value;
+            const name = document.getElementById('edit-name').value;
+            const price = document.getElementById('edit-price').value;
+            const description = document.getElementById('edit-description').value;
+            const image_url = document.getElementById('edit-image-url').value;
+            const category = document.getElementById('edit-category').value;
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/products/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, price, description, image_url, category })
+                });
+
+                if (response.ok) {
+                    fetchProducts(); // Rafraîchit la liste des produits après modification
+                    document.getElementById('edit-form-container').style.display = 'none'; // Cacher le formulaire
+                } else {
+                    const data = await response.json();
+                    alert('Erreur : ' + data.message);
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Erreur lors de la mise à jour du produit');
+            }
+        });
+
+        async function editProduct(id) {
+            console.log('ID du produit:', id);  // Ajoutez ce log pour vérifier l'ID
+            try {
+                const response = await fetch(`http://localhost:3000/api/products/${id}`);
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP : ${response.status}`);
+                }
+        
+                const product = await response.json();
+                console.log('Produit récupéré :', product);
+        
+                // Remplir le formulaire avec les données actuelles du produit
+                document.getElementById('edit-name').value = product.name;
+                document.getElementById('edit-price').value = product.price;
+                document.getElementById('edit-description').value = product.description;
+                document.getElementById('edit-image-url').value = product.image_url;
+                document.getElementById('edit-category').value = product.category;
+                document.getElementById('edit-product-id').value = product.id;
+        
+                // Afficher le formulaire de modification
+                document.getElementById('edit-form-container').style.display = 'block';
+            } catch (error) {
+                console.error('Erreur lors de la récupération des données du produit :', error);
+                alert('Erreur lors de la récupération des données du produit');
+            }
+        }
+
+        function displayProducts(products) {
+            const productsList = document.getElementById('products-list');
+            productsList.innerHTML = '';
+        
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${product.price} €</td>
+                    <td>${product.description}</td>
+                    <td>
+                        <img src="http://localhost:3000/images/${product.image_url}" alt="${product.name}" width="100">
+                    </td>
+                    <td>${product.category}</td>
+                    <td><button onclick="deleteProduct(${product.id})">Supprimer</button></td>
+                    <td><button onclick="editProduct(${product.id})">Modifier</button></td>
+                `;
+                productsList.appendChild(row);
+            });
+        }
+
+        function filterProducts() {
+            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+            const filteredProducts = allProducts.filter(product =>
+                product.name.toLowerCase().includes(searchQuery)
+            );
+            displayProducts(filteredProducts); // Réaffiche les produits filtrés
+        }
+
+        function sortProducts() {
+            const sortOption = document.getElementById('sort-options').value;
+            let sortedProducts = [...allProducts]; // Copie des produits
+            
+            if (sortOption === 'price-asc') {
+                sortedProducts.sort((a, b) => a.price - b.price);
+            } else if (sortOption === 'price-desc') {
+                sortedProducts.sort((a, b) => b.price - a.price);
+            } else if (sortOption === 'category') {
+                sortedProducts.sort((a, b) => {
+                    // Convertit les catégories en chaînes de caractères avant de les comparer
+                    return String(a.category).localeCompare(String(b.category));
+                });
+            }
+            
+            displayProducts(sortedProducts); // Réaffiche les produits triés
+        }
+        
+
+        // Initialiser l'affichage des produits
         fetchProducts();
     </script>
-    
-    
 </body>
 </html>

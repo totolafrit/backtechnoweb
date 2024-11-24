@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catégorie 1</title>
     <link rel="stylesheet" href="cat1.css">
 </head>
-
 <body>
     <!-- En-tête de navigation -->
     <nav class="navigation">
@@ -22,57 +20,109 @@
                 <li><a href="project.html">Projects</a></li>
                 <li><a href="actualites.html">Actuality</a></li>
                 <li><a href="conseils.html">Advices</a></li>
-                <!-- on mettra panier.html plus tard-->
-                <li><a href="fakepanier.html">Mon panier</a></li> 
+                <li><a href="fakepanier.html">Mon panier</a></li>
                 <li><a href="connection.html">Connexion</a></li>
             </ul>
         </header>
     </nav>
 
+    <div id="filter-container">
+        <input type="text" id="search-bar" placeholder="Rechercher par nom..." oninput="filterProducts()">
+        <select id="sort-options" onchange="sortProducts()">
+            <option value="">Trier par</option>
+            <option value="price-asc">Prix croissant</option>
+            <option value="price-desc">Prix décroissant</option>
+          
+        </select>
+    </div>
+
     <main>
-        <section class="article-grid">
-            <div class="article">
-                <img src="terre.jpg" alt="Article 1">
-                <h2>Article 1</h2>
-                <p>Description de l'article 1.</p>
-                <a href="a1c1.html" class="read-more">Lire plus</a>
-            </div>
-            <div class="article">
-                <img src="te.jpg" alt="Article 2">
-                <h2>Article 2</h2>
-                <p>Description de l'article 2.</p>
-                <a href="article2.html" class="read-more">Lire plus</a>
-            </div>
-            <div class="article">
-                <img src="article3.jpg" alt="Article 3">
-                <h2>Article 3</h2>
-                <p>Description de l'article 3.</p>
-                <a href="article3.html" class="read-more">Lire plus</a>
-            </div>
-            <div class="article">
-                <img src="article4.jpg" alt="Article 4">
-                <h2>Article 4</h2>
-                <p>Description de l'article 4.</p>
-                <a href="article4.html" class="read-more">Lire plus</a>
-            </div>
-            <div class="article">
-                <img src="article5.jpg" alt="Article 5">
-                <h2>Article 5</h2>
-                <p>Description de l'article 5.</p>
-                <a href="article5.html" class="read-more">Lire plus</a>
-            </div>
-            <div class="article">
-                <img src="article6.jpg" alt="Article 6">
-                <h2>Article 6</h2>
-                <p>Description de l'article 6.</p>
-                <a href="article6.html" class="read-more">Lire plus</a>
-            </div>
+        <section class="article-grid" id="article-grid">
+            <!-- Les articles seront insérés ici via JavaScript -->
         </section>
     </main>
 
+    
     <footer>
         <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
     </footer>
-</body>
 
+    <script>
+
+        let allProducts = []; // Définir la variable allProducts en dehors des fonctions
+
+        // Récupérer les produits lors du chargement de la page
+        fetch('http://localhost:3000/api/products/category/1')
+            .then(response => response.json())
+            .then(products => {
+                allProducts = products; // Mettre à jour allProducts avec les produits récupérés
+                console.log(products); // Vérifie la structure des données
+                const articleGrid = document.getElementById('article-grid');
+                products.forEach(product => {
+                    const articleElement = document.createElement('div');
+                    articleElement.classList.add('article');
+                    articleElement.innerHTML = `
+                        <td>
+                            <img src="http://localhost:3000/images/${product.image_url}" alt="${product.name}" width="50">
+                        </td>
+                        <h2>${product.name}</h2>
+                        <p>${product.description}</p>
+                        <p>Prix : ${product.price}€</p>
+                        <a href="produit.html?id=${product.id}" class="read-more">Lire plus</a>
+                    `;
+                    articleGrid.appendChild(articleElement);
+                });
+            })
+            .catch(error => {
+                console.error('Erreur de récupération des produits :', error);
+            });
+        
+        // Filtrer les produits selon la recherche
+        function filterProducts() {
+            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+            const filteredProducts = allProducts.filter(product =>
+                product.name.toLowerCase().includes(searchQuery)
+            );
+            displayProducts(filteredProducts); // Réaffiche les produits filtrés
+        }
+        
+        // Trier les produits
+        function sortProducts() {
+            const sortOption = document.getElementById('sort-options').value;
+            let sortedProducts = [...allProducts]; // Copie des produits
+            
+            if (sortOption === 'price-asc') {
+                sortedProducts.sort((a, b) => a.price - b.price);
+            } else if (sortOption === 'price-desc') {
+                sortedProducts.sort((a, b) => b.price - a.price);
+            } 
+            
+            console.log('Produits triés :', sortedProducts); // Vérifie le tri
+            displayProducts(sortedProducts); // Réaffiche les produits triés
+        }
+        
+        // Fonction pour afficher les produits
+        function displayProducts(products) {
+            const articleGrid = document.getElementById('article-grid');
+            articleGrid.innerHTML = ''; // Vider la grille avant d'afficher les produits filtrés ou triés
+            
+            products.forEach(product => {
+                const articleElement = document.createElement('div');
+                articleElement.classList.add('article');
+                articleElement.innerHTML = `
+                    <td>
+                        <img src="http://localhost:3000/images/${product.image_url}" alt="${product.name}" width="50">
+                    </td>
+                    <h2>${product.name}</h2>
+                    <p>${product.description}</p>
+                    <p>Prix : ${product.price}€</p>
+                    <a href="produit.html?id=${product.id}" class="read-more">Lire plus</a>
+                `;
+                articleGrid.appendChild(articleElement);
+            });
+        }
+        
+        
+    </script>
+</body>
 </html>
