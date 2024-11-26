@@ -7,6 +7,8 @@
     <title>Document</title>
 </head>
 
+<!-- aff-supp correspond à MANAGE PRODUCTS, en attente de futur maj avec l'addition de create.html-->
+
 <header>
     <nav>
         <ul class="nav-menu">
@@ -38,11 +40,11 @@
             </tr>
         </thead>
         <tbody id="products-list">
-            <!-- Les produits seront insérés ici -->
+            <!-- les produits sont inseres dynamiquement ici -->
         </tbody>
     </table>
     
-    <!-- Formulaire pour modifier un produit -->
+    <!-- EDIT : pour modifier un produit -->
     <div id="edit-form-container" style="display: none;">
         <h2>Modifier le produit</h2>
         <form id="edit-product-form">
@@ -50,7 +52,7 @@
             <input type="text" id="edit-name" required>
 
             <label for="edit-price">Prix :</label>
-            <input type="number" id="edit-price" step="0.01" required> <!-- Modification ici -->
+            <input type="number" id="edit-price" step="0.01" required>
 
             <label for="edit-description">Description :</label>
             <textarea id="edit-description" required></textarea>
@@ -68,29 +70,30 @@
     
     <script>
 
-        let allProducts = []; // Tous les produits récupérés du serveur
+        let allProducts = []; // tous les produits récupérés du serveur
 
         async function fetchProducts() {
             try {
                 const response = await fetch('http://localhost:3000/api/products');
                 const products = await response.json();
 
-                allProducts = products; // Stocker les produits récupérés
-                displayProducts(products); // Affiche initialement tous les produits
-                // Vérifie si 'products' contient des données
-                console.log('Produits récupérés :', products);
+                allProducts = products; // Stocker les produits recup
+                displayProducts(products); 
+               
+                console.log('Produits récupérés :', products); // verif
 
                 const productsList = document.getElementById('products-list');
                 productsList.innerHTML = '';
 
                 if (Array.isArray(products) && products.length > 0) {
-                    // Boucle sur les produits pour les afficher
+    
                     products.forEach(product => {
-                        console.log('Produit:', product);  // Vérifie l'objet 'product'
-                        console.log('Image URL:', product.image_url);  // Affiche l'URL de l'image
+                        console.log('Produit:', product);  
+                        console.log('Image URL:', product.image_url);  
                         
                         const row = document.createElement('tr');
-                        row.innerHTML = `
+                        // affichage des produits
+                        row.innerHTML = ` 
                             <td>${product.name}</td>
                             <td>${product.price} €</td>
                             <td>${product.description}</td>
@@ -120,7 +123,7 @@
 
                 if (response.ok) {
                     alert('Produit supprimé');
-                    fetchProducts(); // Rafraîchit la liste des produits après suppression
+                    fetchProducts(); // update la liste des produits après suppression
                 } else {
                     const data = await response.json();
                     alert('Erreur : ' + data.message);
@@ -150,8 +153,8 @@
                 });
 
                 if (response.ok) {
-                    fetchProducts(); // Rafraîchit la liste des produits après modification
-                    document.getElementById('edit-form-container').style.display = 'none'; // Cacher le formulaire
+                    fetchProducts(); 
+                    document.getElementById('edit-form-container').style.display = 'none';
                 } else {
                     const data = await response.json();
                     alert('Erreur : ' + data.message);
@@ -163,7 +166,7 @@
         });
 
         async function editProduct(id) {
-            console.log('ID du produit:', id);  // Ajoutez ce log pour vérifier l'ID
+            console.log('ID du produit:', id); 
             try {
                 const response = await fetch(`http://localhost:3000/api/products/${id}`);
                 if (!response.ok) {
@@ -173,7 +176,6 @@
                 const product = await response.json();
                 console.log('Produit récupéré :', product);
         
-                // Remplir le formulaire avec les données actuelles du produit
                 document.getElementById('edit-name').value = product.name;
                 document.getElementById('edit-price').value = product.price;
                 document.getElementById('edit-description').value = product.description;
@@ -181,7 +183,7 @@
                 document.getElementById('edit-category').value = product.category;
                 document.getElementById('edit-product-id').value = product.id;
         
-                // Afficher le formulaire de modification
+                // pour afficher le formulaire de modification
                 document.getElementById('edit-form-container').style.display = 'block';
             } catch (error) {
                 console.error('Erreur lors de la récupération des données du produit :', error);
@@ -215,12 +217,12 @@
             const filteredProducts = allProducts.filter(product =>
                 product.name.toLowerCase().includes(searchQuery)
             );
-            displayProducts(filteredProducts); // Réaffiche les produits filtrés
+            displayProducts(filteredProducts);
         }
 
         function sortProducts() {
             const sortOption = document.getElementById('sort-options').value;
-            let sortedProducts = [...allProducts]; // Copie des produits
+            let sortedProducts = [...allProducts]; // copie des produits
             
             if (sortOption === 'price-asc') {
                 sortedProducts.sort((a, b) => a.price - b.price);
@@ -228,16 +230,14 @@
                 sortedProducts.sort((a, b) => b.price - a.price);
             } else if (sortOption === 'category') {
                 sortedProducts.sort((a, b) => {
-                    // Convertit les catégories en chaînes de caractères avant de les comparer
-                    return String(a.category).localeCompare(String(b.category));
+                    
+                    return String(a.category).localeCompare(String(b.category));// convertit les catégories en chaînes de caractères avant de les comparer
                 });
             }
             
-            displayProducts(sortedProducts); // Réaffiche les produits triés
+            displayProducts(sortedProducts);
         }
         
-
-        // Initialiser l'affichage des produits
         fetchProducts();
     </script>
 </body>

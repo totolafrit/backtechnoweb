@@ -13,8 +13,7 @@
     <input type="text" id="name" required>
 
     <label for="price">Prix :</label>
-    <!-- Ajout de l'attribut step pour permettre les décimales -->
-    <input type="number" id="price" step="0.01" required>
+    <input type="number" id="price" step="0.01" required> <!-- step pour les decimales -->
 
     <label for="description">Description :</label>
     <textarea id="description" required></textarea>
@@ -38,15 +37,13 @@
         const image_url = document.getElementById('image_url').value;
         const category = document.getElementById('category').value;
 
-        // Validation du prix pour s'assurer qu'il est un nombre avec deux décimales
         price = parseFloat(price);
         if (isNaN(price) || price < 0) {
             alert('Veuillez entrer un prix valide.');
             return;
         }
 
-        // Formatage du prix avec deux décimales (pour éviter les erreurs de calcul)
-        price = price.toFixed(2); 
+        price = price.toFixed(2);  // avec deux décimales (pour éviter les erreurs de calcul)
 
         try {
             const response = await fetch('http://localhost:3000/api/products', {

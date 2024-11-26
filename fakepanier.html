@@ -69,7 +69,7 @@
                 cartContainer.innerHTML = '<p>Votre panier est vide.</p>';
                 cartTotalContainer.innerHTML = ''; // Si le panier est vide, aucune somme affichée
             } else {
-                // Pour chaque article du panier
+                // pour chaque article du panier
                 cartItems.forEach(item => {
                     let existingCartItemDiv = document.getElementById('cart-item-' + item.name);
 
@@ -111,11 +111,10 @@
 
             if (item) {
                 item.quantity += change;
-                // Si la quantité devient 0 ou moins, on supprime l'article
-                if (item.quantity <= 0) {
+                if (item.quantity <= 0) {// si la qtité devient 0 ou moins on supp l'article
                     cartItems = cartItems.filter(cartItem => cartItem.name !== productName);
                 }
-                // Mise à jour du panier dans le localStorage
+                // mise a jour du panier dans le localStorage
                 localStorage.setItem('cart', JSON.stringify(cartItems));
                 loadCart(); // Recharger le panier
             }
@@ -139,8 +138,7 @@
                 }else {
        // Vérifier si l'utilisateur est connecté
               
-       if (!localStorage.getItem('isLoggedIn')) {
-        // Si non connecté, rediriger vers connexion.html
+       if (!localStorage.getItem('isLoggedIn')) { // si non connecté
         alert('Veuillez vous connecter avant de payer!');
         window.location.href = 'connection.html';
     } else {
@@ -154,12 +152,12 @@
 
        
        
-        <script> //Fonction pour déconnecter l'utilisateur 
+        <script> //Fonction pour déconnecter l'utilisateur qu'on pourra ajouter sur les uatres pages 
         document.getElementById('logoutButton').addEventListener('click', function() {
-            // Supprimer l'information de connexion du localStorage
+          
             localStorage.removeItem('isLoggedIn');
             
-            // Rediriger vers la page d'accueil après déconnexion
+            // redirection vers la page d'accueil après déconnexion -> devient un visitor
             window.location.href = 'accueil.html';
         });
         </script>

@@ -38,7 +38,7 @@
 
     <main>
         <section class="article-grid" id="article-grid">
-            <!-- Les articles seront insérés ici via JavaScript -->
+            <!-- les articles sont insérés dynamiquement ici -->
         </section>
     </main>
 
@@ -49,14 +49,14 @@
 
     <script>
 
-        let allProducts = []; // Définir la variable allProducts en dehors des fonctions
+        let allProducts = []; // tjr en dehors des fonctions
 
-        // Récupérer les produits lors du chargement de la page
+        // pour recup les produits lors du chargement de la page
         fetch('http://localhost:3000/api/products/category/1')
             .then(response => response.json())
             .then(products => {
-                allProducts = products; // Mettre à jour allProducts avec les produits récupérés
-                console.log(products); // Vérifie la structure des données
+                allProducts = products; // mettre à jour allproducts avec les produits récupérés
+                console.log(products); 
                 const articleGrid = document.getElementById('article-grid');
                 products.forEach(product => {
                     const articleElement = document.createElement('div');
@@ -77,19 +77,19 @@
                 console.error('Erreur de récupération des produits :', error);
             });
         
-        // Filtrer les produits selon la recherche
+        // fonction filtre
         function filterProducts() {
             const searchQuery = document.getElementById('search-bar').value.toLowerCase();
             const filteredProducts = allProducts.filter(product =>
                 product.name.toLowerCase().includes(searchQuery)
             );
-            displayProducts(filteredProducts); // Réaffiche les produits filtrés
+            displayProducts(filteredProducts); // re-affiche les produits filtrés
         }
         
-        // Trier les produits
+        // fonction tri
         function sortProducts() {
             const sortOption = document.getElementById('sort-options').value;
-            let sortedProducts = [...allProducts]; // Copie des produits
+            let sortedProducts = [...allProducts]; // copie des produits
             
             if (sortOption === 'price-asc') {
                 sortedProducts.sort((a, b) => a.price - b.price);
@@ -97,16 +97,16 @@
                 sortedProducts.sort((a, b) => b.price - a.price);
             } 
             
-            console.log('Produits triés :', sortedProducts); // Vérifie le tri
-            displayProducts(sortedProducts); // Réaffiche les produits triés
+            console.log('Produits triés :', sortedProducts);
+            displayProducts(sortedProducts); 
         }
         
-        // Fonction pour afficher les produits
+        // fonction pour afficher les produits
         function displayProducts(products) {
             const articleGrid = document.getElementById('article-grid');
-            articleGrid.innerHTML = ''; // Vider la grille avant d'afficher les produits filtrés ou triés
+            articleGrid.innerHTML = ''; //  vidage avant d'afficher les produits filtrés ou triés
             
-            products.forEach(product => {
+            products.forEach(product => { // aff des produits
                 const articleElement = document.createElement('div');
                 articleElement.classList.add('article');
                 articleElement.innerHTML = `
