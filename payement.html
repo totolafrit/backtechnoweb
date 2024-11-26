@@ -50,12 +50,11 @@
 <script src="https://js.stripe.com/v3/"></script>
 <script src="app.js"></script>
 
-<script> //Fonction pour déconnecter l'utilisateur
+<script> 
     document.getElementById('logoutButton').addEventListener('click', function() {
-        // Supprimer l'information de connexion du localStorage
+
         localStorage.removeItem('isLoggedIn');
-        
-        // Rediriger vers la page d'accueil après déconnexion
+
         window.location.href = 'accueil.html';
     });
     </script>

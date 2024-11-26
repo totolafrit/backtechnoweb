@@ -1,26 +1,24 @@
-require('dotenv').config(); // Charger les informations de info.env
-const express = require('express'); // Créer et gérer le serveur web
-const mysql = require('mysql'); // Se connecter à la base de données
-const cors = require('cors'); // Recommandé pour gérer certaines API
-const path = require('path'); // Ajoute cette ligne pour définir 'path'
+require('dotenv').config(); // pour charger les informations de info.env
+const express = require('express'); // créer et gérer le serveur web
+const mysql = require('mysql'); // Se connecter à la DB
+const cors = require('cors'); // gérer  API
+const path = require('path'); // pour def le chemin
 
-require('dotenv').config({ path: './info.env' }); // Éviter les problèmes de chemins
+require('dotenv').config({ path: './info.env' }); // pour eviter les problèmes de chemins
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json()); // Analyser les requêtes POST
+app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 
-// Middleware pour servir les fichiers statiques (images)
+app.use('/images', express.static('images')); // middleware pour servir le doc images
 
-app.use('/images', express.static('images'));
-
-//app.use('/images', express.static(path.join(__dirname, 'public/images')));
+//app.use('/images', express.static(path.join(__dirname, 'public/images'))); // debug
 
 
-// Connexion à la base de données "dbtechnoback"
+// connexion à la base de données dbtechnoback - verifiez le info.env 
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -36,21 +34,23 @@ db.connect((err) => {
     console.log('Connexion réussie à la DB de MySQL');
 });
 
-// Test serveur
+// test serveur
 app.get('/', (req, res) => {
     res.send('Le serveur node.js est fonctionnel');
 });
 
-// Middleware pour vérifier si l'utilisateur est admin
-function checkAdminRole(req, res, next) {
-    const { role } = req.body; // Le rôle devrait être passé depuis le front-end ou vérifié via JWT
+function checkAdminRole(req, res, next) { // middleware pour vérifier si l'utilisateur est admin
+    const { role } = req.body; // A fair epour secu : le rôle devrait être passé depuis le front-end ou vérifié via JWT
     if (role !== 'admin') {
         return res.status(403).json({ message: "Accès refusé. Droits insuffisants." });
     }
     next();
 }
 
-const bcrypt = require('bcrypt'); // Importer bcrypt
+const bcrypt = require('bcrypt'); // pour la hashage des données
+
+
+// Routes 
 
 app.post('/register', async (req, res) => {
     const { username, email, password, role } = req.body;
@@ -60,8 +60,8 @@ app.post('/register', async (req, res) => {
     }
 
     try {
-        // Hachage du mot de passe
-        const saltRounds = 10; // Nombre de rounds de salage (sécurité)
+        // hachage du mdp
+        const saltRounds = 10; // nombre de rounds de salage (sécurité)
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         
         console.log("Mot de passe original :", password);
@@ -118,7 +118,7 @@ app.post('/login', async (req, res) => {
     });
 });
 
-// Route DELETE pour supprimer un utilisateur (admin uniquement)
+// route DELETE pour supprimer un utilisateur (admin uniquement)
 app.delete('/delete-user/:id', checkAdminRole, (req, res) => {
     const userId = req.params.id;
 
@@ -141,7 +141,6 @@ app.delete('/delete-user/:id', checkAdminRole, (req, res) => {
 app.post('/api/products', (req, res) => {
     const { name, price, description, image_url, category } = req.body;
 
-    // Vérifier que l'image_url est valide (ajouter un contrôle ici si nécessaire)
     if (!image_url || !name || !price || !description || !category) {
         return res.status(400).json({ message: 'Tous les champs sont requis' });
     }
@@ -165,7 +164,7 @@ app.get('/api/products', (req, res) => {
             console.error('Erreur lors de la récupération des produits:', err);
             return res.status(500).json({ message: 'Erreur lors de la récupération des produits' });
         }
-        res.status(200).json(result);  // Renvoie la liste des produits au format JSON
+        res.status(200).json(result);  
     });
 });
 
@@ -201,12 +200,12 @@ app.get('/api/products/:id', (req, res) => {
             return res.status(404).json({ message: 'Produit non trouvé' });
         }
 
-        res.status(200).json(result[0]);  // Renvoie le produit spécifique au format JSON
+        res.status(200).json(result[0]);  
     });
 });
 
 
-// // Récupérer les articles par catégorie (admin vers shop)
+// // recup les articles par catégorie (admin vers shop)
 // app.get('/api/products/category/:categoryId', (req, res) => {
 //     const categoryId = req.params.categoryId;  // Récupère l'ID de la catégorie depuis l'URL
 //     console.log('ID de la catégorie demandé :', categoryId);
@@ -226,6 +225,8 @@ app.get('/api/products/:id', (req, res) => {
 //     });
 // });
 
+// recupérer les infos des produits par catégorie pour les afficher dans la bonne page
+
 app.get('/api/products/category/:categoryId', (req, res) => {
     const categoryId = req.params.categoryId;
     db.query('SELECT * FROM products WHERE category = ?', [categoryId], (err, results) => {
@@ -242,7 +243,6 @@ app.put('/api/products/:id', (req, res) => {
     const productId = req.params.id;
     const { name, price, description, image_url, category } = req.body;
 
-    // Vérifiez que tous les champs requis sont fournis
     if (!name || !price || !description || !image_url || !category) {
         return res.status(400).json({ message: 'Tous les champs sont requis' });
     }
@@ -264,7 +264,7 @@ app.put('/api/products/:id', (req, res) => {
 
 
 
-
+// tjr à la fin
 app.listen(PORT, () => {
     console.log(`Serveur démarré sur le port ${PORT}`);
 });
