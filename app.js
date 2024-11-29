@@ -263,6 +263,107 @@ app.put('/api/products/:id', (req, res) => {
 });
 
 
+// Route pour récupérer tous les utilisateurs
+app.get('/api/users', (req, res) => {
+    const query = 'SELECT id, username, email, role FROM users';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Erreur lors de la récupération des utilisateurs :', err);
+            return res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs' });
+        }
+        res.status(200).json(results);
+    });
+});
+
+// Route pour récupérer un utilisateur par ID
+app.get('/api/users/:id', (req, res) => {
+    const userId = req.params.id;
+    const query = 'SELECT id, username, email, role FROM users WHERE id = ?';
+
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('Erreur lors de la récupération de l\'utilisateur :', err);
+            return res.status(500).json({ message: 'Erreur serveur' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        }
+
+        res.status(200).json(results[0]);
+    });
+});
+
+// Route pour mettre à jour un utilisateur
+app.put('/api/users/:id', (req, res) => {
+    const userId = req.params.id;
+    const { username, email, role } = req.body;
+
+    if (!username || !email || !role) {
+        return res.status(400).json({ message: 'Tous les champs (nom d\'utilisateur, email, rôle) sont requis.' });
+    }
+
+    const query = 'UPDATE users SET username = ?, email = ?, role = ? WHERE id = ?';
+    db.query(query, [username, email, role, userId], (err, result) => {
+        if (err) {
+            console.error('Erreur lors de la mise à jour de l\'utilisateur :', err);
+            return res.status(500).json({ message: 'Erreur serveur' });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        }
+
+        res.status(200).json({ message: 'Utilisateur mis à jour avec succès.' });
+    });
+});
+
+// Route pour supprimer un utilisateur
+app.delete('/api/users/:id', (req, res) => {
+    const userId = req.params.id;
+
+    const query = 'DELETE FROM users WHERE id = ?';
+    db.query(query, [userId], (err, result) => {
+        if (err) {
+            console.error('Erreur lors de la suppression de l\'utilisateur :', err);
+            return res.status(500).json({ message: 'Erreur serveur' });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+        }
+
+        res.status(200).json({ message: 'Utilisateur supprimé avec succès.' });
+    });
+});
+
+// Route pour ajouter un utilisateur
+app.post('/api/users', async (req, res) => {
+    const { username, email, password, role } = req.body;
+
+    if (!username || !email || !password || !role) {
+        return res.status(400).json({ message: 'Tous les champs (nom d\'utilisateur, email, mot de passe, rôle) sont requis.' });
+    }
+
+    try {
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        const query = 'INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)';
+        db.query(query, [username, email, hashedPassword, role], (err, result) => {
+            if (err) {
+                console.error('Erreur lors de l\'ajout de l\'utilisateur :', err);
+                return res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'utilisateur' });
+            }
+            res.status(201).json({ message: 'Utilisateur ajouté avec succès.' });
+        });
+    } catch (error) {
+        console.error('Erreur lors du hachage du mot de passe :', error);
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
+
+
 
 // tjr à la fin
 app.listen(PORT, () => {

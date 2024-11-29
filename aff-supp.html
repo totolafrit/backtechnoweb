@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="aff-supp.css">
-    <title>Document</title>
+    <title>Manage Products</title>
 </head>
-
-<!-- aff-supp correspond à MANAGE PRODUCTS, en attente de futur maj avec l'addition de create.html-->
 
 <header>
     <nav>
@@ -17,6 +15,13 @@
     </nav>
 </header>
 <body>
+    <!-- Bouton pour créer un produit -->
+    <div id="create-product-container" style="margin: 20px; text-align: center;">
+        <button onclick="window.location.href='create-products.html'" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            Créer un produit
+        </button>
+    </div>
+
     <div id="filter-container">
         <input type="text" id="search-bar" placeholder="Rechercher par nom..." oninput="filterProducts()">
         <select id="sort-options" onchange="sortProducts()">
@@ -40,7 +45,7 @@
             </tr>
         </thead>
         <tbody id="products-list">
-            <!-- les produits sont inseres dynamiquement ici -->
+            <!-- les produits sont insérés dynamiquement ici -->
         </tbody>
     </table>
     
@@ -67,6 +72,14 @@
             <button type="submit">Sauvegarder les modifications</button>
         </form>
     </div>
+    
+    <script>
+        // Votre code JavaScript reste inchangé
+        fetchProducts();
+    </script>
+</body>
+</html>
+
     
     <script>
 
