@@ -3,59 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart</title>
-    <!--<link rel="stylesheet" href="payement.css"> -->
-    <link rel="stylesheet" href="fakepanier.css">
+    <title>Payement</title>
+    <link rel="stylesheet" href="payement.css"> <!-- Ajouter votre CSS ici -->
 </head>
 <body>
+    <!-- En-tête -->
     <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
         <nav>
             <ul class="nav-menu">
                 <button id="logoutButton">Déconnexion</button>
-              
-               
-                    <li><a href="accueil.html">Home</a></li>
-                    <li><a href="aboutus.html">About us</a></li>
-                    <li><a href="shop.html">Shop</a></li>
-                    <li><a href="project.html">Projects</a></li>
-                    <li><a href="actualites.html">Actuality</a></li>
-                    <li><a href="conseils.html">Advices</a></li>
-                    <!-- on mettra panier.html plus tard-->
-                    <li><a href="fakepanier.html">Mon panier</a></li> 
-                    <li><a href="connection.html">Connexion</a></li>
-               
+                <li><a href="accueil.html">Home</a></li>
+                <li><a href="aboutus.html">About us</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="project.html">Projects</a></li>
+                <li><a href="actualites.html">Actuality</a></li>
+                <li><a href="conseils.html">Advices</a></li>
+                <li><a href="fakepanier.html">Mon panier</a></li>
+                <li><a href="connection.html">Connexion</a></li>
             </ul>
         </nav>
     </header>
-    <div class="cart-container">
-        <h1>Votre Panier</h1>
-        <div class="cart-items">
-            <!-- Dynamically generated items go here -->
-            <div class="cart-item">
-                <img src="product.jpg" alt="Produit">
-                <div class="item-details">
-                    <h2>Nom du Produit</h2>
-                    <p>Prix : $XX</p>
-                    <input type="number" value="1" min="1">
+
+    <!-- Page Payement -->
+    <main class="payment-page">
+        <h1>Paiement</h1>
+        <div class="payment-container">
+            <!-- Récapitulatif de commande -->
+            <div class="order-summary">
+                <h2>Récapitulatif de votre commande</h2>
+                <div id="cart-summary"></div>
+                <div id="order-total">
+                    <h3>Total : €<span id="total-price"></span></h3>
                 </div>
             </div>
+
+            <!-- Options de paiement -->
+            <div class="payment-options">
+                <h2>Moyens de paiement</h2>
+                <form id="payment-form">
+                    <div class="payment-method">
+                        <input type="radio" id="credit-card" name="payment-method" value="cb" required>
+                        <label for="credit-card">Carte Bancaire</label>
+                    </div>
+                    <div class="payment-method">
+                        <input type="radio" id="paypal" name="payment-method" value="paypal">
+                        <label for="paypal">PayPal</label>
+                    </div>
+                    <button type="submit">Valider le paiement</button>
+                </form>
+            </div>
         </div>
-        <div class="cart-total">
-            <h2>Total : $XX.XX</h2>
-            <button id="checkout-button">Procéder au Paiement</button>
-        </div>
-    </div>
-</body>
+    </main>
 
-<script src="https://js.stripe.com/v3/"></script>
-<script src="app.js"></script>
+    <!-- Pied de page -->
+    <footer>
+        <p>&copy; 2024 L'Arbre En Vie - Tous droits réservés</p>
+    </footer>
 
-<script> 
-    document.getElementById('logoutButton').addEventListener('click', function() {
+    <script>
+        // Charger les données du panier et afficher le récapitulatif
+        function loadOrderSummary() {
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartSummary = document.getElementById('cart-summary');
+            const totalPriceElement = document.getElementById('total-price');
+        
+            cartSummary.innerHTML = ''; // Réinitialise le contenu
+        
+            let totalSum = 0;
+        
+            if (cartItems.length === 0) {
+                cartSummary.innerHTML = '<p>Votre panier est vide.</p>';
+                totalPriceElement.textContent = '0,00';
+            } else {
+                cartItems.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'order-item';
+                    itemDiv.innerHTML = `
+                        <div class="order-item">
+                            <img src="${item.image}" alt="${item.name}" width="100">
+                            <div class="order-details">
+                                <h3>${item.name}</h3>
+                                <p>Prix unitaire : €${item.price.toFixed(2).replace('.', ',')}</p>
+                                <p>Quantité : ${item.quantity}</p>
+                                <p>Prix total : €${(item.price * item.quantity).toFixed(2).replace('.', ',')}</p>
+                            </div>
+                        </div>
+                    `;
+                    cartSummary.appendChild(itemDiv);
+                    totalSum += item.price * item.quantity;
+                });
+        
+                totalPriceElement.textContent = totalSum.toFixed(2).replace('.', ',');
+            }
+        }
+        
+        // Gérer la soumission du formulaire de paiement
+        document.getElementById('payment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+            alert(`Vous avez sélectionné le mode de paiement : ${paymentMethod.toUpperCase()}`);
+            // Ajouter la logique pour traiter le paiement ici
+        });
 
-        localStorage.removeItem('isLoggedIn');
-
-        window.location.href = 'accueil.html';
-    });
+        window.onload = loadOrderSummary;
     </script>
+</body>
 </html>

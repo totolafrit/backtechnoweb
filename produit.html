@@ -56,28 +56,28 @@
     <footer>
         <p>&copy; 2024 L'Arbre En Vie - Tous droits réservés</p>
     </footer>
-
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
-
+    
         // fetch product en fct du product ID
         fetch(`http://localhost:3000/api/products/${productId}`)
             .then(response => response.json())
             .then(product => {
+                // Remplir les détails du produit
                 document.getElementById('product-image').src = `http://localhost:3000/images/${product.image_url}`;
                 document.getElementById('product-name').textContent = product.name;
                 document.getElementById('product-price').textContent = `${product.price}€`;
                 document.getElementById('product-description').textContent = product.description;
-
+    
                 const characteristicsList = document.getElementById('product-characteristics');
                 product.characteristics.forEach(charac => {
                     const li = document.createElement('li');
                     li.textContent = charac;
                     characteristicsList.appendChild(li);
                 });
-
-                // Show reviews - voir plus tard pour la DB feedback
+    
+                // Affichage des avis clients
                 const reviewsContainer = document.getElementById('reviews');
                 product.reviews.forEach(review => {
                     const reviewElement = document.createElement('div');
@@ -92,30 +92,36 @@
             .catch(error => {
                 console.error('Erreur lors de la récupération du produit:', error);
             });
-
-        // ajouter au panier ( le localStorage)
+    
+        // Ajouter au panier avec URL de l'image
         function addToCart() {
             const productName = document.getElementById('product-name').textContent;
             const productPrice = parseFloat(document.getElementById('product-price').textContent.replace('€', '').trim());
-
+            const productImage = document.getElementById('product-image').src;
+        
             const product = {
                 name: productName,
                 price: productPrice,
+                image: productImage, // Inclure l'image ici
                 quantity: 1,
             };
-
+        
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             const existingProduct = cart.find(item => item.name === product.name);
             if (existingProduct) {
-                existingProduct.quantity += 1; // pour ajouter +1 un produit s'il existe deja
+                existingProduct.quantity += 1; // Pour ajouter +1 un produit s'il existe déjà
             } else {
                 cart.push(product);
             }
-
+        
             localStorage.setItem('cart', JSON.stringify(cart));
             alert('Produit ajouté au panier');
         }
+        
+        
     </script>
+    
+    
 </body>
 
 </html>
