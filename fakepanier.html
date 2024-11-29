@@ -51,82 +51,83 @@
         <p>&copy; 2024 L'Arbre En Vie - Tous droits réservés</p>
     </footer>
 
-    <script>
-        // Fonction pour formater le prix selon qu'il soit entier ou avec centimes
-        function formatPrice(price) {
-            return price.toFixed(2).replace('.', ','); // Toujours avec 2 décimales et remplace le point par une virgule
-        }
-
-        function loadCart() {
-            const cartItems = JSON.parse(localStorage.getItem('cart')) || []; 
-            const cartContainer = document.getElementById('cart-items');
-            const cartTotalContainer = document.getElementById('cart-total');
-            cartContainer.innerHTML = '';  // Réinitialise le contenu du panier à chaque chargement
-
-            let totalSum = 0;  // Variable pour stocker la somme totale des articles
-
-            if (cartItems.length === 0) {
-                cartContainer.innerHTML = '<p>Votre panier est vide.</p>';
-                cartTotalContainer.innerHTML = ''; // Si le panier est vide, aucune somme affichée
-            } else {
-                // pour chaque article du panier
-                cartItems.forEach(item => {
-                    let existingCartItemDiv = document.getElementById('cart-item-' + item.name);
-
-                    if (!existingCartItemDiv) {
-                        // Si l'élément n'existe pas encore dans le DOM, on le crée
-                        const itemDiv = document.createElement('div');
-                        itemDiv.className = 'cart-item';
-                        itemDiv.id = 'cart-item-' + item.name; // ID unique pour l'article
-                        itemDiv.innerHTML = `
-                            <h2>${item.name}</h2>
-                            <p>Prix unitaire : €${formatPrice(item.price)}</p>
-                            <p>Quantité : <span id="quantity-${item.name}">${item.quantity}</span></p>
-                            <p>Prix total : €${formatPrice(item.price * item.quantity)}</p>
-                            <button onclick="updateQuantity('${item.name}', 1)">+1</button>
-                            <button onclick="updateQuantity('${item.name}', -1)">-1</button>
-                        `;
-                        cartContainer.appendChild(itemDiv);
-                    } else {
-                        // Si l'élément existe déjà, on met à jour sa quantité et le prix total
-                        existingCartItemDiv.querySelector('p:nth-child(3)').textContent = `Quantité : ${item.quantity}`;
-                        existingCartItemDiv.querySelector('p:nth-child(4)').textContent = `Prix total : €${formatPrice(item.price * item.quantity)}`;
-                    }
-
-                    // Ajout du prix de cet article à la somme totale
-                    totalSum += item.price * item.quantity;
-                });
-
-                // Affichage de la somme totale des articles dans le panier
-                cartTotalContainer.innerHTML = `
-                    <h3>Total de votre panier : €${formatPrice(totalSum)}</h3>
-                `;
-            }
-        }
-
-        function updateQuantity(productName, change) {
-            let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-            
-            const item = cartItems.find(cartItem => cartItem.name === productName);
-
-            if (item) {
-                item.quantity += change;
-                if (item.quantity <= 0) {// si la qtité devient 0 ou moins on supp l'article
-                    cartItems = cartItems.filter(cartItem => cartItem.name !== productName);
+<script>
+    function formatPrice(price) {
+        return price.toFixed(2).replace('.', ','); // Toujours avec 2 décimales et remplace le point par une virgule
+    }
+    
+    function loadCart() {
+        const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartContainer = document.getElementById('cart-items');
+        const cartTotalContainer = document.getElementById('cart-total');
+        cartContainer.innerHTML = ''; // Réinitialise le contenu du panier à chaque chargement
+    
+        let totalSum = 0; // Variable pour stocker la somme totale des articles
+    
+        if (cartItems.length === 0) {
+            cartContainer.innerHTML = '<p>Votre panier est vide.</p>';
+            cartTotalContainer.innerHTML = ''; // Si le panier est vide, aucune somme affichée
+        } else {
+            // Pour chaque article du panier
+            cartItems.forEach(item => {
+                let existingCartItemDiv = document.getElementById('cart-item-' + item.name);
+    
+                if (!existingCartItemDiv) {
+                    // Si l'élément n'existe pas encore dans le DOM, on le crée
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'cart-item';
+                    itemDiv.id = 'cart-item-' + item.name; // ID unique pour l'article
+                    itemDiv.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-image" width=100>
+                        <h2>${item.name}</h2>
+                        <p>Prix unitaire : €${formatPrice(item.price)}</p>
+                        <p>Quantité : <span id="quantity-${item.name}">${item.quantity}</span></p>
+                        <p>Prix total : €${formatPrice(item.price * item.quantity)}</p>
+                        <button onclick="updateQuantity('${item.name}', 1)">+1</button>
+                        <button onclick="updateQuantity('${item.name}', -1)">-1</button>
+                    `;
+                    cartContainer.appendChild(itemDiv);
+                } else {
+                    // Si l'élément existe déjà, on met à jour sa quantité et le prix total
+                    existingCartItemDiv.querySelector('p:nth-child(3)').textContent = `Quantité : ${item.quantity}`;
+                    existingCartItemDiv.querySelector('p:nth-child(4)').textContent = `Prix total : €${formatPrice(item.price * item.quantity)}`;
                 }
-                // mise a jour du panier dans le localStorage
-                localStorage.setItem('cart', JSON.stringify(cartItems));
-                loadCart(); // Recharger le panier
+    
+                // Ajout du prix de cet article à la somme totale
+                totalSum += item.price * item.quantity;
+            });
+    
+            // Affichage de la somme totale des articles dans le panier
+            cartTotalContainer.innerHTML = `
+                <h3>Total de votre panier : €${formatPrice(totalSum)}</h3>
+            `;
+        }
+    }
+    
+    function updateQuantity(productName, change) {
+        let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        const item = cartItems.find(cartItem => cartItem.name === productName);
+    
+        if (item) {
+            item.quantity += change;
+            if (item.quantity <= 0) { // Si la quantité devient 0 ou moins, on supprime l'article
+                cartItems = cartItems.filter(cartItem => cartItem.name !== productName);
             }
+            // Mise à jour du panier dans le localStorage
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+            loadCart(); // Recharger le panier
         }
+    }
+    
+    function clearCart() {
+        localStorage.removeItem('cart');
+        loadCart();
+    }
+    
+    window.onload = loadCart;
 
-        function clearCart() {
-            localStorage.removeItem('cart');
-            loadCart();
-        }
-
-        window.onload = loadCart;
-    </script>
+</script>
 
     <script> // pour passer la commande
             function validateOrder() {
