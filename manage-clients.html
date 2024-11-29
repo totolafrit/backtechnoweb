@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="manage-clients.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="manage-clients.css">
+    <title>Manage users</title>
+</head>
+
+<header>
+    <nav>
+        <ul class="nav-menu">
+            <li><a href="accueil.html">Home</a></li>
+            <li><a href="aboutus.html">Manage clients</a></li>
+
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="project.html">Project</a></li>
+            <li><a href="actualites.html">News</a></li>
+            <li><a href="conseils.html">Advices</a></li>
+            <li><a href="connection.html">Connexion</a></li>
+            <li class="cart-icon">
+                <a href="fakepanier.html">
+                    <i class="bx bx-cart" style="font-size: 24px; color: #333;"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<body>
+    <div id="filter-container">
+        <input type="text" id="search-bar" placeholder="Rechercher par nom ou email..." oninput="filterusers()">
+        <select id="sort-options" onchange="sortusers()">
+            <option value="">Trier par</option>
+            <option value="username">Nom d'utilisateur</option>
+            <option value="email">Email</option>
+            <option value="role">Rôle</option>
+        </select>
+    </div>
+
+    <table id="users-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom d'utilisateur</th>
+                <th>Email</th>
+                <th>Mot de passe (hash)</th>
+                <th>Rôle</th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
+            </tr>
+        </thead>
+        <tbody id="users-list">
+        </tbody>
+    </table>
+
+    <div id="edit-form-container" style="display: none;">
+        <h2>Modifier le client</h2>
+        <form id="edit-client-form">
+            <label for="edit-username">Nom d'utilisateur :</label>
+            <input type="text" id="edit-username" required>
+
+            <label for="edit-email">Email :</label>
+            <input type="email" id="edit-email" required>
+
+            <label for="edit-role">Rôle :</label>
+            <input type="text" id="edit-role" required>
+
+            <input type="hidden" id="edit-client-id">
+            <button type="submit">Sauvegarder les modifications</button>
+        </form>
+    </div>
+
+    <script>
+        let allusers = [];
+
+        async function fetchusers() {
+            try {
+                const response = await fetch('http://localhost:3000/api/users');
+                const users = await response.json();
+                allusers = users; 
+                displayusers(users);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des users :', error);
+                alert('Erreur lors de la récupération des users');
+            }
+        }
+
+
+        function displayusers(users) {
+            const usersList = document.getElementById('users-list');
+            usersList.innerHTML = '';
+
+            users.forEach(client => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${client.id}</td>
+                    <td>${client.username}</td>
+                    <td>${client.email}</td>
+                    <td>${client.password}</td>
+                    <td>${client.role}</td>
+                    <td><button onclick="editClient(${client.id})">Modifier</button></td>
+                    <td><button onclick="deleteClient(${client.id})">Supprimer</button></td>
+                `;
+                usersList.appendChild(row);
+            });
+        }
+
+        async function deleteClient(id) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/users/${id}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    alert('Client supprimé');
+                    fetchusers(); 
+                } else {
+                    const data = await response.json();
+                    alert('Erreur : ' + data.message);
+                }
+            } catch (error) {
+                console.error('Erreur :', error);
+                alert('Erreur lors de la suppression du client');
+            }
+        }
+
+        async function editClient(id) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/users/${id}`);
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP : ${response.status}`);
+                }
+
+                const client = await response.json();
+                document.getElementById('edit-username').value = client.username;
+                document.getElementById('edit-email').value = client.email;
+                document.getElementById('edit-role').value = client.role;
+                document.getElementById('edit-client-id').value = client.id;
+
+                document.getElementById('edit-form-container').style.display = 'block';
+            } catch (error) {
+                console.error('Erreur lors de la récupération du client :', error);
+                alert('Erreur lors de la récupération du client');
+            }
+        }
+
+        document.getElementById('edit-client-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const id = document.getElementById('edit-client-id').value;
+            const username = document.getElementById('edit-username').value;
+            const email = document.getElementById('edit-email').value;
+            const role = document.getElementById('edit-role').value;
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/users/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, role })
+                });
+
+                if (response.ok) {
+                    fetchusers();
+                    document.getElementById('edit-form-container').style.display = 'none';
+                } else {
+                    const data = await response.json();
+                    alert('Erreur : ' + data.message);
+                }
+            } catch (error) {
+                console.error('Erreur :', error);
+                alert('Erreur lors de la mise à jour du client');
+            }
+        });
+
+        function filterusers() {
+            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+            const filteredusers = allusers.filter(client =>
+                client.username.toLowerCase().includes(searchQuery) ||
+                client.email.toLowerCase().includes(searchQuery)
+            );
+            displayusers(filteredusers);
+        }
+
+        function sortusers() {
+            const sortOption = document.getElementById('sort-options').value;
+            let sortedusers = [...allusers];
+
+            if (sortOption === 'username') {
+                sortedusers.sort((a, b) => a.username.localeCompare(b.username));
+            } else if (sortOption === 'email') {
+                sortedusers.sort((a, b) => a.email.localeCompare(b.email));
+            } else if (sortOption === 'role') {
+                sortedusers.sort((a, b) => a.role.localeCompare(b.role));
+            }
+
+            displayusers(sortedusers);
+        }
+
+        fetchusers(); 
+    </script>
+</body>
+</html>
