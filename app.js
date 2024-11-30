@@ -3,6 +3,8 @@ const express = require('express'); // créer et gérer le serveur web
 const mysql = require('mysql'); // Se connecter à la DB
 const cors = require('cors'); // gérer  API
 const path = require('path'); // pour def le chemin
+const router = express.Router();
+
 
 require('dotenv').config({ path: './info.env' }); // pour eviter les problèmes de chemins
 
@@ -11,6 +13,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json()); 
+
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/images', express.static('images')); // middleware pour servir le doc images
@@ -111,12 +114,15 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ message: "Nom d'utilisateur ou mot de passe incorrect." });
         }
 
+        // Envoie l'ID utilisateur et autres informations nécessaires
         res.json({
             message: 'Connexion réussie!',
-            role: user.role, // Retourner le rôle pour le front-end
+            userId: user.id,  // Ajout de l'userId dans la réponse
+            role: user.role,   // Retourner le rôle de l'utilisateur si nécessaire
         });
     });
 });
+
 
 // route DELETE pour supprimer un utilisateur (admin uniquement)
 app.delete('/delete-user/:id', checkAdminRole, (req, res) => {
@@ -362,6 +368,158 @@ app.post('/api/users', async (req, res) => {
         res.status(500).json({ message: 'Erreur serveur' });
     }
 });
+
+
+// // Route pour enregistrer une commande
+
+app.post('/create-order', (req, res) => {
+    const { userId, cart, totalPrice } = req.body;
+    console.log("Données reçues dans /create-order :", req.body);
+
+    // Vérifier si l'userId et le panier sont présents
+    if (!userId || !cart || cart.length === 0) {
+        return res.status(400).json({ error: 'User ID or cart is missing.' });
+    }
+
+    // Insérer la commande dans la base de données, par exemple
+    const query = 'INSERT INTO orders (user_id, total_price, cart_items) VALUES (?, ?, ?)';
+    const cartJson = JSON.stringify(cart);  // Convertir le panier en JSON pour l'enregistrer
+
+    db.query(query, [userId, totalPrice, cartJson], (err, results) => {
+        if (err) {
+            console.error('Erreur lors de la création de la commande :', err);
+            return res.status(500).json({ error: 'Erreur lors de la création de la commande.' });
+        }
+
+        // Répondre avec succès si la commande a été créée
+        res.json({ message: 'Commande créée avec succès!', orderId: results.insertId });
+    });
+});
+
+// app.post('/orders', async (req, res) => {
+//     const { userId, cart, totalPrice } = req.body;
+
+//     if (!userId || !cart || cart.length === 0 || !totalPrice) {
+//         return res.status(400).json({ message: 'Données manquantes ou invalides.' });
+//     }
+
+//     try {
+//         // Vérifier si l'utilisateur existe
+//         const userCheck = await db.query('SELECT * FROM users WHERE id = ?', [userId]);
+//         if (userCheck.length === 0) {
+//             return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+//         }
+
+//         // Insérer la commande dans la table "orders"
+//         const result = await db.query('INSERT INTO orders (user_id, total_price) VALUES (?, ?)', [userId, totalPrice]);
+//         const orderId = result.insertId;
+
+//         // Insérer les articles dans la table "order_items"
+//         for (const item of cart) {
+//             await db.query(
+//                 'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)',
+//                 [orderId, item.productId, item.quantity, item.price]
+//             );
+//         }
+
+//         res.status(201).json({ message: 'Commande enregistrée avec succès.' });
+//     } catch (error) {
+//         console.error('Erreur lors de l\'insertion de la commande :', error);
+//         res.status(500).json({ message: 'Erreur serveur lors de l\'enregistrement de la commande.' });
+//     }
+// });
+
+
+
+// app.post('/submit-order', async (req, res) => {
+//     const { userId, cart } = req.body; // userId: ID du client, cart: produits dans le panier
+//     console.log('Données reçues:', { userId, cart }); // Log des données reçues
+
+//     if (!userId || !cart || cart.length === 0) {
+//         return res.status(400).json({ message: 'Paramètres invalides.' });
+//     }
+
+//     // Créer une connexion à la base de données
+//     const connection = mysql.createConnection({
+//         host: process.env.DB_HOST,
+//         user: process.env.DB_USER,
+//         password: process.env.DB_PASSWORD,
+//         database: process.env.DB_NAME
+//     });
+
+//     // Connexion à la base de données
+//     connection.connect((err) => {
+//         if (err) {
+//             console.error("Erreur de connexion à la database :", err);
+//             return res.status(500).json({ message: 'Erreur de connexion à la base de données.' });
+//         }
+//         console.log('Connexion ORDER réussie à la DB de MySQL');
+//     });
+
+//     try {
+//         // Démarrer la transaction
+//         await new Promise((resolve, reject) => {
+//             connection.beginTransaction((err) => {
+//                 if (err) {
+//                     return reject('Erreur lors du début de la transaction');
+//                 }
+//                 resolve();
+//             });
+//         });
+
+//         // 1. Créer une commande
+//         const [orderResult] = await new Promise((resolve, reject) => {
+//             connection.query(
+//                 'INSERT INTO orders (user_id) VALUES (?)',
+//                 [userId],
+//                 (err, results) => {
+//                     if (err) return reject(err);
+//                     resolve(results);
+//                 }
+//             );
+//         });
+//         const orderId = orderResult.insertId;
+
+//         // 2. Insérer les produits dans `order_items`
+//         const orderItems = cart.map(item => [
+//             orderId,
+//             item.id,
+//             item.quantity,
+//             item.price
+//         ]);
+
+//         await new Promise((resolve, reject) => {
+//             connection.query(
+//                 'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ?',
+//                 [orderItems],
+//                 (err, results) => {
+//                     if (err) return reject(err);
+//                     resolve(results);
+//                 }
+//             );
+//         });
+
+//         // Valider la transaction
+//         await new Promise((resolve, reject) => {
+//             connection.commit((err) => {
+//                 if (err) return reject('Erreur lors de la validation de la transaction');
+//                 resolve();
+//             });
+//         });
+
+//         res.status(200).json({ message: 'Commande enregistrée avec succès.' });
+//     } catch (error) {
+//         // Annuler la transaction en cas d'erreur
+//         connection.rollback(() => {
+//             console.error('Transaction annulée:', error);
+//         });
+//         res.status(500).json({ message: 'Erreur serveur.' });
+//     } finally {
+//         // Fermer la connexion
+//         connection.end();
+//     }
+// });
+
 
 
 

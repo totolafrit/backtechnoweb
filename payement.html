@@ -41,7 +41,7 @@
             </div>
 
             <!-- Options de paiement -->
-            <div class="payment-options">
+            <!-- <div class="payment-options">
                 <h2>Moyens de paiement</h2>
                 <form id="payment-form">
                     <div class="payment-method">
@@ -52,9 +52,9 @@
                         <input type="radio" id="paypal" name="payment-method" value="paypal">
                         <label for="paypal">PayPal</label>
                     </div>
-                    <button type="submit">Valider le paiement</button>
                 </form>
-            </div>
+            </div> -->
+            <button id="submit-order">Valider la commande</button>
         </div>
     </main>
 
@@ -81,7 +81,7 @@
                 cartItems.forEach(item => {
                     const itemDiv = document.createElement('div');
                     itemDiv.className = 'order-item';
-                    itemDiv.innerHTML = `
+                    itemDiv.innerHTML = ` 
                         <div class="order-item">
                             <img src="${item.image}" alt="${item.name}" width="100">
                             <div class="order-details">
@@ -99,16 +99,88 @@
                 totalPriceElement.textContent = totalSum.toFixed(2).replace('.', ',');
             }
         }
-        
-        // Gérer la soumission du formulaire de paiement
-        document.getElementById('payment-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
-            alert(`Vous avez sélectionné le mode de paiement : ${paymentMethod.toUpperCase()}`);
-            // Ajouter la logique pour traiter le paiement ici
-        });
 
         window.onload = loadOrderSummary;
+
+        // Gérer la soumission du formulaire de paiement
+        document.getElementById('submit-order').addEventListener('click', async () => {
+            const userId = localStorage.getItem('userId'); // Récupère l'userId
+            console.log("User ID récupéré :", userId);
+        
+            if (!userId) {
+                alert("Utilisateur non connecté. Veuillez vous connecter avant de passer une commande.");
+                window.location.href = 'connection.html'; // Redirige vers la page de connexion
+                return;
+            }
+        
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || []; // Récupère le panier
+            const totalPrice = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0); // Calcule le total
+        
+            const orderData = {
+                userId: userId,
+                cart: cartItems, // Ajoute le panier
+                totalPrice: totalPrice.toFixed(2) // Le total de la commande
+            };
+        
+            console.log("Données envoyées :", orderData);
+        
+            try {
+                const response = await fetch('http://localhost:3000/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
+        
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("Erreur réponse serveur :", errorData);
+                    alert(`Erreur lors de la commande : ${errorData.message}`);
+                } else {
+                    alert("Commande passée avec succès !");
+                    window.location.href = 'confirmation.html';
+                }
+            } catch (error) {
+                console.error("Erreur lors de la requête :", error);
+                alert("Erreur de connexion au serveur.");
+            }
+        });
     </script>
 </body>
 </html>
+
+  <!-- document.getElementById('payment-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+        
+            const userId = localStorage.getItem('userId'); // Assurez-vous que l'utilisateur est connecté
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+          
+        
+            if (cart.length === 0) {
+                alert('Votre panier est vide.');
+                return;
+            }
+        
+            try {
+                const response = await fetch('http://localhost:3000/submit-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ userId, cart }),
+                });
+        
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Commande validée avec succès !');
+                    localStorage.removeItem('cart'); // Vider le panier
+                    window.location.href = 'accueil.html'; // Rediriger après validation
+                } else {
+                    alert(`Erreur : ${result.message}`);
+                }
+            } catch (error) {
+                console.error('Erreur réseau :', error);
+                alert('Impossible de valider la commande.');
+            }
+        });
+         -->
