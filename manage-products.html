@@ -15,7 +15,6 @@
     </nav>
 </header>
 <body>
-    <!-- Bouton pour créer un produit -->
     <div id="create-product-container" style="margin: 20px; text-align: center;">
         <button onclick="window.location.href='create-products.html'" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
             Créer un produit
@@ -45,11 +44,11 @@
             </tr>
         </thead>
         <tbody id="products-list">
-            <!-- les produits sont insérés dynamiquement ici -->
+            <!-- produits affiché dynamiquement ici -->
         </tbody>
     </table>
     
-    <!-- EDIT : pour modifier un produit -->
+    <!-- EDIT : pour modif un produit -->
     <div id="edit-form-container" style="display: none;">
         <h2>Modifier le produit</h2>
         <form id="edit-product-form">
@@ -74,7 +73,6 @@
     </div>
     
     <script>
-        // Votre code JavaScript reste inchangé
         fetchProducts();
     </script>
 </body>
@@ -93,7 +91,7 @@
                 allProducts = products; // Stocker les produits recup
                 displayProducts(products); 
                
-                console.log('Produits récupérés :', products); // verif
+                console.log('Produits récupérés :', products);
 
                 const productsList = document.getElementById('products-list');
                 productsList.innerHTML = '';
@@ -147,7 +145,7 @@
             }
         }
 
-        // Fonction pour mettre à jour le produit
+        // fonction pour mettre à jour le produit
         document.getElementById('edit-product-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 

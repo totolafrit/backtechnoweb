@@ -73,11 +73,11 @@
     </div>
 
     <script>
-        let allusers = [];
+        let allusers = []; // recup les infos
 
         async function fetchusers() {
             try {
-                const response = await fetch('http://localhost:3000/api/users');
+                const response = await fetch('http://localhost:3000/api/users'); // voir route app.js
                 const users = await response.json();
                 allusers = users; 
                 displayusers(users);
@@ -199,5 +199,9 @@
 
         fetchusers(); 
     </script>
+    <footer>
+        <p>&copy; 2024 L'Arbre Envie - All Rights Reserved</p>
+    </footer>
 </body>
+
 </html>

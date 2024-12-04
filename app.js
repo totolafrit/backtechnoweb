@@ -50,10 +50,12 @@ function checkAdminRole(req, res, next) { // middleware pour vérifier si l'util
     next();
 }
 
-const bcrypt = require('bcrypt'); // pour la hashage des données
+const bcrypt = require('bcrypt'); // methode pour hasher les mdp
 
 
-// Routes 
+//////////////// Routes ////////////////
+
+//create un compte
 
 app.post('/register', async (req, res) => {
     const { username, email, password, role } = req.body;
@@ -64,7 +66,7 @@ app.post('/register', async (req, res) => {
 
     try {
         // hachage du mdp
-        const saltRounds = 10; // nombre de rounds de salage (sécurité)
+        const saltRounds = 10; // nombre de rounds de salage
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         
         console.log("Mot de passe original :", password);
@@ -88,6 +90,7 @@ app.post('/register', async (req, res) => {
 });
 
 
+// connexion
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -114,17 +117,17 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ message: "Nom d'utilisateur ou mot de passe incorrect." });
         }
 
-        // Envoie l'ID utilisateur et autres informations nécessaires
         res.json({
             message: 'Connexion réussie!',
-            userId: user.id,  // Ajout de l'userId dans la réponse
-            role: user.role,   // Retourner le rôle de l'utilisateur si nécessaire
+            userId: user.id,  // ajout de luserId
+            role: user.role,   // utile pour se connecter en tant qu'admin
         });
     });
 });
 
 
 // route DELETE pour supprimer un utilisateur (admin uniquement)
+
 app.delete('/delete-user/:id', checkAdminRole, (req, res) => {
     const userId = req.params.id;
 
@@ -143,7 +146,8 @@ app.delete('/delete-user/:id', checkAdminRole, (req, res) => {
     });
 });
 
-// Ajout d'un produit
+// Ajout d'un produit (admin)
+
 app.post('/api/products', (req, res) => {
     const { name, price, description, image_url, category } = req.body;
 
@@ -210,27 +214,6 @@ app.get('/api/products/:id', (req, res) => {
     });
 });
 
-
-// // recup les articles par catégorie (admin vers shop)
-// app.get('/api/products/category/:categoryId', (req, res) => {
-//     const categoryId = req.params.categoryId;  // Récupère l'ID de la catégorie depuis l'URL
-//     console.log('ID de la catégorie demandé :', categoryId);
-
-//     // Requête SQL pour récupérer les produits ayant la catégorie spécifiée
-//     db.query('SELECT * FROM products WHERE category = ?', [categoryId], (err, results) => {
-//         if (err) {
-//             console.error('Erreur SQL:', err.message);
-//             return res.status(500).json({ error: err.message });
-//         }
-
-//         if (results.length === 0) {
-//             return res.status(404).json({ message: 'Aucun produit trouvé pour cette catégorie' });
-//         }
-
-//         res.json(results);  // Retourne les produits trouvés
-//     });
-// });
-
 // recupérer les infos des produits par catégorie pour les afficher dans la bonne page
 
 app.get('/api/products/category/:categoryId', (req, res) => {
@@ -244,6 +227,7 @@ app.get('/api/products/category/:categoryId', (req, res) => {
 });
 
 
+// produit par ID
 
 app.put('/api/products/:id', (req, res) => {
     const productId = req.params.id;
@@ -269,7 +253,7 @@ app.put('/api/products/:id', (req, res) => {
 });
 
 
-// Route pour récupérer tous les utilisateurs
+// route pour recup tous les users
 app.get('/api/users', (req, res) => {
     const query = 'SELECT id, username, email, role FROM users';
     db.query(query, (err, results) => {
@@ -281,7 +265,7 @@ app.get('/api/users', (req, res) => {
     });
 });
 
-// Route pour récupérer un utilisateur par ID
+// route pour recup un user par ID
 app.get('/api/users/:id', (req, res) => {
     const userId = req.params.id;
     const query = 'SELECT id, username, email, role FROM users WHERE id = ?';
@@ -300,7 +284,7 @@ app.get('/api/users/:id', (req, res) => {
     });
 });
 
-// Route pour mettre à jour un utilisateur
+//rute pour mettre à jour un user
 app.put('/api/users/:id', (req, res) => {
     const userId = req.params.id;
     const { username, email, role } = req.body;
@@ -324,7 +308,7 @@ app.put('/api/users/:id', (req, res) => {
     });
 });
 
-// Route pour supprimer un utilisateur
+// route pour suppr un user
 app.delete('/api/users/:id', (req, res) => {
     const userId = req.params.id;
 
@@ -343,7 +327,7 @@ app.delete('/api/users/:id', (req, res) => {
     });
 });
 
-// Route pour ajouter un utilisateur
+// route pour ajouter un user
 app.post('/api/users', async (req, res) => {
     const { username, email, password, role } = req.body;
 
@@ -370,20 +354,18 @@ app.post('/api/users', async (req, res) => {
 });
 
 
-// // Route pour enregistrer une commande
+// route pour enregistrer une commande
 
 app.post('/create-order', (req, res) => {
     const { userId, cart, totalPrice } = req.body;
     console.log("Données reçues dans /create-order :", req.body);
 
-    // Vérifier si l'userId et le panier sont présents
-    if (!userId || !cart || cart.length === 0) {
+    if (!userId || !cart || cart.length === 0) {  // verifier si l'userid et le panier sont présents
         return res.status(400).json({ error: 'User ID or cart is missing.' });
     }
 
-    // Insérer la commande dans la base de données, par exemple
-    const query = 'INSERT INTO orders (user_id, total_price, cart_items) VALUES (?, ?, ?)';
-    const cartJson = JSON.stringify(cart);  // Convertir le panier en JSON pour l'enregistrer
+    const query = 'INSERT INTO orders (user_id, total_price, cart_items) VALUES (?, ?, ?)'; // add ici si on veut dire quand recup la commande
+    const cartJson = JSON.stringify(cart);  // on converti le panier en JSON pour l'enregistrer
 
     db.query(query, [userId, totalPrice, cartJson], (err, results) => {
         if (err) {
@@ -391,139 +373,55 @@ app.post('/create-order', (req, res) => {
             return res.status(500).json({ error: 'Erreur lors de la création de la commande.' });
         }
 
-        // Répondre avec succès si la commande a été créée
         res.json({ message: 'Commande créée avec succès!', orderId: results.insertId });
     });
 });
+       
 
-// app.post('/orders', async (req, res) => {
-//     const { userId, cart, totalPrice } = req.body;
+// route pour récupérer les commandes côté admin
+app.get('/api/orders', (req, res) => {
 
-//     if (!userId || !cart || cart.length === 0 || !totalPrice) {
-//         return res.status(400).json({ message: 'Données manquantes ou invalides.' });
-//     }
+    const { sort } = req.query; 
 
-//     try {
-//         // Vérifier si l'utilisateur existe
-//         const userCheck = await db.query('SELECT * FROM users WHERE id = ?', [userId]);
-//         if (userCheck.length === 0) {
-//             return res.status(404).json({ message: 'Utilisateur non trouvé.' });
-//         }
+    let orderBy = 'created_at DESC'; // tri par defaut - les commandes les plus recentes 
+    if (sort === 'created_at_asc') orderBy = 'created_at ASC';
+    if (sort === 'total_price_asc') orderBy = 'total_price ASC';
+    if (sort === 'total_price_desc') orderBy = 'total_price DESC';
 
-//         // Insérer la commande dans la table "orders"
-//         const result = await db.query('INSERT INTO orders (user_id, total_price) VALUES (?, ?)', [userId, totalPrice]);
-//         const orderId = result.insertId;
+    const query = `
+        SELECT 
+            orders.order_id, 
+            orders.user_id, 
+            users.username, 
+            orders.total_price, 
+            orders.cart_items, 
+            orders.created_at 
+        FROM orders
+        JOIN users ON orders.user_id = users.id
+        ORDER BY ${orderBy}
+    `;
 
-//         // Insérer les articles dans la table "order_items"
-//         for (const item of cart) {
-//             await db.query(
-//                 'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)',
-//                 [orderId, item.productId, item.quantity, item.price]
-//             );
-//         }
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Erreur lors de la récupération des commandes :', err);
+            return res.status(500).json({ error: 'Erreur lors de la récupération des commandes.' });
+        }
 
-//         res.status(201).json({ message: 'Commande enregistrée avec succès.' });
-//     } catch (error) {
-//         console.error('Erreur lors de l\'insertion de la commande :', error);
-//         res.status(500).json({ message: 'Erreur serveur lors de l\'enregistrement de la commande.' });
-//     }
-// });
+        // formatage des résultats
+        const formattedResults = results.map(order => {
+            order.cart_items = JSON.parse(order.cart_items);  // on parse `cart_items` (qui est une chaîne JSON) pour l'utiliser dans le front de manage-orders.html
 
+            order.created_at = new Date(order.created_at).toISOString(); // changement en format ISO de la date à laquelle la commande a été réalisé
 
+            return order;
+        });
 
-// app.post('/submit-order', async (req, res) => {
-//     const { userId, cart } = req.body; // userId: ID du client, cart: produits dans le panier
-//     console.log('Données reçues:', { userId, cart }); // Log des données reçues
-
-//     if (!userId || !cart || cart.length === 0) {
-//         return res.status(400).json({ message: 'Paramètres invalides.' });
-//     }
-
-//     // Créer une connexion à la base de données
-//     const connection = mysql.createConnection({
-//         host: process.env.DB_HOST,
-//         user: process.env.DB_USER,
-//         password: process.env.DB_PASSWORD,
-//         database: process.env.DB_NAME
-//     });
-
-//     // Connexion à la base de données
-//     connection.connect((err) => {
-//         if (err) {
-//             console.error("Erreur de connexion à la database :", err);
-//             return res.status(500).json({ message: 'Erreur de connexion à la base de données.' });
-//         }
-//         console.log('Connexion ORDER réussie à la DB de MySQL');
-//     });
-
-//     try {
-//         // Démarrer la transaction
-//         await new Promise((resolve, reject) => {
-//             connection.beginTransaction((err) => {
-//                 if (err) {
-//                     return reject('Erreur lors du début de la transaction');
-//                 }
-//                 resolve();
-//             });
-//         });
-
-//         // 1. Créer une commande
-//         const [orderResult] = await new Promise((resolve, reject) => {
-//             connection.query(
-//                 'INSERT INTO orders (user_id) VALUES (?)',
-//                 [userId],
-//                 (err, results) => {
-//                     if (err) return reject(err);
-//                     resolve(results);
-//                 }
-//             );
-//         });
-//         const orderId = orderResult.insertId;
-
-//         // 2. Insérer les produits dans `order_items`
-//         const orderItems = cart.map(item => [
-//             orderId,
-//             item.id,
-//             item.quantity,
-//             item.price
-//         ]);
-
-//         await new Promise((resolve, reject) => {
-//             connection.query(
-//                 'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ?',
-//                 [orderItems],
-//                 (err, results) => {
-//                     if (err) return reject(err);
-//                     resolve(results);
-//                 }
-//             );
-//         });
-
-//         // Valider la transaction
-//         await new Promise((resolve, reject) => {
-//             connection.commit((err) => {
-//                 if (err) return reject('Erreur lors de la validation de la transaction');
-//                 resolve();
-//             });
-//         });
-
-//         res.status(200).json({ message: 'Commande enregistrée avec succès.' });
-//     } catch (error) {
-//         // Annuler la transaction en cas d'erreur
-//         connection.rollback(() => {
-//             console.error('Transaction annulée:', error);
-//         });
-//         res.status(500).json({ message: 'Erreur serveur.' });
-//     } finally {
-//         // Fermer la connexion
-//         connection.end();
-//     }
-// });
+        res.json(formattedResults);
+    });
+});
 
 
-
-
-// tjr à la fin
+// toujours à la fin
 app.listen(PORT, () => {
     console.log(`Serveur démarré sur le port ${PORT}`);
 });

@@ -278,6 +278,8 @@ body {
  
  }
  
+
+ 
  
  /* Toggle Button */
  
@@ -333,4 +335,61 @@ body {
  
  
  
- 
+ /* Style pour la Section de Filtrage et le Bouton "Show Orders" */
+.filter-section {
+   display: flex;
+   justify-content: space-between; /* Pour espacer le label, select et le bouton */
+   align-items: center; /* Aligner verticalement les éléments */
+   gap: 10px; /* Espacement entre les éléments */
+   background-color: #ffffff;
+   padding: 20px;
+   border-radius: 8px;
+   border: 1px solid #dcdde1;
+   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+   margin-top: 30px;
+}
+
+/* Style du Label */
+.filter-section label {
+   font-size: 16px;
+   font-weight: bold;
+   color: #34495e;
+   margin-bottom: 5px;
+}
+
+/* Style du Select */
+#order-filter {
+   padding: 10px 15px;
+   font-size: 16px;
+   border: 1px solid #dcdde1;
+   border-radius: 5px;
+   background-color: #ffffff;
+   color: #34495e;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   width: 200px;
+}
+
+/* Style du bouton Show Orders */
+.toggle-button {
+   background-color: #1abc9c;
+   color: white;
+   border: none;
+   padding: 10px 20px;
+   font-size: 16px;
+   border-radius: 30px;
+   cursor: pointer;
+   transition: background-color 0.3s ease;
+   margin-right: 10px; /* Espacement à droite */
+}
+
+/* Effet au survol du bouton */
+.toggle-button:hover {
+   background-color: #16a085;
+}
+
+/* Contenu Toggle (Initialement caché) */
+#order-list {
+   display: none; /* Cacher la liste des commandes par défaut */
+   margin-top: 20px;
+}
