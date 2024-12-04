@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payement</title>
-    <link rel="stylesheet" href="payement.css"> <!-- Ajouter votre CSS ici -->
+    <link rel="stylesheet" href="payement.css"> 
 </head>
 <body>
-    <!-- En-tête -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
@@ -27,11 +26,10 @@
         </nav>
     </header>
 
-    <!-- Page Payement -->
     <main class="payment-page">
         <h1>Paiement</h1>
         <div class="payment-container">
-            <!-- Récapitulatif de commande -->
+            
             <div class="order-summary">
                 <h2>Récapitulatif de votre commande</h2>
                 <div id="cart-summary"></div>
@@ -40,7 +38,7 @@
                 </div>
             </div>
 
-            <!-- Options de paiement -->
+            <!-- à changer comme tu veux ines -->
             <div class="payment-options">
                 <h2>Moyens de paiement</h2>
                 <form id="payment-form">
@@ -52,25 +50,23 @@
                         <input type="radio" id="paypal" name="payment-method" value="paypal">
                         <label for="paypal">PayPal</label>
                     </div>
-                    <button type="submit">Valider le paiement</button>
                 </form>
             </div>
+            <button id="submit-order">Valider la commande</button>
         </div>
     </main>
 
-    <!-- Pied de page -->
     <footer>
         <p>&copy; 2024 L'Arbre En Vie - Tous droits réservés</p>
     </footer>
 
     <script>
-        // Charger les données du panier et afficher le récapitulatif
-        function loadOrderSummary() {
+        function loadOrderSummary() {    // pour charger les données du panier et aff le recap
             const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
             const cartSummary = document.getElementById('cart-summary');
             const totalPriceElement = document.getElementById('total-price');
         
-            cartSummary.innerHTML = ''; // Réinitialise le contenu
+            cartSummary.innerHTML = ''; // maj le contenu 
         
             let totalSum = 0;
         
@@ -81,7 +77,7 @@
                 cartItems.forEach(item => {
                     const itemDiv = document.createElement('div');
                     itemDiv.className = 'order-item';
-                    itemDiv.innerHTML = `
+                    itemDiv.innerHTML = ` 
                         <div class="order-item">
                             <img src="${item.image}" alt="${item.name}" width="100">
                             <div class="order-details">
@@ -99,16 +95,54 @@
                 totalPriceElement.textContent = totalSum.toFixed(2).replace('.', ',');
             }
         }
-        
-        // Gérer la soumission du formulaire de paiement
-        document.getElementById('payment-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
-            alert(`Vous avez sélectionné le mode de paiement : ${paymentMethod.toUpperCase()}`);
-            // Ajouter la logique pour traiter le paiement ici
-        });
 
         window.onload = loadOrderSummary;
+
+        // pour gerer la soumission du formulaire de paiement 
+        document.getElementById('submit-order').addEventListener('click', async () => {
+            const userId = localStorage.getItem('userId'); // recup de l'userId charger depuis connexion.html
+            console.log("User ID récupéré :", userId);
+        
+            if (!userId) {
+                alert("Utilisateur non connecté. Veuillez vous connecter avant de passer une commande.");
+                window.location.href = 'connection.html'; 
+                return;
+            }
+        
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || []; 
+            const totalPrice = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0); 
+        
+            const orderData = {
+                userId: userId,
+                cart: cartItems, 
+                totalPrice: totalPrice.toFixed(2)
+            };
+        
+            console.log("Données envoyées :", orderData); // envoie à la DB
+        
+            try {
+                const response = await fetch('http://localhost:3000/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
+        
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("Erreur réponse serveur :", errorData);
+                    alert(`Erreur lors de la commande : ${errorData.message}`);
+                } else {
+                    alert("Commande passée avec succès !");
+                    window.location.href = 'confirmation.html';
+                }
+            } catch (error) {
+                console.error("Erreur lors de la requête :", error);
+                alert("Erreur de connexion au serveur.");
+            }
+        });
     </script>
+    <footer>
+        <p>&copy; 2024 L'Arbre Envie - All Rights Reserved</p>
+    </footer>
 </body>
 </html>

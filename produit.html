@@ -64,7 +64,7 @@
         fetch(`http://localhost:3000/api/products/${productId}`)
             .then(response => response.json())
             .then(product => {
-                // Remplir les détails du produit
+                // remplir les détails du produit
                 document.getElementById('product-image').src = `http://localhost:3000/images/${product.image_url}`;
                 document.getElementById('product-name').textContent = product.name;
                 document.getElementById('product-price').textContent = `${product.price}€`;
@@ -93,7 +93,7 @@
                 console.error('Erreur lors de la récupération du produit:', error);
             });
     
-        // Ajouter au panier avec URL de l'image
+        // ajouter au panier avec URL de l'image
         function addToCart() {
             const productName = document.getElementById('product-name').textContent;
             const productPrice = parseFloat(document.getElementById('product-price').textContent.replace('€', '').trim());
@@ -117,11 +117,9 @@
             localStorage.setItem('cart', JSON.stringify(cart));
             alert('Produit ajouté au panier');
         }
-        
-        
+             
     </script>
     
     
 </body>
-
 </html>

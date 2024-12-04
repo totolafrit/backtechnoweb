@@ -3,6 +3,8 @@ const express = require('express'); // créer et gérer le serveur web
 const mysql = require('mysql'); // Se connecter à la DB
 const cors = require('cors'); // gérer  API
 const path = require('path'); // pour def le chemin
+const router = express.Router();
+
 
 require('dotenv').config({ path: './info.env' }); // pour eviter les problèmes de chemins
 
@@ -11,6 +13,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json()); 
+
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/images', express.static('images')); // middleware pour servir le doc images
@@ -47,10 +50,12 @@ function checkAdminRole(req, res, next) { // middleware pour vérifier si l'util
     next();
 }
 
-const bcrypt = require('bcrypt'); // pour la hashage des données
+const bcrypt = require('bcrypt'); // methode pour hasher les mdp
 
 
-// Routes 
+//////////////// Routes ////////////////
+
+//create un compte
 
 app.post('/register', async (req, res) => {
     const { username, email, password, role } = req.body;
@@ -61,7 +66,7 @@ app.post('/register', async (req, res) => {
 
     try {
         // hachage du mdp
-        const saltRounds = 10; // nombre de rounds de salage (sécurité)
+        const saltRounds = 10; // nombre de rounds de salage
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         
         console.log("Mot de passe original :", password);
@@ -85,6 +90,7 @@ app.post('/register', async (req, res) => {
 });
 
 
+// connexion
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -113,12 +119,15 @@ app.post('/login', async (req, res) => {
 
         res.json({
             message: 'Connexion réussie!',
-            role: user.role, // Retourner le rôle pour le front-end
+            userId: user.id,  // ajout de luserId
+            role: user.role,   // utile pour se connecter en tant qu'admin
         });
     });
 });
 
+
 // route DELETE pour supprimer un utilisateur (admin uniquement)
+
 app.delete('/delete-user/:id', checkAdminRole, (req, res) => {
     const userId = req.params.id;
 
@@ -137,7 +146,8 @@ app.delete('/delete-user/:id', checkAdminRole, (req, res) => {
     });
 });
 
-// Ajout d'un produit
+// Ajout d'un produit (admin)
+
 app.post('/api/products', (req, res) => {
     const { name, price, description, image_url, category } = req.body;
 
@@ -204,27 +214,6 @@ app.get('/api/products/:id', (req, res) => {
     });
 });
 
-
-// // recup les articles par catégorie (admin vers shop)
-// app.get('/api/products/category/:categoryId', (req, res) => {
-//     const categoryId = req.params.categoryId;  // Récupère l'ID de la catégorie depuis l'URL
-//     console.log('ID de la catégorie demandé :', categoryId);
-
-//     // Requête SQL pour récupérer les produits ayant la catégorie spécifiée
-//     db.query('SELECT * FROM products WHERE category = ?', [categoryId], (err, results) => {
-//         if (err) {
-//             console.error('Erreur SQL:', err.message);
-//             return res.status(500).json({ error: err.message });
-//         }
-
-//         if (results.length === 0) {
-//             return res.status(404).json({ message: 'Aucun produit trouvé pour cette catégorie' });
-//         }
-
-//         res.json(results);  // Retourne les produits trouvés
-//     });
-// });
-
 // recupérer les infos des produits par catégorie pour les afficher dans la bonne page
 
 app.get('/api/products/category/:categoryId', (req, res) => {
@@ -238,6 +227,7 @@ app.get('/api/products/category/:categoryId', (req, res) => {
 });
 
 
+// produit par ID
 
 app.put('/api/products/:id', (req, res) => {
     const productId = req.params.id;
@@ -263,7 +253,7 @@ app.put('/api/products/:id', (req, res) => {
 });
 
 
-// Route pour récupérer tous les utilisateurs
+// route pour recup tous les users
 app.get('/api/users', (req, res) => {
     const query = 'SELECT id, username, email, role FROM users';
     db.query(query, (err, results) => {
@@ -275,7 +265,7 @@ app.get('/api/users', (req, res) => {
     });
 });
 
-// Route pour récupérer un utilisateur par ID
+// route pour recup un user par ID
 app.get('/api/users/:id', (req, res) => {
     const userId = req.params.id;
     const query = 'SELECT id, username, email, role FROM users WHERE id = ?';
@@ -294,7 +284,7 @@ app.get('/api/users/:id', (req, res) => {
     });
 });
 
-// Route pour mettre à jour un utilisateur
+//rute pour mettre à jour un user
 app.put('/api/users/:id', (req, res) => {
     const userId = req.params.id;
     const { username, email, role } = req.body;
@@ -318,7 +308,7 @@ app.put('/api/users/:id', (req, res) => {
     });
 });
 
-// Route pour supprimer un utilisateur
+// route pour suppr un user
 app.delete('/api/users/:id', (req, res) => {
     const userId = req.params.id;
 
@@ -337,7 +327,7 @@ app.delete('/api/users/:id', (req, res) => {
     });
 });
 
-// Route pour ajouter un utilisateur
+// route pour ajouter un user
 app.post('/api/users', async (req, res) => {
     const { username, email, password, role } = req.body;
 
@@ -364,8 +354,74 @@ app.post('/api/users', async (req, res) => {
 });
 
 
+// route pour enregistrer une commande
 
-// tjr à la fin
+app.post('/create-order', (req, res) => {
+    const { userId, cart, totalPrice } = req.body;
+    console.log("Données reçues dans /create-order :", req.body);
+
+    if (!userId || !cart || cart.length === 0) {  // verifier si l'userid et le panier sont présents
+        return res.status(400).json({ error: 'User ID or cart is missing.' });
+    }
+
+    const query = 'INSERT INTO orders (user_id, total_price, cart_items) VALUES (?, ?, ?)'; // add ici si on veut dire quand recup la commande
+    const cartJson = JSON.stringify(cart);  // on converti le panier en JSON pour l'enregistrer
+
+    db.query(query, [userId, totalPrice, cartJson], (err, results) => {
+        if (err) {
+            console.error('Erreur lors de la création de la commande :', err);
+            return res.status(500).json({ error: 'Erreur lors de la création de la commande.' });
+        }
+
+        res.json({ message: 'Commande créée avec succès!', orderId: results.insertId });
+    });
+});
+       
+
+// route pour récupérer les commandes côté admin
+app.get('/api/orders', (req, res) => {
+
+    const { sort } = req.query; 
+
+    let orderBy = 'created_at DESC'; // tri par defaut - les commandes les plus recentes 
+    if (sort === 'created_at_asc') orderBy = 'created_at ASC';
+    if (sort === 'total_price_asc') orderBy = 'total_price ASC';
+    if (sort === 'total_price_desc') orderBy = 'total_price DESC';
+
+    const query = `
+        SELECT 
+            orders.order_id, 
+            orders.user_id, 
+            users.username, 
+            orders.total_price, 
+            orders.cart_items, 
+            orders.created_at 
+        FROM orders
+        JOIN users ON orders.user_id = users.id
+        ORDER BY ${orderBy}
+    `;
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Erreur lors de la récupération des commandes :', err);
+            return res.status(500).json({ error: 'Erreur lors de la récupération des commandes.' });
+        }
+
+        // formatage des résultats
+        const formattedResults = results.map(order => {
+            order.cart_items = JSON.parse(order.cart_items);  // on parse `cart_items` (qui est une chaîne JSON) pour l'utiliser dans le front de manage-orders.html
+
+            order.created_at = new Date(order.created_at).toISOString(); // changement en format ISO de la date à laquelle la commande a été réalisé
+
+            return order;
+        });
+
+        res.json(formattedResults);
+    });
+});
+
+
+// toujours à la fin
 app.listen(PORT, () => {
     console.log(`Serveur démarré sur le port ${PORT}`);
 });

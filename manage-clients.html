@@ -46,7 +46,6 @@
                 <th>ID</th>
                 <th>Nom d'utilisateur</th>
                 <th>Email</th>
-                <th>Mot de passe (hash)</th>
                 <th>Rôle</th>
                 <th>Modifier</th>
                 <th>Supprimer</th>
@@ -74,11 +73,11 @@
     </div>
 
     <script>
-        let allusers = [];
+        let allusers = []; // recup les infos
 
         async function fetchusers() {
             try {
-                const response = await fetch('http://localhost:3000/api/users');
+                const response = await fetch('http://localhost:3000/api/users'); // voir route app.js
                 const users = await response.json();
                 allusers = users; 
                 displayusers(users);
@@ -99,7 +98,6 @@
                     <td>${client.id}</td>
                     <td>${client.username}</td>
                     <td>${client.email}</td>
-                    <td>${client.password}</td>
                     <td>${client.role}</td>
                     <td><button onclick="editClient(${client.id})">Modifier</button></td>
                     <td><button onclick="deleteClient(${client.id})">Supprimer</button></td>
@@ -201,5 +199,9 @@
 
         fetchusers(); 
     </script>
+    <footer>
+        <p>&copy; 2024 L'Arbre Envie - All Rights Reserved</p>
+    </footer>
 </body>
+
 </html>
