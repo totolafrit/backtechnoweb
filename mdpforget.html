@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+   <meta charset="UTF-8">
+
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>Réinitialiser le mot de passe</title>
+
+   <link rel="stylesheet" href="mdpforget.css">
+
+   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+   <div class="reset-container">
+
+       <!-- Logo -->
+
+       <img src="logo.png" alt="Logo de L'Arbre Envie" class="logo">
+
+       <h2>Réinitialiser le mot de passe</h2>
+
+       <p>Entrez votre adresse e-mail pour recevoir un lien de réinitialisation de mot de passe.</p>
+
+       <form action="#" method="POST">
+
+           <div class="input-group">
+
+               <label for="email">Adresse e-mail</label>
+
+               <input type="email" id="email" name="email" required>
+
+           </div>
+
+           <button type="submit">Envoyer</button>
+
+       </form>
+
+       <p><a href="connection.html">Retour à la connexion</a></p>
+
+   </div>
+
+   <footer>
+
+       <p>&copy; 2024 L'Arbre Envie - Tous droits réservés</p>
+
+   </footer>
+
+
+   <!-- Bouton de changement de thème -->
+
+   <div id="theme-toggle">
+
+       <button id="theme-toggle-btn" title="Changer le thème">
+
+           <i class="bx bx-sun"></i>
+
+       </button>
+
+   </div>
+
+
+   <!-- Script pour le changement de thème -->
+
+   <script>
+
+       // Vérifiez si un thème est stocké dans localStorage
+
+       const themeToggleButton = document.getElementById("theme-toggle-btn");
+
+       const body = document.body;
+
+
+       // Appliquer le thème stocké
+
+       const savedTheme = localStorage.getItem("theme");
+
+       if (savedTheme) {
+
+           body.classList.add(savedTheme);
+
+           updateIcon(savedTheme);
+
+       }
+
+
+       // Ajouter l'écouteur pour changer le thème
+
+       themeToggleButton.addEventListener("click", () => {
+
+           if (body.classList.contains("dark-theme")) {
+
+               body.classList.remove("dark-theme");
+
+               localStorage.setItem("theme", "light-theme");
+
+               updateIcon("light-theme");
+
+           } else {
+
+               body.classList.add("dark-theme");
+
+               localStorage.setItem("theme", "dark-theme");
+
+               updateIcon("dark-theme");
+
+           }
+
+       });
+
+
+       // Mettre à jour l'icône du bouton
+
+       function updateIcon(theme) {
+
+           const icon = themeToggleButton.querySelector("i");
+
+           if (theme === "dark-theme") {
+
+               icon.classList.remove("bx-sun");
+
+               icon.classList.add("bx-moon");
+
+           } else {
+
+               icon.classList.remove("bx-moon");
+
+               icon.classList.add("bx-sun");
+
+           }
+
+       }
+
+   </script>
+
+
+<script src="theme.js"></script>
+
+
+<!-- Bouton de changement de thème -->
+
+<div id="theme-toggle">
+
+<button id="theme-toggle-btn" title="Changer le thème">
+
+    <i class="bx bx-sun"></i>
+
+</button>
+
+</div>
+
+
+</body>
+
+</html>
+

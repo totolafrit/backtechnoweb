@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la Commande</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="order-details.css">
+</head>
+<body>
+    <!-- En-tête -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="accueil.html">Accueil</a></li>
+                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="project.html">Services</a></li>
+                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li>
+                    <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
+                    <a href="myaccount.html"><i class="bx bxs-user-circle"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenu principal -->
+    <main>
+        <section id="order-details-section">
+            <h1>Détails de la Commande #12345</h1>
+            <p>Date : 01/12/2024</p>
+            <p>Total : 45,90€</p>
+
+            <div class="order-items">
+                <div class="order-item">
+                    <p><strong>Article :</strong> Produit A</p>
+                    <p><strong>Quantité :</strong> 2</p>
+                    <p><strong>Prix :</strong> 15,00€</p>
+                </div>
+                <div class="order-item">
+                    <p><strong>Article :</strong> Produit B</p>
+                    <p><strong>Quantité :</strong> 1</p>
+                    <p><strong>Prix :</strong> 15,90€</p>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button onclick="goBack()" class="btn">Retour à mon compte</button>
+                <button onclick="generatePDF()" class="btn pdf-btn">Télécharger la facture</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pied de page -->
+    <footer>
+        <p>&copy; 2024 L'Arbre Envie - Tous droits réservés</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        function goBack() {
+            window.location.href = "myaccount.html";
+        }
+
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(18);
+            doc.text("Facture - Commande #12345", 20, 20);
+
+            doc.setFontSize(14);
+            doc.text("Date : 01/12/2024", 20, 40);
+            doc.text("Total : 45,90€", 20, 50);
+
+            doc.setFontSize(12);
+            doc.text("Détails de la commande :", 20, 70);
+
+            doc.text("- Produit A : Quantité 2, Prix 30,00€", 20, 80);
+            doc.text("- Produit B : Quantité 1, Prix 15,90€", 20, 90);
+
+            doc.setFontSize(10);
+            doc.text("Merci pour votre achat !", 20, 120);
+
+            doc.save("facture-commande-12345.pdf");
+        }
+    </script>
+
+    <!-- Bouton de changement de thème -->
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle-btn');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+        });
+    </script>
+</body>
+</html>

@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La technologie au service du jardinage</title>
+    <title>Tailler ou ne pas Tailler</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="actu.css">
 </head>
-<body>
 
+<body>
+   
     <!-- En-tête -->
     <header>
         <div class="logo">
@@ -15,23 +18,54 @@
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="accueil.html">Home</a></li>
-                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="accueil.html">Accueil</a></li>
+                <li><a href="aboutus.html">À propos</a></li>
                 <li><a href="shop.html">Shop</a></li>
-                <li><a href="project.html">Project</a></li>
-                <li><a href="actualites.html">Actuality</a></li>
-                <li><a href="conseils.html">Advices</a></li>
+                <li><a href="project.html">Services</a></li>
+                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li>
+                    <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
+                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
+                </li>
             </ul>
         </nav>
     </header>
 
-    <!-- Contenu de l'article -->
+    <!-- Retour aux actualités -->
+    <section class="return-link">
+        <a href="actualites.html"><i class="bx bx-left-arrow-alt"></i> Retour aux Actualités</a>
+    </section>
+
+    <!-- Contenu principal -->
     <main>
-        <article>
-            <h1>La technologie au service du jardinage</h1>
-            <p>Découvrez les dernières innovations technologiques qui facilitent l'entretien des jardins modernes.</p>
-            <p>Des capteurs de sol aux outils automatisés, la technologie révolutionne le jardinage et le rend plus accessible pour tous.</p>
-        </article>
+        <section class="content">
+            <h1>Tailler ou ne pas Tailler</h1>
+            <p class="description">
+                La plaquette éducative <strong>"Tailler ou ne pas Tailler"</strong> aborde un sujet crucial : comment entretenir les arbres en respectant leur croissance naturelle.  
+                Ce guide met en lumière les impacts des tailles inadaptées, offrant des conseils pratiques pour préserver la santé et la beauté des arbres.  
+                À travers des illustrations informatives, cette ressource répond aux questions des passionnés de jardinage :  
+            </p>
+            <ul>
+                <li>Pourquoi éviter les tailles excessives ?</li>
+                <li>Quels sont les effets sur la vitalité et la longévité des arbres ?</li>
+                <li>Comment adopter des pratiques d’élagage responsables ?</li>
+            </ul>
+            <p>
+                Ce document est idéal pour tous ceux qui souhaitent conjuguer esthétique et durabilité dans l’entretien des espaces verts.
+                Utilisez les flèches pour parcourir les pages et en apprendre davantage sur les bonnes pratiques arboricoles.
+            </p>
+        </section>
+
+        <!-- Visionneuse PDF -->
+        <section class="pdf-viewer">
+            <div class="navigation">
+                <button id="prevPage"><i class="bx bx-chevron-left"></i> Précédent</button>
+                <button id="nextPage">Suivant <i class="bx bx-chevron-right"></i></button>
+                <button id="zoomBtn"><i class="bx bx-zoom-in"></i> Zoom</button>
+            </div>
+            <canvas id="pdfCanvas"></canvas>
+            <p class="page-info">Page : <span id="pageNum"></span> / <span id="pageCount"></span></p>
+        </section>
     </main>
 
     <!-- Pied de page -->
@@ -39,5 +73,98 @@
         <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
     </footer>
 
+    <!-- Script JS pour le PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+        const url = 'BD-Tailler-ou-ne-pas-tailler-2-1.pdf'; // Lien vers le PDF
+
+        let pdfDoc = null,
+            pageNum = 1,
+            pageIsRendering = false,
+            pageNumIsPending = null;
+
+        const scale = 1, // Réduction de la taille du PDF
+            canvas = document.getElementById('pdfCanvas'),
+            ctx = canvas.getContext('2d');
+
+        // Charger le PDF
+        const renderPage = (num) => {
+            pageIsRendering = true;
+
+            pdfDoc.getPage(num).then((page) => {
+                const viewport = page.getViewport({ scale });
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderCtx = {
+                    canvasContext: ctx,
+                    viewport: viewport,
+                };
+
+                page.render(renderCtx).promise.then(() => {
+                    pageIsRendering = false;
+
+                    if (pageNumIsPending !== null) {
+                        renderPage(pageNumIsPending);
+                        pageNumIsPending = null;
+                    }
+                });
+
+                document.getElementById('pageNum').textContent = num;
+            });
+        };
+
+        const queueRenderPage = (num) => {
+            if (pageIsRendering) {
+                pageNumIsPending = num;
+            } else {
+                renderPage(num);
+            }
+        };
+
+        const showPrevPage = () => {
+            if (pageNum <= 1) {
+                return;
+            }
+            pageNum--;
+            queueRenderPage(pageNum);
+        };
+
+        const showNextPage = () => {
+            if (pageNum >= pdfDoc.numPages) {
+                return;
+            }
+            pageNum++;
+            queueRenderPage(pageNum);
+        };
+
+        // Fonction pour ouvrir le PDF en plein écran
+        const openPDFInNewTab = () => {
+            window.open(url, '_blank');
+        };
+
+        pdfjsLib.getDocument(url).promise.then((pdfDoc_) => {
+            pdfDoc = pdfDoc_;
+
+            document.getElementById('pageCount').textContent = pdfDoc.numPages;
+
+            renderPage(pageNum);
+        });
+
+        document.getElementById('prevPage').addEventListener("click", showPrevPage);
+        document.getElementById('nextPage').addEventListener("click", showNextPage);
+        document.getElementById('zoomBtn').addEventListener("click", openPDFInNewTab);
+    </script>
+
+    <!-- Script pour le changement de thème -->
+    <script src="theme.js"></script>
+
+    <!-- Bouton de changement de thème -->
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
 </body>
+
 </html>

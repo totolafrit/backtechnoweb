@@ -1,139 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery - Past Projects</title>
+    <title>À propos de nous</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="project.css">
 </head>
+
 <body>
 
-    <!-- Header -->
-    <header>
+    <!-- En-tête -->
+     <!-- En-tête -->
+     <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="accueil.html">Home</a></li>
-                <li><a href="aboutus.html">About us</a></li>
+                <li><a href="accueil.html">Accueil</a></li>
+                <li><a href="aboutus.html">À propos</a></li>
                 <li><a href="shop.html">Shop</a></li>
-                <li><a href="project.html">Projects</a></li>
-                <li><a href="actualites.html">Actuality</a></li>
-                <li><a href="conseils.html">Advices</a></li>
-                <!-- on mettra panier.html plus tard-->
-                <li><a href="fakepanier.html">Mon panier</a></li> 
-                <li><a href="connection.html">Connexion</a></li>
+                <li><a href="project.html">Services</a></li>
+                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li>
+                    <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
+                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
+                </li>
             </ul>
         </nav>
     </header>
 
-    <!-- Filter Bar -->
-    <section class="filter-bar">
-        <label for="filter-date">Filter by Date:</label>
-        <select id="filter-date">
-            <option value="all">All Dates</option>
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-            <option value="2022">2022</option>
-        </select>
-
-        <label for="filter-price">Filter by Price:</label>
-        <select id="filter-price">
-            <option value="all">All Prices</option>
-            <option value="low">Under 1000€</option>
-            <option value="medium">1000€ - 5000€</option>
-            <option value="high">Over 5000€</option>
-        </select>
-
-        <label for="filter-type">Filter by Type:</label>
-        <select id="filter-type">
-            <option value="all">All Types</option>
-            <option value="elagage">Pruning</option>
-            <option value="abattage">Tree Felling</option>
-            <option value="soin">Tree Care</option>
-            <option value="amenagement">Landscaping</option>
-        </select>
-    </section>
-
-    <!-- Gallery Content -->
+    <!-- Contenu de la galerie -->
     <main>
         <section class="gallery-container">
-            <h1>Past Projects Gallery</h1>
-            <p>Explore our previous projects in tree pruning, care, and landscaping of green spaces.</p>
+            <h1>Service réalisé par l'Arbre Envie</h1>
+            <p>Découvrez nos services précédents en matière d'entretien de jardin, débroussaillage, création, tailles et soins aux arbres.</p>
             <div class="gallery-grid">
-                <!-- Project 1 -->
-                <div class="gallery-item" data-type="elagage" data-date="2024" data-price="medium">
-                    <img src="c1.webp" alt="Project 1">
-                    <div class="gallery-info">
-                        <h2>Pruning of Mature Trees in a Public Park</h2>
+                <!-- Chantier 1 -->
+                <a href="project-entretient.html" class="gallery-link">
+                    <div class="gallery-item" data-type="Entretient de jardin" data-date="2024">
+                        <img src="entretient.jpg" alt="Entretient de jardin">
+                        <div class="gallery-info">
+                            <h2>Entretient de jardin</h2>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Project 2 -->
-                <div class="gallery-item" data-type="soin" data-date="2023" data-price="low">
-                    <img src="c2.webp" alt="Project 2">
-                    <div class="gallery-info">
-                        <h2>Formative Pruning for Young Trees</h2>
+                </a>
+                <!-- Chantier 2 -->
+                <a href="project-debrous.html" class="gallery-link">
+                    <div class="gallery-item" data-type="Débroussaillage" data-date="2024">
+                        <img src="debrouss.jpg" alt="Débroussaillage">
+                        <div class="gallery-info">
+                            <h2>Débroussaillage</h2>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="gallery-item" data-type="abattage" data-date="2022" data-price="high">
-                    <img src="c3.webp" alt="Project 3">
-                    <div class="gallery-info">
-                        <h2>Safe Tree Felling in Urban Area</h2>
+                </a>
+                <!-- Chantier 3 -->
+                <a href="project-taille-soins.html" class="gallery-link">
+                    <div class="gallery-item" data-type="Taille et soins aux arbres" data-date="2024">
+                        <img src="taille.jpg" alt="Taille et soins aux arbres">
+                        <div class="gallery-info">
+                            <h2>Taille et soins aux arbres</h2>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Project 4 -->
-                <div class="gallery-item" data-type="elagage" data-date="2024" data-price="medium">
-                    <img src="c4.webp" alt="Project 4">
-                    <div class="gallery-info">
-                        <h2>Cleaning and Thinning of Tree Crowns</h2>
+                </a>
+                <!-- Chantier 4 -->
+                <a href="project-creation.html" class="gallery-link">
+                    <div class="gallery-item" data-type="Création" data-date="2024">
+                        <img src="creation.jpg" alt="Création">
+                        <div class="gallery-info">
+                            <h2>Création</h2>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Project 5 -->
-                <div class="gallery-item" data-type="elagage" data-date="2023" data-price="low">
-                    <img src="c5.webp" alt="Project 5">
-                    <div class="gallery-info">
-                        <h2>Height Reduction for Safety</h2>
-                    </div>
-                </div>
-
-                <!-- Project 6 -->
-                <div class="gallery-item" data-type="soin" data-date="2022" data-price="medium">
-                    <img src="fruit.webp" alt="Project 6">
-                    <div class="gallery-info">
-                        <h2>Pruning and Care of Fruit Trees</h2>
-                    </div>
-                </div>
-
-                <!-- Project 7 -->
-                <div class="gallery-item" data-type="amenagement" data-date="2024" data-price="high">
-                    <img src="jardin.webp" alt="Project 7">
-                    <div class="gallery-info">
-                        <h2>Private Green Space Landscaping</h2>
-                    </div>
-                </div>
-
-                <!-- Project 8 -->
-                <div class="gallery-item" data-type="abattage" data-date="2023" data-price="high">
-                    <img src="c6.webp" alt="Project 8">
-                    <div class="gallery-info">
-                        <h2>Tree Felling of a Hazardous Tree</h2>
-                    </div>
-                </div>
+                </a>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
+    <!-- Pied de page -->
     <footer>
-        <p>&copy; 2024 L'Arbre En Vie. All rights reserved.</p>
+        <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
     </footer>
 
-    <script src="filter.js"></script>
+    <!-- Script pour le changement de thème -->
+    <script src="theme.js"></script>
+
+    <!-- Bouton de changement de thème -->
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
+
 </body>
+
 </html>

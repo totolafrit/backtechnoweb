@@ -1,73 +1,253 @@
-/* Style de base */
+/* Styles généraux */
 body {
     font-family: Arial, sans-serif;
-    line-height: 1.6;
     margin: 0;
     padding: 0;
-    background-color: #ffffff;
+    background-color: #f0f0f5;
+    color: #333;
 }
 
-/* En-tête */
 header {
-    background-color: #fffcfc;
-    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #ddd;
+    background: #fff;
+    padding: 10px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Logo */
 .logo img {
     width: 60px;
-    height: auto;
 }
 
-/* Menu de navigation */
 .nav-menu {
     display: flex;
-    gap: 20px;
-    list-style-type: none;
-    padding: 0;
+    list-style: none;
+    gap: 15px;
     margin: 0;
+    padding: 0;
 }
 
-.nav-menu li a {
+.nav-menu a {
     text-decoration: none;
-    color: black;
+    color: #333;
     font-weight: bold;
-    transition: color 0.3s ease;
+    transition: color 0.3s;
 }
 
-.nav-menu li a:hover {
+.nav-menu a:hover {
     color: #4CAF50;
 }
 
-/* Style pour le contenu principal */
-main {
-    padding: 20px;
-    max-width: 800px;
-    margin: 40px auto;
+.return-link {
+    margin: 20px;
+    text-align: left;
 }
 
-article h1 {
-    font-size: 2em;
-    margin-bottom: 10px;
-    color: #333;
+.return-link a {
+    text-decoration: none;
+    font-size: 16px;
+    color: #4CAF50;
+    display: inline-flex;
+    align-items: center;
+}
+
+.return-link a i {
+    margin-right: 5px;
+}
+
+main {
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 800px;
     text-align: center;
 }
 
-article p {
-    font-size: 1em;
+main h1 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+main p {
+    font-size: 16px;
+    line-height: 1.6;
     color: #666;
+}
+
+.pdf-viewer {
+    display: flex; /* Active Flexbox */
+    flex-direction: column; /* Place les enfants en colonne */
+    justify-content: center; /* Centre verticalement */
+    align-items: center; /* Centre horizontalement */
+    height: calc(100vh - 200px); /* Ajuste la hauteur en soustrayant l'espace occupé par l'en-tête et autres éléments */
+    margin: 0 auto; /* Centre horizontalement le conteneur */
+    padding: 20px; /* Ajoute un peu d'espacement */
+    box-sizing: border-box; /* Inclut les marges/paddings dans la hauteur totale */
+}
+
+
+.pdf-viewer .navigation {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
     margin-bottom: 10px;
+}
+
+.pdf-viewer .navigation button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.pdf-viewer .navigation button:hover {
+    background-color: #388E3C;
+}
+
+#pdfCanvas {
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    max-width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.page-info {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #f9f9f9;
+    color: #666;
+    font-size: 14px;
+    margin-top: 30px;
+}
+
+.nav-menu a[href="actualites.html"] {
+    color: #4CAF50;
+    background-color: #eaf8ea;
+    font-weight: bold;
+}
+
+/* ========================= Mode Sombre ========================= */
+body.dark-theme {
+    background-color: #121212; /* Couleur de fond sombre */
+    color: #e0e0e0; /* Texte en gris clair */
+}
+
+/* En-tête */
+body.dark-theme header {
+    background-color: #1f1f1f; /* Fond de l'en-tête */
+    color: #e0e0e0; /* Texte */
+}
+
+body.dark-theme .nav-menu a {
+    color: #e0e0e0;
+}
+
+body.dark-theme .nav-menu a:hover {
+    color: #4CAF50; /* Couleur d'accent */
+}
+
+/* Carousel */
+body.dark-theme .carousel-item {
+    background-color: #1f1f1f;
+    border: 1px solid #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .carousel-item img {
+    border-bottom: 1px solid #333;
+}
+
+body.dark-theme .project-title {
+    color: #4CAF50;
+}
+
+/* Promotions */
+body.dark-theme .discount-item {
+    background-color: #1f1f1f;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    color: #e0e0e0;
+}
+
+body.dark-theme .discount-item:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.8);
+}
+
+/* Actualités */
+body.dark-theme .actualities-item {
+    background-color: #1f1f1f;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    color: #e0e0e0;
+}
+
+body.dark-theme .actualities-item a {
+    color: #4CAF50;
+}
+
+body.dark-theme .actualities-item a:hover {
+    color: #66BB6A; /* Accentuation du lien */
+}
+
+/* Boutons */
+body.dark-theme button,
+body.dark-theme .theme-toggle {
+    background-color: #333;
+    color: #e0e0e0;
+    border: 1px solid #444;
+}
+
+body.dark-theme button:hover,
+body.dark-theme .theme-toggle:hover {
+    background-color: #444;
+    color: #ffffff;
 }
 
 /* Pied de page */
-footer {
-    background-color: #f1f1f1;
-    text-align: center;
-    padding: 10px;
-    color: #666;
-    margin-top: 20px;
+body.dark-theme footer {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
+
+/* Liens */
+body.dark-theme a {
+    color: #4CAF50;
+}
+
+body.dark-theme a:hover {
+    color: #66BB6A;
+}
+/* Style pour le bouton de changement de thème */
+#theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+#theme-toggle button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#theme-toggle button:hover {
+    background-color: #4CAF50;
+    transform: scale(1.1);
 }

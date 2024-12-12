@@ -1,40 +1,167 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le jardinage urbain en plein essor</title>
+    <title>Mort d'un Chêne</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="actu.css">
 </head>
-<body>
 
+<body>
+    <!-- En-tête -->
+   
+    <!-- En-tête -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="accueil.html">Home</a></li>
-                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="accueil.html">Accueil</a></li>
+                <li><a href="aboutus.html">À propos</a></li>
                 <li><a href="shop.html">Shop</a></li>
-                <li><a href="project.html">Project</a></li>
-                <li><a href="actualites.html">Actuality</a></li>
-                <li><a href="conseils.html">Advices</a></li>
+                <li><a href="project.html">Services</a></li>
+                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li>
+                    <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
+                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
+                </li>
             </ul>
         </nav>
     </header>
+    <!-- Retour aux actualités -->
+    <section class="return-link">
+        <a href="actualites.html"><i class="bx bx-left-arrow-alt"></i> Retour aux Actualités</a>
+    </section>
 
+    <!-- Contenu principal -->
     <main>
-        <article>
-            <h1>Le jardinage urbain en plein essor</h1>
-            <p>Le jardinage urbain transforme les villes en créant des espaces verts dans des environnements urbains.</p>
-            <p>Découvrez comment ce mouvement encourage la durabilité, la biodiversité et la qualité de vie dans les zones urbaines.</p>
-        </article>
+        <section class="content">
+            <h1>Mort d'un Chêne</h1>
+            <p class="description">
+                Plongez dans le récit poignant de <strong>"Mort d'un Chêne"</strong>, une bande dessinée éducative
+                qui illustre les défis auxquels les arbres sont confrontés face aux mauvaises pratiques humaines,
+                aux maladies et aux agressions environnementales. Ce document met en lumière les erreurs courantes
+                dans l'entretien des arbres tout en sensibilisant à l'importance de leur préservation.
+            </p>
+            <p>
+                À travers une narration riche et des illustrations percutantes, découvrez comment un chêne majestueux
+                a été affecté par des choix inadéquats. Utilisez les flèches pour naviguer dans ce récit éducatif
+                et inspirant.
+            </p>
+        </section>
+
+        <!-- Visionneuse PDF -->
+        <section class="pdf-viewer">
+            <div class="navigation">
+                <button id="prevPage"><i class="bx bx-chevron-left"></i> Précédent</button>
+                <button id="nextPage">Suivant <i class="bx bx-chevron-right"></i></button>
+                <button id="zoomBtn"><i class="bx bx-zoom-in"></i> Zoom</button>
+            </div>
+            <canvas id="pdfCanvas"></canvas>
+            <p class="page-info">Page : <span id="pageNum"></span> / <span id="pageCount"></span></p>
+        </section>
     </main>
 
+    <!-- Pied de page -->
     <footer>
         <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
     </footer>
 
+    <!-- Script JS pour le PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+        const url = '2021-BD-mort-dun-chene.pdf'; // Lien vers le PDF
+
+        let pdfDoc = null,
+            pageNum = 1,
+            pageIsRendering = false,
+            pageNumIsPending = null;
+
+        const scale = 1, // Réduction de la taille du PDF
+            canvas = document.getElementById('pdfCanvas'),
+            ctx = canvas.getContext('2d');
+
+        // Charger le PDF
+        const renderPage = (num) => {
+            pageIsRendering = true;
+
+            pdfDoc.getPage(num).then((page) => {
+                const viewport = page.getViewport({ scale });
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderCtx = {
+                    canvasContext: ctx,
+                    viewport: viewport,
+                };
+
+                page.render(renderCtx).promise.then(() => {
+                    pageIsRendering = false;
+
+                    if (pageNumIsPending !== null) {
+                        renderPage(pageNumIsPending);
+                        pageNumIsPending = null;
+                    }
+                });
+
+                document.getElementById('pageNum').textContent = num;
+            });
+        };
+
+        const queueRenderPage = (num) => {
+            if (pageIsRendering) {
+                pageNumIsPending = num;
+            } else {
+                renderPage(num);
+            }
+        };
+
+        const showPrevPage = () => {
+            if (pageNum <= 1) {
+                return;
+            }
+            pageNum--;
+            queueRenderPage(pageNum);
+        };
+
+        const showNextPage = () => {
+            if (pageNum >= pdfDoc.numPages) {
+                return;
+            }
+            pageNum++;
+            queueRenderPage(pageNum);
+        };
+
+        // Fonction pour ouvrir le PDF en plein écran
+        const openPDFInNewTab = () => {
+            window.open(url, '_blank');
+        };
+
+        pdfjsLib.getDocument(url).promise.then((pdfDoc_) => {
+            pdfDoc = pdfDoc_;
+
+            document.getElementById('pageCount').textContent = pdfDoc.numPages;
+
+            renderPage(pageNum);
+        });
+
+        document.getElementById('prevPage').addEventListener("click", showPrevPage);
+        document.getElementById('nextPage').addEventListener("click", showNextPage);
+        document.getElementById('zoomBtn').addEventListener("click", openPDFInNewTab);
+    </script>
+
+    <!-- Script pour le changement de thème -->
+    <script src="theme.js"></script>
+
+    <!-- Bouton de changement de thème -->
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
 </body>
+
 </html>

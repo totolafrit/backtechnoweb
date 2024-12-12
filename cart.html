@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À propos de nous</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="cart.css">
+</head>
+
+<body>
+
+     <!-- En-tête -->
+     <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="accueil.html">Accueil</a></li>
+                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="project.html">Services</a></li>
+                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li>
+                    <a href="cart.html"><i class="bx bx-cart"></i></a>
+                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="cart-container">
+        <h1 class="cart-title">My Basket</h1>
+        <p class="reservation-info">Les articles seront réservés pendant 60 minutes</p>
+
+        <div class="cart-content">
+            <!-- Partie Gauche -->
+            <div class="cart-left">
+                <div class="cart-item">
+                    <img src="brush-cutter.jpg" alt="Brush Cutter" class="cart-item-image">
+                    <div class="cart-item-details">
+                        <h2>Trimming Tools - Brush Cutter for Big Tree</h2>
+                        <p class="cart-item-options">Couleur : Noir | Taille : L</p>
+                        <p class="cart-item-price">47,99 €</p>
+                        <div class="cart-item-actions">
+                            <label for="quantity">Qté :</label>
+                            <input type="number" id="quantity" class="cart-quantity" min="1" value="1">
+                        </div>
+                    </div>
+                    <button class="cart-remove">X</button>
+                </div>
+            </div>
+
+            <!-- Partie Droite -->
+            <div class="cart-right">
+                <h2>Total</h2>
+                <p class="cart-summary">Sous-total : <strong>47,99 €</strong></p>
+                <p>Livraison : <strong>Retrait à l'entrepôt (Gratuit)</strong></p>
+
+                <div class="cart-buttons">
+                    <button class="cart-save">Buy more</button>
+                    <button class="cart-checkout" onclick="redirectToPickup()">Paiement</button>
+                </div>
+
+                <p class="cart-payment-info">Nous acceptons :</p>
+                <img src="payementicon.webp" alt="Moyens de paiement" class="cart-payment-icons">
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function redirectToPickup() {
+            window.location.href = "pickup.html"; // Redirection vers la page de sélection de l'entrepôt
+        }
+    </script>
+
+</main>
+
+<footer>
+    <p>&copy; 2024 L'Arbre Envie - All Rights Reserved</p>
+</footer>
+
+
+<script src="theme.js"></script>
+
+       <!-- Bouton de changement de thème -->
+       <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
+    
+    </body>
+    </html>
+    
+</body>
+</html>

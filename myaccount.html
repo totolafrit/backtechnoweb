@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Compte</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="myaccount.css">
+</head>
+<body>
+    <!-- En-tête -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="accueil.html">Accueil</a></li>
+                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="project.html">Services</a></li>
+                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li>
+                    <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
+                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenu principal -->
+    <main>
+        <section id="account-section">
+            <div class="account-header">
+                <h1>Paramètres du Compte</h1>
+                <button class="logout-button" onclick="logout()">Déconnexion</button>
+            </div>
+
+            <!-- Grille pour les sections -->
+            <div class="grid-container">
+                <!-- Mes informations -->
+                <div class="info-section card">
+                    <h2>Mes Informations</h2>
+                    <p><strong>Nom :</strong> Jean Dupont</p>
+                    <p><strong>Email :</strong> jean.dupont@example.com</p>
+                
+                    <button class="btn">Modifier mes informations</button>
+                </div>
+
+                <!-- Gestion du mot de passe -->
+                <div class="password-section card">
+                    <h2>Gestion du Mot de Passe</h2>
+                    <p>Pour assurer la sécurité de votre compte, veuillez régulièrement changer votre mot de passe.</p>
+                    <a href="mdpchange.html" class="btn">Changer mon mot de passe</a>
+                </div>
+            </div>
+
+            <!-- Dernières commandes et paramètres -->
+            <div class="grid-container">
+                <!-- Dernières commandes -->
+                <div class="orders-section card">
+                    <h2>Dernières Commandes</h2>
+                    <div class="order-item">
+                        <p><strong>Commande #12345</strong></p>
+                        <p>3 Articles - Total : 45,90€</p>
+                        <p>Date : 01/12/2024</p>
+                        <a href="order-details.html" class="btn">Voir les détails</a>
+                    </div>
+                    <div class="order-item">
+                        <p><strong>Commande #12344</strong></p>
+                        <p>2 Articles - Total : 25,50€</p>
+                        <p>Date : 15/11/2024</p>
+                        <a href="order-details.html" class="btn">Voir les détails</a>
+                    </div>
+                </div>
+
+                <!-- Paramètres de confidentialité et suppression -->
+                <div class="settings-section card">
+                    <h2>Paramètres de Confidentialité</h2>
+                    <p>Gérez vos données personnelles et vos autorisations.</p>
+                    <a href="confidentialite.html" class="btn">Gérer</a>
+                    <h2>Supprimer le Compte</h2>
+                    <p>Cette action est irréversible.</p>
+                    <a href="delete-account.html" class="btn delete">Supprimer</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pied de page -->
+    <footer>
+        <p>&copy; 2024 L'Arbre Envie - Tous droits réservés</p>
+    </footer>
+
+    <script>
+        function logout() {
+            alert("Vous avez été déconnecté.");
+            window.location.href = "connection.html";
+        }
+    </script>
+
+    <script src="theme.js"></script>
+
+    <!-- Bouton de changement de thème -->
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
+</body>
+</html>

@@ -4,12 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News - Jardinage et Élagage</title>
+    <title>Green Info</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="actualites.css">
 </head>
 
 <body>
 
+    <!-- En-tête -->
+   
     <!-- En-tête -->
     <header>
         <div class="logo">
@@ -17,15 +20,15 @@
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="accueil.html">Home</a></li>
-                <li><a href="aboutus.html">About us</a></li>
+                <li><a href="accueil.html">Accueil</a></li>
+                <li><a href="aboutus.html">À propos</a></li>
                 <li><a href="shop.html">Shop</a></li>
-                <li><a href="project.html">Projects</a></li>
-                <li><a href="actualites.html">Actuality</a></li>
-                <li><a href="conseils.html">Advices</a></li>
-                <!-- on mettra panier.html plus tard-->
-                <li><a href="fakepanier.html">Mon panier</a></li> 
-                <li><a href="connection.html">Connexion</a></li>
+                <li><a href="project.html">Services</a></li>
+                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li>
+                    <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
+                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
+                </li>
             </ul>
         </nav>
     </header>
@@ -35,49 +38,49 @@
         <section class="news-container">
             <!-- Article 1 -->
             <div class="news-article">
-                <img src="a1.webp" alt="Conférence sur l'élagage">
-                <h2>Conférence mondiale sur l'élagage</h2>
-                <p>Découvrez les dernières techniques d'élagage partagées par des experts du monde entier lors de la conférence annuelle.</p>
+                <img src="2021-BD-bon-arbre-1.pdf">
+                <h2>Bon Arbre, Bon Endroit</h2>
+                <p>Découvrez les conseils essentiels pour planter les bons arbres au bon endroit et préserver leur santé.</p>
                 <a href="actu1.html" class="read-more">Lire plus</a>
             </div>
 
             <!-- Article 2 -->
             <div class="news-article">
-                <img src="a6.webp" alt="Guide de jardinage bio">
-                <h2>Guide complet sur le jardinage biologique</h2>
-                <p>Apprenez comment transformer votre jardin en un espace respectueux de l'environnement avec des méthodes biologiques.</p>
+                <img src="2021-BD-les-racines-du-mal.pdf">
+                <h2>Les Racines du Mal</h2>
+                <p>Explorez les défis liés aux racines invasives et apprenez comment les gérer efficacement.</p>
                 <a href="actu2.html" class="read-more">Lire plus</a>
             </div>
 
             <!-- Article 3 -->
             <div class="news-article">
-                <img src="a3.webp" alt="Jardinage urbain">
-                <h2>Le jardinage urbain en plein essor</h2>
-                <p>Les espaces verts se multiplient en ville. Découvrez comment le jardinage urbain est en train de changer les paysages urbains.</p>
+                <img src="2021-BD-mort-dun-chene.pdf">
+                <h2>Mort d'un Chêne</h2>
+                <p>Découvrez les raisons de la mort prématurée des arbres et comment éviter ces problèmes.</p>
                 <a href="actu3.html" class="read-more">Lire plus</a>
             </div>
 
             <!-- Article 4 -->
             <div class="news-article">
-                <img src="a4.webp" alt="Conseils de taille d'arbres">
-                <h2>Conseils pour une taille d'arbres réussie</h2>
-                <p>Maîtrisez l'art de la taille d'arbres pour garder vos plantes en bonne santé et leur donner une forme parfaite.</p>
+                <img src="2021-plaquette-respectons-les-arbres.pdf">
+                <h2>Respectons les Arbres</h2>
+                <p>Apprenez les bonnes pratiques pour élaguer et entretenir vos arbres en toute sécurité.</p>
                 <a href="actu4.html" class="read-more">Lire plus</a>
             </div>
 
             <!-- Article 5 -->
             <div class="news-article">
-                <img src="a5.webp" alt="Technologie dans le jardinage">
-                <h2>La technologie au service du jardinage</h2>
-                <p>Découvrez les dernières innovations technologiques qui facilitent l'entretien des jardins modernes.</p>
+                <img src="BD-Tailler-ou-ne-pas-tailler-2-1.pdf">
+                <h2>Tailler ou ne pas Tailler</h2>
+                <p>Découvrez quand et comment tailler vos arbres sans compromettre leur croissance.</p>
                 <a href="actu5.html" class="read-more">Lire plus</a>
             </div>
 
             <!-- Article 6 -->
             <div class="news-article">
-                <img src="a2.webp" alt="Exposition florale internationale">
-                <h2>Exposition florale internationale</h2>
-                <p>Participez à l'un des plus grands salons floraux au monde et émerveillez-vous devant des créations florales spectaculaires.</p>
+                <img src="Fiche_4_choix_arbres-arbustes_et_imprim_A3.pdf">
+                <h2>Choisir les arbres et arbustes</h2>
+                <p>Des conseils pour sélectionner les arbres et arbustes adaptés à votre jardin et votre climat.</p>
                 <a href="actu6.html" class="read-more">Lire plus</a>
             </div>
         </section>
@@ -88,6 +91,19 @@
         <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
     </footer>
 
+
+    <script src="theme.js"></script>
+
+       <!-- Bouton de changement de thème -->
+       <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
+    
+    </body>
+    </html>
+    
 </body>
 
 </html>
