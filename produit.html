@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <title>Produit Détail</title>
     <link rel="stylesheet" href="produit.css">
 </head>
@@ -29,6 +30,12 @@
         </nav>
     </header>
 
+    <a href="javascript:history.back()" class="back-icon">
+
+        <i class='bx bx-undo'></i>
+
+    </a>
+
     <!-- page produit -->
     <main class="product-page">
         <section class="product-info">
@@ -38,18 +45,25 @@
             <div class="product-details">
                 <h1 id="product-name"></h1>
                 <p id="product-price"></p>
-                <p id="product-description"></p>
-                <button class="add-to-cart" onclick="addToCart()">Ajouter au panier</button>
-                <div class="additional-info">
-                    <h2>Caractéristiques</h2>
-                    <ul id="product-characteristics"></ul>
+                <h1>Description</h1>
+                <p id="product-description"> </p>
+            
+                <div class="quantity-control">
+                    <label for="product-quantity">Quantité :</label>
+                    <button class="quantity-btn" onclick="changeQuantity(-1)">
+                        <i class='bx bx-minus'></i>
+                    </button>
+                    <span id="product-quantity">1</span>
+                    <button class="quantity-btn" onclick="changeQuantity(1)">
+                        <i class='bx bx-plus'></i>
+                    </button>
                 </div>
+            
+                <button class="add-to-cart" onclick="addToCart()">Ajouter au panier</button>
             </div>
-        </section>
-
-        <section class="customer-reviews">
-            <h2>Avis des clients</h2>
-            <div id="reviews"></div>
+            
+            
+            </div>
         </section>
     </main>
 
@@ -70,53 +84,63 @@
                 document.getElementById('product-price').textContent = `${product.price}€`;
                 document.getElementById('product-description').textContent = product.description;
     
-                const characteristicsList = document.getElementById('product-characteristics');
-                product.characteristics.forEach(charac => {
-                    const li = document.createElement('li');
-                    li.textContent = charac;
-                    characteristicsList.appendChild(li);
-                });
     
-                // Affichage des avis clients
-                const reviewsContainer = document.getElementById('reviews');
-                product.reviews.forEach(review => {
-                    const reviewElement = document.createElement('div');
-                    reviewElement.classList.add('review');
-                    reviewElement.innerHTML = `
-                        <p><strong>${review.author}</strong> - ★${review.rating}</p>
-                        <p>${review.comment}</p>
-                    `;
-                    reviewsContainer.appendChild(reviewElement);
-                });
             })
             .catch(error => {
                 console.error('Erreur lors de la récupération du produit:', error);
             });
+
+            let currentQuantity = 1;
+
+    function changeQuantity(amount) {
+        const quantityDisplay = document.getElementById("product-quantity");
+        currentQuantity = Math.max(1, currentQuantity + amount); 
+        quantityDisplay.textContent = currentQuantity;
+    }
+
     
         // ajouter au panier avec URL de l'image
         function addToCart() {
             const productName = document.getElementById('product-name').textContent;
             const productPrice = parseFloat(document.getElementById('product-price').textContent.replace('€', '').trim());
             const productImage = document.getElementById('product-image').src;
+            const productQuantity = parseInt(document.getElementById('product-quantity').textContent); // Corrigé ici
+        
+            // Validation de la quantité
+            if (productQuantity <= 0 || isNaN(productQuantity)) {
+                alert("Veuillez entrer une quantité valide.");
+                return;
+            }
         
             const product = {
                 name: productName,
                 price: productPrice,
-                image: productImage, // Inclure l'image ici
-                quantity: 1,
+                image: productImage,
+                quantity: productQuantity,
             };
         
+            // Gestion du panier dans localStorage
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             const existingProduct = cart.find(item => item.name === product.name);
+        
             if (existingProduct) {
-                existingProduct.quantity += 1; // Pour ajouter +1 un produit s'il existe déjà
+                existingProduct.quantity += productQuantity; 
             } else {
                 cart.push(product);
             }
         
             localStorage.setItem('cart', JSON.stringify(cart));
-            alert('Produit ajouté au panier');
+            alert(`${productQuantity} ${productName}(s) ajouté(s) au panier`);
+        
+            // Réinitialiser la quantité affichée
+            currentQuantity = 1;
+            document.getElementById('product-quantity').textContent = currentQuantity;
         }
+        
+
+        
+        
+        
              
     </script>
     

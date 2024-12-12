@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conférence mondiale sur l'élagage</title>
+    <title>Bon Arbre, Bon Endroit</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="actu.css">
 </head>
-<body>
 
+<body>
+    <!-- En-tête -->
+   
     <!-- En-tête -->
     <header>
         <div class="logo">
@@ -15,23 +19,46 @@
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="accueil.html">Home</a></li>
-                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="accueil.html">Accueil</a></li>
+                <li><a href="aboutus.html">À propos</a></li>
                 <li><a href="shop.html">Shop</a></li>
-                <li><a href="project.html">Project</a></li>
-                <li><a href="actualites.html">Actuality</a></li>
-                <li><a href="conseils.html">Advices</a></li>
+                <li><a href="project.html">Services</a></li>
+                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li>
+                    <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
+                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
+                </li>
             </ul>
         </nav>
     </header>
 
-    <!-- Contenu de l'article -->
+    <!-- Retour aux actualités -->
+    <section class="return-link">
+        <a href="actualites.html"><i class="bx bx-left-arrow-alt"></i> Retour aux Actualités</a>
+    </section>
+
+    <!-- Contenu principal -->
     <main>
-        <article>
-            <h1>Conférence mondiale sur l'élagage</h1>
-            <p>Découvrez les dernières techniques d'élagage présentées par des experts du monde entier lors de cette conférence annuelle.</p>
-            <p>Cette conférence est un rendez-vous incontournable pour les professionnels de l’élagage, avec des ateliers, des démonstrations et des discussions sur les meilleures pratiques.</p>
-        </article>
+        <section class="content">
+            <h1>Bon Arbre, Bon Endroit</h1>
+            <p class="description">
+                Découvrez le guide complet de l'élagage : <strong>"Bon Arbre, Bon Endroit"</strong>, édité en 2021.
+                Ce document est une ressource précieuse pour les passionnés et les professionnels du jardinage,
+                vous offrant des techniques modernes pour prendre soin de vos arbres et améliorer vos compétences.
+            </p>
+            <p>Utilisez les flèches pour naviguer à travers les pages comme dans un livre.</p>
+        </section>
+
+        <!-- Visionneuse PDF -->
+        <section class="pdf-viewer">
+            <div class="navigation">
+                <button id="prevPage"><i class="bx bx-chevron-left"></i> Précédent</button>
+                <button id="nextPage">Suivant <i class="bx bx-chevron-right"></i></button>
+                <button id="zoomBtn"><i class="bx bx-zoom-in"></i> Zoom</button>
+            </div>
+            <canvas id="pdfCanvas"></canvas>
+            <p class="page-info">Page : <span id="pageNum"></span> / <span id="pageCount"></span></p>
+        </section>
     </main>
 
     <!-- Pied de page -->
@@ -39,5 +66,99 @@
         <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
     </footer>
 
+    <!-- Script JS pour le PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+        const url = '2021-BD-bon-arbre-1.pdf'; // Lien vers le PDF
+
+        let pdfDoc = null,
+            pageNum = 1,
+            pageIsRendering = false,
+            pageNumIsPending = null;
+
+        const scale = 1, // Réduction de la taille du PDF
+            canvas = document.getElementById('pdfCanvas'),
+            ctx = canvas.getContext('2d');
+
+        // Charger le PDF
+        const renderPage = (num) => {
+            pageIsRendering = true;
+
+            pdfDoc.getPage(num).then((page) => {
+                const viewport = page.getViewport({ scale });
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderCtx = {
+                    canvasContext: ctx,
+                    viewport: viewport,
+                };
+
+                page.render(renderCtx).promise.then(() => {
+                    pageIsRendering = false;
+
+                    if (pageNumIsPending !== null) {
+                        renderPage(pageNumIsPending);
+                        pageNumIsPending = null;
+                    }
+                });
+
+                document.getElementById('pageNum').textContent = num;
+            });
+        };
+
+        const queueRenderPage = (num) => {
+            if (pageIsRendering) {
+                pageNumIsPending = num;
+            } else {
+                renderPage(num);
+            }
+        };
+
+        const showPrevPage = () => {
+            if (pageNum <= 1) {
+                return;
+            }
+            pageNum--;
+            queueRenderPage(pageNum);
+        };
+
+        const showNextPage = () => {
+            if (pageNum >= pdfDoc.numPages) {
+                return;
+            }
+            pageNum++;
+            queueRenderPage(pageNum);
+        };
+
+        // Fonction pour ouvrir le PDF en grand
+        const openPDFInNewTab = () => {
+            window.open(url, '_blank');
+        };
+
+        pdfjsLib.getDocument(url).promise.then((pdfDoc_) => {
+            pdfDoc = pdfDoc_;
+
+            document.getElementById('pageCount').textContent = pdfDoc.numPages;
+
+            renderPage(pageNum);
+        });
+
+        document.getElementById('prevPage').addEventListener("click", showPrevPage);
+        document.getElementById('nextPage').addEventListener("click", showNextPage);
+        document.getElementById('zoomBtn').addEventListener("click", openPDFInNewTab);
+    </script>
+
+    <!-- Script pour le changement de thème -->
+    <script src="theme.js"></script>
+
+    <!-- Bouton de changement de thème -->
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
 </body>
+
 </html>
+

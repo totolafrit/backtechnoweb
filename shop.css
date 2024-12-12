@@ -1,99 +1,99 @@
-/* Style de base pour le corps */
+/* Styles généraux */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #ffffff;
+    background-color: #f0f0f5;
+    color: #333;
 }
 
-/* En-tête */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: #fff;
     padding: 10px 20px;
-    background-color: #fffcfc;
-    border-bottom: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Logo */
 .logo img {
     width: 60px;
-    height: auto;
 }
 
-/* Menu de navigation */
 .nav-menu {
     display: flex;
-    gap: 20px;
-    list-style-type: none;
-    padding: 0;
+    list-style: none;
+    gap: 15px;
     margin: 0;
+    padding: 0;
 }
 
-.nav-menu li a {
+.nav-menu a {
     text-decoration: none;
-    color: black;
+    color: #333;
     font-weight: bold;
-    transition: color 0.3s ease;
+    transition: color 0.3s;
 }
 
-.nav-menu li a:hover {
-    color: #f0a500;
+.nav-menu a[href="shop.html"] {
+    color: #4CAF50; /* Vert pour la page active */
+    font-weight: bold;
 }
 
-/* Conteneur des catégories */
+.nav-menu a:hover {
+    color: #4CAF50;
+}
+
+/* Style des catégories */
 .categories-container {
     display: flex;
-    justify-content: space-around;
-    padding: 40px 20px;
-    max-width: 1200px;
-    margin: 40px auto;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Permet de passer sur plusieurs lignes si nécessaire */
+    gap: 30px;
+    min-height: 70vh; /* Assure que le contenu est centré verticalement */
+    padding: 20px;
+    margin-top: 20px;
 }
 
-/* Carte de catégorie individuelle */
 .category-card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 30%;
-    cursor: pointer;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    height: 350px;
-    position: relative;
+    align-items: center;
+    text-align: center;
+    width: 350px; /* Augmenté pour mieux remplir l'espace */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
 }
 
 .category-card img {
     width: 100%;
-    height: auto;
-    border-bottom: 1px solid #ddd;
+    height: 250px; /* Ajusté pour une meilleure mise en page */
+    object-fit: cover; /* Remplir le conteneur sans déformer l'image */
+    border-bottom: 3px solid #4CAF50; /* Ligne verte sous l'image */
 }
 
-/* Titre de la catégorie en bas de l'image */
 .category-title {
-    background-color: #d3d3d3;
-    color: #333;
+    padding: 15px;
+    background-color: #f9f9f9;
+    font-size: 20px;
     font-weight: bold;
-    padding: 10px;
     text-transform: uppercase;
-    font-size: 16px;
-    text-align: center;
+    color: #333;
+    border-top: 1px solid #ddd;
+    width: 100%;
 }
 
-/* Effet de survol pour les cartes de catégorie */
-.category-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* Style du pied de page */
+/* Pied de page */
 footer {
-    background-color: #f1f1f1;
     text-align: center;
     padding: 10px;
     font-size: 14px;
@@ -110,7 +110,79 @@ footer {
     }
 
     .category-card {
-        width: 80%;
-        margin-bottom: 20px;
+        width: 90%; /* Largeur ajustée pour les petits écrans */
     }
+}
+
+/* ========================= Mode Sombre ========================= */
+body.dark-theme {
+    background-color: #121212; /* Couleur de fond sombre */
+    color: #e0e0e0; /* Texte en gris clair */
+}
+
+/* En-tête */
+body.dark-theme header {
+    background-color: #1f1f1f; /* Fond de l'en-tête */
+    color: #e0e0e0; /* Texte */
+}
+
+body.dark-theme .nav-menu a {
+    color: #e0e0e0;
+}
+
+body.dark-theme .nav-menu a:hover {
+    color: #4CAF50; /* Couleur d'accent */
+}
+
+/* Catégories */
+body.dark-theme .category-card {
+    background-color: #1f1f1f;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .category-card img {
+    border-bottom: 3px solid #4CAF50;
+}
+
+body.dark-theme .category-title {
+    background-color: #333;
+    color: #4CAF50;
+}
+
+/* Pied de page */
+body.dark-theme footer {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
+
+/* Style pour le bouton de changement de thème */
+#theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+#theme-toggle button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#theme-toggle button:hover {
+    background-color: #4CAF50;
+    transform: scale(1.1);
+}
+
+
+
+.nav-menu a[href="shop.html"] {
+    color: #4CAF50;
+    font-weight: bold;
 }

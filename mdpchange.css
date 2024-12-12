@@ -1,0 +1,179 @@
+/* Styles généraux */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative; /* Pour positionner le footer */
+}
+
+/* Conteneur principal */
+.login-container {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Logo et flèche */
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    position: relative;
+}
+
+.logo-container .back-button {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    color: #4CAF50;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.logo-container .back-button:hover {
+    color: #388E3C;
+    transform: scale(1.1);
+}
+
+.logo-container .logo {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.logo-container .logo img {
+    width: 60px;
+    height: auto;
+}
+
+/* Titre */
+.login-container h1 {
+    font-size: 1.8rem;
+    margin: 0;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Formulaire */
+.login-container form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login-container label {
+    text-align: left;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.login-container input:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+/* Bouton */
+.login-container .btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+}
+
+.login-container .btn:hover {
+    background-color: #388E3C;
+    transform: scale(1.05);
+}
+
+/* Lien sous le formulaire */
+.login-container .additional-links {
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.login-container .additional-links a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-container .additional-links a:hover {
+    text-decoration: underline;
+}
+
+/* Pied de page */
+footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #888;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* ================= Mode Sombre ================= */
+body.dark-theme {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.dark-theme .login-container {
+    background-color: #1f1f1f;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-theme input {
+    background-color: #333;
+    border-color: #555;
+    color: #e0e0e0;
+}
+
+body.dark-theme input:focus {
+    border-color: #4CAF50;
+}
+
+body.dark-theme .btn {
+    background-color: #388E3C;
+}
+
+body.dark-theme .btn:hover {
+    background-color: #2E7D32;
+}
+
+body.dark-theme footer {
+    color: #888;
+}

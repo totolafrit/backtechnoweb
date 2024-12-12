@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon Panier</title>
-    <link rel="stylesheet" href="fakepanier.css"> <!-- mettre le css approprié-->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="cart.css">
+    <!--<link rel="stylesheet" href="fakepanier.css"> -->
 
 </head>
 <body>
@@ -15,35 +17,46 @@
         </div>
         <nav>
             <ul class="nav-menu">
-                <button id="logoutButton">Déconnexion</button>
-            
-                    <li><a href="accueil.html">Home</a></li>
-                    <li><a href="aboutus.html">About us</a></li>
-                    <li><a href="shop.html">Shop</a></li>
-                    <li><a href="project.html">Projects</a></li>
-                    <li><a href="actualites.html">Actuality</a></li>
-                    <li><a href="conseils.html">Advices</a></li>
-                    <!-- on mettra panier.html plus tard-->
-                    <li><a href="fakepanier.html">Mon panier</a></li> 
-                    <li><a href="connection.html">Connexion</a></li>
-                </ul>
+                <li><a href="accueil.html">Accueil</a></li>
+                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="project.html">Services</a></li>
+                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li>
+                    <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
+                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
+                </li>
+            </ul>
         </nav>
     </header>
 
-    <main class="cart-page">
-        <h1>Votre panier</h1>
-        <div id="cart-items">
-        
+    <main class="cart-container">
+        <h1 class="cart-title">Mon Panier</h1>
+        <p class="reservation-info">Les articles seront réservés pendant 60 minutes</p>
+    
+        <div class="cart-content">
+            <!-- Partie Gauche : prod affichées dynamiquements -->
+            <div class="cart-left" id="cart-items">
+                <button class="cart-remove">X</button>
+            </div>
+    
+            <!-- Partie Droite -->
+            <div class="cart-right">
+                <h2>Total</h2>
+                <p class="cart-summary">Sous-total : <strong id="cart-total">0,00 €</strong></p>
+                <p>Livraison : <strong>Retrait à l'entrepôt (Gratuit)</strong></p>
+    
+                <div class="cart-buttons">
+                    <button class="clear-cart-button" onclick="clearCart()">Vider le panier</button>
+                    <button id="checkout-btn" onclick="validateOrder()">Passer la commande</button>
+                </div>
+    
+                <p class="cart-payment-info">Nous acceptons :</p>
+                <img src="payementicon.webp" alt="Moyens de paiement" class="cart-payment-icons">
+            </div>
         </div>
-        <div id="cart-total"> 
-         
-        </div>
-        
-        <button class="clear-cart-button" onclick="clearCart()">Vider le panier</button> <!--petite class CSS pour la beauté-->
-
-<button id="checkout-btn" onclick="validateOrder()">Passer la commande</button>
-
     </main>
+    
 
 
     <footer>
@@ -52,8 +65,12 @@
 
 <script>
     function formatPrice(price) {
-        return price.toFixed(2).replace('.', ','); // Toujours avec 2 décimales et remplace le point par une virgule
+        if (price == null || isNaN(price)) {
+            return "0,00";  // Valeur par défaut en cas d'erreur
+        }
+        return price.toFixed(2).replace('.', ','); 
     }
+    
     
     function loadCart() {
         const cartItems = JSON.parse(localStorage.getItem('cart')) || [];

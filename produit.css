@@ -1,94 +1,98 @@
-/* Style général */
+/* Style Général */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f9f9f9;
     color: #333;
+    line-height: 1.6;
 }
 
+/* Header */
 header {
     background-color: #ffffff;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo img {
+    width: 60px;
 }
 
 .nav-menu {
     display: flex;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.nav-menu li {
-    margin: 0 15px;
+    list-style: none;
+    gap: 15px;
 }
 
 .nav-menu li a {
     text-decoration: none;
-    color: black;
+    color: #333;
     font-weight: bold;
+    padding: 5px 10px;
+    transition: color 0.3s, background-color 0.3s;
+    border-radius: 5px;
 }
 
-.logo img {
-    height: 50px;
+.nav-menu li a:hover {
+    color: #ffffff;
+    background-color: #007bff;
 }
 
-/* Style de la page produit */
+/* Page Produit */
 .product-page {
-    width: 90%;
     max-width: 1200px;
     margin: 40px auto;
-    padding: 20px;
+    padding: 0 20px;
 }
 
-/* Image et détails du produit */
 .product-info {
     display: flex;
-    gap: 30px;
-    margin-bottom: 40px;
+    align-items: flex-start;
+    gap: 40px;
 }
 
+/* Image */
 .product-image img {
-    width: 100%;
-    max-width: 400px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    width: 350px;
+    border-radius: 5px;
 }
 
+/* Détails Produit */
 .product-details {
-    max-width: 600px;
+    flex: 1;
 }
 
 .product-details h1 {
-    font-size: 2em;
-    margin: 0;
-    color: #333;
+    font-size: 28px;
+    margin-bottom: 10px;
 }
 
-.price {
-    font-size: 1.8em;
-    color: #4CAF50;
-    margin: 15px 0;
-}
-
-.description {
-    font-size: 1.1em;
-    line-height: 1.6;
+#product-price {
+    font-size: 24px;
+    color: #4caf50;
     margin-bottom: 20px;
-    color: #555;
+}
+
+#product-description {
+    margin-bottom: 20px;
+    font-size: 16px;
 }
 
 .add-to-cart {
-    background-color: #4CAF50;
+    background-color: #4caf50;
     color: white;
-    padding: 10px 20px;
-    font-size: 1em;
     border: none;
-    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
     border-radius: 5px;
+    cursor: pointer;
     transition: background-color 0.3s;
 }
 
@@ -96,84 +100,79 @@ header {
     background-color: #45a049;
 }
 
-/* Informations additionnelles */
+/* Caractéristiques supplémentaires */
 .additional-info h2 {
-    font-size: 1.3em;
-    margin-top: 30px;
-    color: #333;
+    font-size: 22px;
+    margin-top: 20px;
 }
 
-.additional-info ul {
-    list-style: none;
-    padding: 0;
-    color: #555;
+#product-characteristics {
+    list-style-type: disc;
+    padding-left: 20px;
 }
 
-.additional-info ul li {
-    margin: 5px 0;
-}
-
-/* Section des avis clients */
-.customer-reviews {
-    margin-bottom: 40px;
-}
-
+/* Avis Clients */
 .customer-reviews h2 {
-    font-size: 1.5em;
-    margin-bottom: 15px;
+    font-size: 24px;
+    margin-top: 40px;
 }
 
 .review {
-    background-color: #f9f9f9;
+    background: #f3f3f3;
     padding: 15px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
+    margin-bottom: 15px;
     border-radius: 5px;
 }
 
-/* Produits similaires */
-.related-products {
-    margin-top: 40px;
+.review p {
+    margin: 5px 0;
 }
 
-.related-products h2 {
-    font-size: 1.5em;
-    margin-bottom: 20px;
+.product-details input[type="number"] {
+    width: 60px;
+    margin: 10px 0;
 }
 
-.related-items {
+button.add-to-cart, button.remove-from-cart {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+/* Styles pour les boutons de quantité */
+.quantity-control {
     display: flex;
-    gap: 20px;
+    align-items: center;
+    gap: 10px;
 }
 
-.related-item {
-    text-align: center;
-}
-
-.related-item img {
-    width: 100%;
-    max-width: 150px;
-    height: auto;
-    border: 1px solid #ddd;
+.quantity-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
     border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.related-item p {
-    margin: 10px 0 0;
-    color: #333;
+.quantity-btn:hover {
+    background-color: #45a049;
 }
 
-.related-item .price {
-    color: #4CAF50;
+#product-quantity {
+    font-size: 18px;
     font-weight: bold;
 }
 
-/* Pied de page */
+
+
+/* Footer */
 footer {
-    background-color: #f1f1f1;
     text-align: center;
-    padding: 15px;
+    padding: 20px;
+    background: #333;
+    color: white;
     margin-top: 40px;
-    font-size: 0.9em;
-    border-top: 1px solid #ddd;
 }

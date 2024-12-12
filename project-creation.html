@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Création</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="project-creation.css">
+</head>
+
+<body>
+
+    <!-- En-tête -->
+     <!-- En-tête -->
+     <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="accueil.html">Accueil</a></li>
+                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="project.html">Services</a></li>
+                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li>
+                    <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
+                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenu principal -->
+    <main>
+        <article>
+            <h1>
+                <a href="project.html" class="undo-button">
+                    <i class="bx bx-undo"></i>
+                </a>
+                Création
+            </h1>
+            <p>Découvrez les services d'entretien proposés par L'Arbre Envie.</p>
+            <p>
+                L'Arbre Envie propose et conçoit des petits aménagements de vos espaces extérieurs :
+            </p>
+            <ul>
+                <li>Plantation d'arbustes de haie et de massif</li>
+                <li>Création de parterres et massifs végétalisés</li>
+                <li>Création de jardinières végétalisées (traverse paysagère)</li>
+                <li>Création de potagers</li>
+                <li>Pose de gazon synthétique ou gazon en rouleaux (petite surface)</li>
+                <li>...et tout projet soumis à étude</li>
+            </ul>
+        </article>
+
+        <!-- Carrousel -->
+        <section class="carousel-container">
+            <h2>Nos Réalisations</h2>
+            <div class="carousel-wrapper">
+                <div class="carousel">
+                    <div class="carousel-item">
+                        <img src="crea1.jpg" alt="Création 1">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="crea2.jpg" alt="Création 2">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="crea3.jpg" alt="Création 3">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="crea4.jpg" alt="Création 4">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="crea5.jpg" alt="Création 5">
+                    </div>
+                </div>
+            </div>
+            <!-- Flèches de navigation -->
+            <button class="carousel-prev"><i class="bx bx-chevron-left"></i></button>
+            <button class="carousel-next"><i class="bx bx-chevron-right"></i></button>
+        </section>
+    </main>
+
+    <!-- Pied de page -->
+    <footer>
+        <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
+    </footer>
+
+    <!-- Script JS -->
+    <script>
+        const carousel = document.querySelector(".carousel");
+        const prevBtn = document.querySelector(".carousel-prev");
+        const nextBtn = document.querySelector(".carousel-next");
+        const carouselItems = document.querySelectorAll(".carousel-item");
+        const itemWidth = carouselItems[0].offsetWidth + 20; // Adjusted for spacing
+        let currentPosition = 0;
+
+        // Clone items for infinite loop
+        carousel.innerHTML += carousel.innerHTML;
+
+        const moveCarousel = (direction) => {
+            currentPosition += direction * itemWidth;
+
+            if (direction === 1 && currentPosition >= itemWidth * (carouselItems.length)) {
+                currentPosition = 0;
+                carousel.style.transition = "none";
+                carousel.style.transform = `translateX(${currentPosition}px)`;
+                setTimeout(() => (carousel.style.transition = "transform 0.5s ease-in-out"), 0);
+            } else if (direction === -1 && currentPosition < 0) {
+                currentPosition = itemWidth * (carouselItems.length - 1);
+                carousel.style.transition = "none";
+                carousel.style.transform = `translateX(-${currentPosition}px)`;
+                setTimeout(() => (carousel.style.transition = "transform 0.5s ease-in-out"), 0);
+            } else {
+                carousel.style.transition = "transform 0.5s ease-in-out";
+                carousel.style.transform = `translateX(-${currentPosition}px)`;
+            }
+        };
+
+        nextBtn.addEventListener("click", () => moveCarousel(1));
+        prevBtn.addEventListener("click", () => moveCarousel(-1));
+
+        let autoSlide = setInterval(() => moveCarousel(1), 3000);
+        carousel.addEventListener("mouseover", () => clearInterval(autoSlide));
+        carousel.addEventListener("mouseout", () => (autoSlide = setInterval(() => moveCarousel(1), 3000)));
+    </script>
+
+    <!-- Bouton de changement de thème -->
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
+
+</body>
+
+</html>

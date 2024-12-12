@@ -3,10 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page d'Accueil</title>
+    <title>Accueil</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="accueil.css">
 </head>
 <body>
+    <!-- Sélecteur de langue -->
+    <div class="language-selector">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" alt="Français" id="lang-fr" title="Français">
+        <img src="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg" alt="Anglais" id="lang-en" title="English">
+    </div>
 
     <!-- En-tête -->
     <header>
@@ -15,94 +21,103 @@
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="accueil.html">Home</a></li>
-                <li><a href="aboutus.html">About us</a></li>
+                <li><a href="accueil.html">Accueil</a></li>
+                <li><a href="aboutus.html">À propos</a></li>
                 <li><a href="shop.html">Shop</a></li>
-                <li><a href="project.html">Projects</a></li>
-                <li><a href="actualites.html">Actuality</a></li>
-                <li><a href="conseils.html">Advices</a></li>
-                <!-- on mettra panier.html plus tard-->
-                <li><a href="fakepanier.html">Mon panier</a></li> 
-                <li><a href="connection.html">Connexion</a></li>
+                <li><a href="project.html">Services</a></li>
+                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li>
+                    <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
+                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
+                </li>
             </ul>
         </nav>
     </header>
 
     <!-- Grande photo principale -->
     <div class="main-photo">
-        <img src="photoaccueil.jpg" alt="Grande Photo">
+        <img src="baniere.JPG" alt="Bannière principale">
     </div>
 
-    <!-- Galerie de photos -->
-    <div class="photo-gallery">
-        <h2>Last Projects</h2>
-        <div class="photo-row">
-            <div class="project">
-                <img src="photo2.jpg" alt="Projet 1">
-                <p class="project-title">Aménagement du Jardin Zen</p>
+    <!-- Section des services -->
+    <h1>Nos Services</h1>
+    <section class="services">
+        <a href="project-entretient.html" class="service">
+            <img src="entretient.jpg" alt="Entretien de Jardin">
+            <h3>Entretien De Jardin</h3>
+        </a>
+        <a href="project-debrous.html" class="service">
+            <img src="debrouss.jpg" alt="Débroussaillage">
+            <h3>Débroussaillage</h3>
+        </a>
+        <a href="project-taille-soins.html" class="service">
+            <img src="taille.jpg" alt="Taille Et Soins Aux Arbres">
+            <h3>Taille Et Soins Aux Arbres</h3>
+        </a>
+        <a href="project-creation.html" class="service">
+            <img src="creation.jpg" alt="Création">
+            <h3>Création (Petites Créations et Aménagement de Jardin)</h3>
+        </a>
+    </section>
+
+    <!-- Promotions -->
+    <h2>Promotions principales</h2>
+    <div class="photo-row">
+        <div class="discount-item">
+            <img src="outils.jpg" alt="Sécateur de Jardin">
+            <p class="item-name">Sécateur de Jardin</p>
+            <p class="item-price">Prix: <span class="old-price">€25</span> <span class="new-price">€20</span></p>
+            <p class="discount-percentage">Réduction: 20%</p>
+        </div>
+        <div class="discount-item">
+            <img src="rabot.webp" alt="Tondeuse à Gazon">
+            <p class="item-name">Tondeuse à Gazon</p>
+            <p class="item-price">Prix: <span class="old-price">€150</span> <span class="new-price">€120</span></p>
+            <p class="discount-percentage">Réduction: 20%</p>
+        </div>
+        <div class="discount-item">
+            <img src="tools.webp" alt="Kit d'outils de Jardinage">
+            <p class="item-name">Kit d'outils de Jardinage</p>
+            <p class="item-price">Prix: <span class="old-price">€50</span> <span class="new-price">€40</span></p>
+            <p class="discount-percentage">Réduction: 20%</p>
+        </div>
+    </div>
+    <a href="shop.html" class="see-more">Voir Plus</a>
+
+    <!-- Section Infos-Vertes -->
+    <section class="green-info">
+        <h2>Les Infos-Vertes</h2>
+        <div class="green-info-row">
+            <div class="green-info-item">
+                <img src="2021-BD-bon-arbre-1.pdf" alt="Bon Arbre, Bon Endroit">
+                <a href="actu1.html">Bon Arbre, Bon Endroit</a>
             </div>
-            <div class="project">
-                <img src="photo3.webp" alt="Projet 2">
-                <p class="project-title">Création d'un Potager Urbain</p>
+            <div class="green-info-item">
+                <img src="2021-BD-les-racines-du-mal.pdf" alt="Les Racines du Mal">
+                <a href="actu2.html">Les Racines du Mal</a>
+            </div>
+            <div class="green-info-item">
+                <img src="2021-BD-mort-dun-chene.pdf" alt="Mort d'un Chêne">
+                <a href="actu3.html">Mort d'un Chêne</a>
             </div>
         </div>
-
-        <h2>Discounts of the Moment</h2>
-        <div class="photo-row">
-            <div class="discount-item">
-                <img src="outils.jpg" alt="Promo 1">
-                <p class="item-name">Sécateur de Jardin</p>
-                <p class="item-price">Prix: <span class="old-price">€25</span> <span class="new-price">€20</span></p>
-                <p class="discount-percentage">Réduction: 20%</p>
-            </div>
-            <div class="discount-item">
-                <img src="rabot.webp" alt="Promo 2">
-                <p class="item-name">Tondeuse à Gazon</p>
-                <p class="item-price">Prix: <span class="old-price">€150</span> <span class="new-price">€120</span></p>
-                <p class="discount-percentage">Réduction: 20%</p>
-            </div>
-            <div class="discount-item">
-                <img src="tools.webp" alt="Promo 3">
-                <p class="item-name">Kit d'outils de Jardinage</p>
-                <p class="item-price">Prix: <span class="old-price">€50</span> <span class="new-price">€40</span></p>
-                <p class="discount-percentage">Réduction: 20%</p>
-            </div>
-            <a href="shop.html" class="see-more">See More</a>
-        </div>
-
-        <h2>Actualities of this Week</h2>
-<div class="photo-row">
-    <div class="actualities-item">
-        <img src="a3.webp" alt="News 1">
-        <a href="actu1.html">Conférence mondiale sur l'élagags</a>
-        
-    </div>
-    <div class="actualities-item">
-        <img src="a6.webp" alt="News 2">
-        <a href="actu2.html">Guide complet sur le jardinage biologique</a>
-
-        
-    </div>
-    <div class="actualities-item">
-        <img src="a4.webp" alt="News 3"></a>
-        <a href="actu3.html">Le jardinage urbain en plein essor</a>
-        
-    </div>
-    <div class="actualities-item">
-        <img src="a3.webp" alt="News 4">
-        <a href="actu4.html">Conseils pour une taille d'arbres réussie</a>
-
-    
-    </div>
-</div>
-
+    </section>
 
     <!-- Pied de page -->
     <footer>
-        <p>&copy; 2024 L'Arbre En Vie - Tous droits réservés</p>
+        <p>&copy; 2024 L'Arbre Envie - Tous droits réservés</p>
     </footer>
 
-    <script src="accueil.js"></script>
+    <script src="theme.js"></script>
 
+       <!-- Bouton de changement de thème -->
+       <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
+    
+    </body>
+    </html>
 </body>
 </html>

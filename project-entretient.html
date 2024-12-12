@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entretien de Jardin</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="project-entretient.css">
+</head>
+
+<body>
+
+    <!-- En-tête -->
+     <!-- En-tête -->
+     <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="accueil.html">Accueil</a></li>
+                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="project.html">Services</a></li>
+                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li>
+                    <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
+                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenu principal -->
+    <main>
+        <article>
+            <h1>
+                <a href="project.html" class="undo-button">
+                    <i class="bx bx-undo"></i>
+                </a>
+                Entretien de Jardin
+            </h1>
+            <p>Découvrez les services d'entretien de jardin proposés par L'Arbre Envie.</p>
+            <p>
+                L'arbre Envie assure la remise en état et/ou l’entretien de votre jardin. Ci-dessous, quelques prestations proposées, mais la réalisation d'un devis précis et adapté à vos demandes sera réalisée lors d'une visite de votre jardin :
+            </p>
+            <ul>
+                <li>Tonte/Débroussaillage</li>
+                <li>Taille de haie</li>
+                <li>Taille d'entretien des arbustes de massif</li>
+                <li>Désherbage manuel (massif, allée, terrain de boule)</li>
+                <li>Création, remise en état et modification d’arrosage automatique (goutte-à-goutte ou aspersion)</li>
+                <li>Nettoyage général (feuilles mortes, etc.)</li>
+                <li>Broyage et/ou évacuation des déchets verts</li>
+                <li>Mulching de sol et des massifs (pose d'une couche de broyat de végétaux)</li>
+            </ul>
+        </article>
+
+        <!-- Carousel -->
+        <section class="carousel-container">
+            <h2>Nos Réalisations</h2>
+            <div class="carousel-wrapper">
+                <div class="carousel">
+                    <div class="carousel-item">
+                        <img src="entretient1.jpg" alt="Réalisation 1">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="entretient2.jpg" alt="Réalisation 2">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="entretient3.jpg" alt="Réalisation 3">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="entretient4.jpg" alt="Réalisation 4">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="entretient5.jpg" alt="Réalisation 5">
+                    </div>
+                </div>
+            </div>
+            <!-- Flèches de navigation -->
+            <button class="carousel-prev"><i class="bx bx-chevron-left"></i></button>
+            <button class="carousel-next"><i class="bx bx-chevron-right"></i></button>
+        </section>
+    </main>
+
+    <!-- Pied de page -->
+    <footer>
+        <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
+    </footer>
+
+    <!-- Script pour le carousel -->
+    <script>
+        const carousel = document.querySelector(".carousel");
+        const prevBtn = document.querySelector(".carousel-prev");
+        const nextBtn = document.querySelector(".carousel-next");
+        const itemWidth = carousel.children[0].offsetWidth + 20;
+        let currentPosition = 0;
+
+        nextBtn.addEventListener("click", () => {
+            currentPosition += itemWidth;
+            carousel.style.transform = `translateX(-${currentPosition}px)`;
+        });
+
+        prevBtn.addEventListener("click", () => {
+            currentPosition -= itemWidth;
+            carousel.style.transform = `translateX(-${currentPosition}px)`;
+        });
+    </script>
+
+    <!-- Script pour le changement de thème -->
+    <script>
+        document.getElementById("theme-toggle-btn").addEventListener("click", () => {
+            document.body.classList.toggle("dark-theme");
+            const icon = document.querySelector("#theme-toggle-btn i");
+            icon.classList.toggle("bx-sun");
+            icon.classList.toggle("bx-moon");
+        });
+    </script>
+
+</body>
+
+</html>

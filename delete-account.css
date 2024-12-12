@@ -1,0 +1,304 @@
+/* Styles généraux */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f5;
+    color: #333;
+}
+
+/* Sélecteur de langue */
+.language-selector {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+
+.language-selector img {
+    width: 35px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.language-selector img:hover {
+    transform: scale(1.1);
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 10px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.logo img {
+    width: 60px;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+    color: #4CAF50;
+}
+
+/* Conteneur principal */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    width: 100%;
+}
+
+/* Conteneur pour supprimer le compte */
+.delete-container {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+    text-align: center;
+}
+
+/* Titre */
+.delete-container h1 {
+    color: #d32f2f; /* Rouge pour alerter */
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+/* Texte */
+.delete-container p {
+    margin-bottom: 20px;
+    color: #555;
+    font-size: 1rem;
+}
+
+/* Boutons d'action */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.confirm-button,
+.cancel-button a {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Bouton confirmer */
+.confirm-button {
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+}
+
+.confirm-button:hover {
+    background-color: #b71c1c;
+    transform: translateY(-2px);
+}
+
+/* Bouton annuler */
+.cancel-button a {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+}
+
+.cancel-button a:hover {
+    background-color: #388e3c;
+    transform: translateY(-2px);
+}
+
+/* Flèche de retour */
+.back-arrow {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 2rem;
+    color: #4CAF50;
+    text-decoration: none;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.back-arrow:hover {
+    transform: scale(1.2);
+    color: #2e7d32;
+}
+
+.nav-menu a[href="myaccount.html"] {
+    color: #4CAF50;
+    background-color: #eaf8ea;
+    font-weight: bold;
+}
+
+
+/* ========================= Mode Sombre ========================= */
+body.dark-theme {
+    background-color: #121212; /* Couleur de fond sombre */
+    color: #e0e0e0; /* Texte en gris clair */
+}
+
+/* En-tête */
+body.dark-theme header {
+    background-color: #1f1f1f; /* Fond de l'en-tête */
+    color: #e0e0e0; /* Texte */
+}
+
+body.dark-theme .nav-menu a {
+    color: #e0e0e0;
+}
+
+body.dark-theme .nav-menu a:hover {
+    color: #4CAF50; /* Couleur d'accent */
+}
+
+/* Catégories */
+body.dark-theme .category-card {
+    background-color: #1f1f1f;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .category-card img {
+    border-bottom: 3px solid #4CAF50;
+}
+
+body.dark-theme .category-title {
+    background-color: #333;
+    color: #4CAF50;
+}
+
+/* Pied de page */
+body.dark-theme footer {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
+
+/* Style pour le bouton de changement de thème */
+#theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+#theme-toggle button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#theme-toggle button:hover {
+    background-color: #4CAF50;
+    transform: scale(1.1);
+}
+
+
+
+
+
+/* ========================= Mode Sombre ========================= */
+body.dark-theme {
+    background-color: #121212; /* Couleur de fond sombre */
+    color: #e0e0e0; /* Texte en gris clair */
+}
+
+/* En-tête */
+body.dark-theme header {
+    background-color: #1f1f1f; /* Fond de l'en-tête */
+    color: #e0e0e0; /* Texte */
+}
+
+body.dark-theme .nav-menu a {
+    color: #e0e0e0;
+}
+
+body.dark-theme .nav-menu a:hover {
+    color: #4CAF50; /* Couleur d'accent */
+}
+
+/* Catégories */
+body.dark-theme .category-card {
+    background-color: #1f1f1f;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .category-card img {
+    border-bottom: 3px solid #4CAF50;
+}
+
+body.dark-theme .category-title {
+    background-color: #333;
+    color: #4CAF50;
+}
+
+/* Pied de page */
+body.dark-theme footer {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
+
+/* Style pour le bouton de changement de thème */
+#theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+#theme-toggle button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#theme-toggle button:hover {
+    background-color: #4CAF50;
+    transform: scale(1.1);
+}
+
+
