@@ -21,7 +21,7 @@
                 <li><a href="project.html">Services</a></li>
                 <li><a href="actualites.html">Les Infos-Vertes</a></li>
                 <li>
-                    <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
+                    <a href="cart.html"><i class="bx bx-cart"></i></a>
                     <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
                 </li>
             </ul>
@@ -44,8 +44,7 @@
                     <p><strong>Nom :</strong> Jean Dupont</p>
                     <p><strong>Email :</strong> jean.dupont@example.com</p>
                 
-                    <button class="btn">Modifier mes informations</button>
-                </div>
+                    <a href="modif.html" class="btn">Changer mes informations personnelles</a>                </div>
 
                 <!-- Gestion du mot de passe -->
                 <div class="password-section card">
@@ -92,20 +91,35 @@
         <p>&copy; 2024 L'Arbre Envie - Tous droits réservés</p>
     </footer>
 
-    <script>
-        function logout() {
-            alert("Vous avez été déconnecté.");
-            window.location.href = "connection.html";
-        }
-    </script>
-
-    <script src="theme.js"></script>
-
     <!-- Bouton de changement de thème -->
     <div id="theme-toggle">
         <button id="theme-toggle-btn" title="Changer le thème">
             <i class="bx bx-sun"></i>
         </button>
     </div>
+
+    <script src="theme.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => { // secu supp
+            if (localStorage.getItem("isLoggedIn") !== "true") {
+                window.location.href = "connection.html";
+            }
+        });
+        </script>
+        
+
+    <script>
+        function logout() { // faut supprimer les données de connexion
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("username");
+        
+            window.location.href = "accueil.html";
+        }
+        </script>
 </body>
 </html>
+
+    
+        
+

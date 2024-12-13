@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier mes informations</title>
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="modif.css"> <!-- Inclure votre fichier CSS -->
+</head>
+<body>
+    <!-- Barre de navigation -->
+    <header class="top-bar">
+        <div class="logo">
+            <img src="logo.png" alt="Logo" class="logo-image">
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        <section class="form-section">
+            <div class="title-container">
+                <!-- Flèche de retour -->
+                <a href="myaccount.html" class="undo-link">
+                    <i class="bx bx-undo"></i>
+                </a>
+                <h2>Modifier mes Informations</h2>
+            </div>
+            
+            <form id="updateForm">
+                <label for="name">Nom :</label>
+                <input type="text" id="name" name="name" value="Jean Dupont" required>
+
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="email" value="jean.dupont@example.com" required>
+
+                <button type="submit" class="submit-btn">Valider</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // Quand le formulaire est soumis
+        document.getElementById('updateForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // On récupère les nouvelles données (pour exemple ici, il faudrait vraiment mettre à jour dans un backend)
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+
+            // Afficher une alerte ou envoyer vers une API pour sauvegarder les données
+            alert(`Les informations ont été mises à jour :
+                  Nom: ${name}, Email: ${email}`);
+
+            // Rediriger vers la page myaccount.html après la mise à jour
+            window.location.href = 'myaccount.html';
+        });
+    </script>
+
+    <script src="theme.js"></script>
+
+    <!-- Bouton de changement de thème -->
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
+</body>
+</html>

@@ -44,20 +44,15 @@
                 } else {
                     const responseData = await response.json();
         
-                    // Vérifier que userId est bien présent dans la réponse
                     if (responseData.userId) {
-                        // Stocker l'information de connexion et le rôle
                         localStorage.setItem('isLoggedIn', 'true');
-                        localStorage.setItem('userRole', responseData.role); // stocker le rôle ici
-                        localStorage.setItem('userId', responseData.userId); // stocker l'userId ici
-                        localStorage.setItem('redirectAfterLogin', window.location.href);  // Stocker l'URL actuelle avant la connexion
+                        localStorage.setItem('userRole', responseData.role);
+                        localStorage.setItem('userId', responseData.userId);
         
-                        // Redirection selon le rôle
-                        if (responseData.role === 'admin') {
-                            window.location.href = 'admin.html';
-                        } else {
-                            window.location.href = 'accueil.html';
-                        }
+                        // Vérifie s'il y a une page cible après la connexion
+                        const redirectTarget = localStorage.getItem('redirectAfterLogin') || 'accueil.html';
+                        localStorage.removeItem('redirectAfterLogin');
+                        window.location.href = redirectTarget;
                     } else {
                         alert("Erreur: L'ID utilisateur n'a pas été récupéré.");
                     }
@@ -67,6 +62,7 @@
                 alert("Erreur de connexion au serveur.");
             }
         });
+        
         
     </script>
 </body>
