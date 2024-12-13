@@ -40,11 +40,14 @@
             <div class="grid-container">
                 <!-- Mes informations -->
                 <div class="info-section card">
-                    <h2>Mes Informations</h2>
-                    <p><strong>Nom :</strong> Jean Dupont</p>
-                    <p><strong>Email :</strong> jean.dupont@example.com</p>
-                
-                    <a href="modif.html" class="btn">Changer mes informations personnelles</a>                </div>
+                    
+                        <h2>Mes Informations</h2>
+                        <p><strong>Nom :</strong> <span id="userName">Chargement...</span></p>
+                        <p><strong>Email :</strong> <span id="userEmail">Chargement...</span></p>
+                        
+                        <a href="modif.html" class="btn">Changer mes informations personnelles</a>
+                    
+                </div>
 
                 <!-- Gestion du mot de passe -->
                 <div class="password-section card">
@@ -101,25 +104,43 @@
     <script src="theme.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => { // secu supp
+        document.addEventListener("DOMContentLoaded", () => { 
+            // Vérifie si l'utilisateur est connecté
             if (localStorage.getItem("isLoggedIn") !== "true") {
-                window.location.href = "connection.html";
+                window.location.href = "connection.html"; // Redirige si non connecté
+            } else {
+                const userId = localStorage.getItem("userId"); // Récupère l'ID utilisateur
+                fetchUserData(userId); // Appel de la fonction pour récupérer les données de cet utilisateur
             }
         });
-        </script>
-        
 
-    <script>
-        function logout() { // faut supprimer les données de connexion
+         // Fonction pour récupérer les données de l'utilisateur connecté depuis l'API
+
+        async function fetchUserData(userId) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/users/${userId}`);
+                if (response.ok) {
+                    const user = await response.json(); 
+                    
+                    // Mettre à jour les éléments HTML avec les informations de l'utilisateur
+                    document.getElementById("userName").textContent = user.username || "Nom non disponible";
+                    document.getElementById("userEmail").textContent = user.email || "Email non disponible";
+                } else {
+                    console.error('Erreur lors de la récupération des données de l\'utilisateur');
+                }
+            } catch (err) {
+                console.error('Erreur de connexion:', err);
+            }
+        }
+
+        // Fonction de déconnexion
+        function logout() {
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("username");
-        
-            window.location.href = "accueil.html";
+            localStorage.removeItem("userId");
+
+            window.location.href = "accueil.html"; // Redirige vers la page d'accueil après déconnexion
         }
-        </script>
+    </script>
 </body>
 </html>
-
-    
-        
-

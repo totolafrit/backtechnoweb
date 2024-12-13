@@ -126,6 +126,33 @@ app.post('/login', async (req, res) => {
 });
 
 
+
+
+
+
+// // Mettre à jour les informations d'un utilisateur
+// app.put('/user/:id', async (req, res) => {
+//     const userId = req.params.id;
+//     const { username, email } = req.body;
+
+//     try {
+//         const [result] = await db.query(
+//             'UPDATE users SET username = ?, email = ? WHERE id = ?',
+//             [username, email, userId]
+//         );
+
+//         if (result.affectedRows > 0) {
+//             res.json({ message: "Informations mises à jour avec succès" });
+//         } else {
+//             res.status(404).json({ message: "Utilisateur non trouvé" });
+//         }
+//     } catch (error) {
+//         res.status(500).json({ message: "Erreur du serveur", error });
+//     }
+// });
+
+
+
 // route DELETE pour supprimer un utilisateur (admin uniquement)
 
 app.delete('/delete-user/:id', checkAdminRole, (req, res) => {
@@ -177,6 +204,82 @@ app.get('/api/products', (req, res) => {
         res.status(200).json(result);  
     });
 });
+
+
+// Récupérer les informations d'un utilisateur par son ID 
+
+// app.get('/api/users', (req, res) => {
+//     const query = 'SELECT * FROM users';
+//     db.query(query, (err, result) => {
+//         if (err) {
+//             console.error('Erreur lors de la récupération des produits:', err);
+//             return res.status(500).json({ message: 'Erreur lors de la récupération des produits' });
+//         }
+//         res.status(200).json(result);  
+//     });
+// });
+
+
+// app.get('/api/users', (req, res) => {
+//     const username = req.query.username;  // Récupérer le username passé dans la requête
+//     const query = 'SELECT * FROM users WHERE username = ?';  // Sélectionner l'utilisateur par username
+    
+//     db.query(query, [username], (err, result) => {
+//         if (err) {
+//             console.error('Erreur lors de la récupération des utilisateurs:', err);
+//             return res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs' });
+//         }
+//         if (result.length === 0) {
+//             return res.status(404).json({ message: 'Utilisateur non trouvé' });
+//         }
+//         res.status(200).json(result[0]);  // Renvoyer le premier utilisateur trouvé
+//     });
+// });
+
+
+app.get('/api/users/:id', (req, res) => {
+    const userId = req.params.id;  // Récupère l'ID de l'utilisateur depuis l'URL
+    const query = 'SELECT * FROM users WHERE id = ?';  // Sélectionne l'utilisateur par ID
+    
+    db.query(query, [userId], (err, result) => {
+        if (err) {
+            console.error('Erreur lors de la récupération des utilisateurs:', err);
+            return res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        }
+        res.status(200).json(result[0]);  // Renvoyer l'utilisateur correspondant
+    });
+});
+
+// modif profil cote client
+
+app.put('/api/users/profile/:id', (req, res) => {
+    const userId = req.params.id;
+    const { username, email } = req.body;
+
+    if (!username || !email) {
+        return res.status(400).json({ message: 'Nom d\'utilisateur et email sont requis.' });
+    }
+
+    const query = 'UPDATE users SET username = ?, email = ? WHERE id = ?';
+    db.query(query, [username, email, userId], (err, result) => {
+        if (err) {
+            console.error('Erreur lors de la mise à jour de l\'utilisateur :', err);
+            return res.status(500).json({ message: 'Erreur serveur' });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        }
+
+        res.status(200).json({ message: 'Informations personnelles mises à jour avec succès.' });
+    });
+});
+
+
+
 
 
 
@@ -284,7 +387,7 @@ app.get('/api/users/:id', (req, res) => {
     });
 });
 
-//rute pour mettre à jour un user
+//rute pour mettre à jour un user côté admin
 app.put('/api/users/:id', (req, res) => {
     const userId = req.params.id;
     const { username, email, role } = req.body;
