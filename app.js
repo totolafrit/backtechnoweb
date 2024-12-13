@@ -457,6 +457,50 @@ app.post('/api/users', async (req, res) => {
 });
 
 
+// Mise à jour du mot de passe
+app.put('/api/users/:id/change-password', (req, res) => {
+    const { id } = req.params;
+    const { currentPassword, newPassword } = req.body;
+
+    //console.log("ID reçu :", id);
+    //console.log("Ancien mot de passe :", currentPassword);
+    //console.log("Nouveau mot de passe :", newPassword);
+
+    db.query("SELECT * FROM users WHERE id = ?", [id], async (err, rows) => {
+        if (err) {
+            console.error("Erreur lors de la requête :", err);
+            return res.status(500).json({ message: "Erreur serveur lors de la récupération de l'utilisateur" });
+        }
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: "Utilisateur introuvable" });
+        }
+
+        const user = rows[0];
+
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        //console.log("Correspondance des mots de passe :", isMatch);
+
+        if (!isMatch) {
+            return res.status(400).json({ message: "Mot de passe actuel incorrect" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        //console.log("Nouveau mot de passe haché :", hashedPassword);
+
+        db.query("UPDATE users SET password = ? WHERE id = ?", [hashedPassword, id], (err, result) => {
+            if (err) {
+                console.error("Erreur lors de la mise à jour du mot de passe :", err);
+                return res.status(500).json({ message: "Erreur serveur lors de la mise à jour du mot de passe" });
+            }
+
+            res.status(200).json({ message: "Mot de passe mis à jour avec succès" });
+        });
+    });
+});
+
+
+
 // route pour enregistrer une commande
 
 app.post('/create-order', (req, res) => {
@@ -522,6 +566,51 @@ app.get('/api/orders', (req, res) => {
         res.json(formattedResults);
     });
 });
+
+
+// route pour recupérer les commandes coté client
+app.get('/api/orders/user/:userId', (req, res) => {
+    const { sort } = req.query; 
+    const userId = req.params.userId; // Récupérer l'userId à partir des paramètres d'URL
+
+    let orderBy = 'created_at DESC'; // tri par défaut - les commandes les plus récentes 
+    if (sort === 'created_at_asc') orderBy = 'created_at ASC';
+    if (sort === 'total_price_asc') orderBy = 'total_price ASC';
+    if (sort === 'total_price_desc') orderBy = 'total_price DESC';
+
+    // Créer la requête SQL avec un filtre basé sur le user_id
+    const query = `
+        SELECT 
+            orders.order_id, 
+            orders.user_id, 
+            users.username, 
+            orders.total_price, 
+            orders.cart_items, 
+            orders.created_at 
+        FROM orders
+        JOIN users ON orders.user_id = users.id
+        WHERE orders.user_id = ?
+        ORDER BY ${orderBy}
+    `;
+
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('Erreur lors de la récupération des commandes :', err);
+            return res.status(500).json({ error: 'Erreur lors de la récupération des commandes.' });
+        }
+
+        // Formatage des résultats
+        const formattedResults = results.map(order => {
+            order.cart_items = JSON.parse(order.cart_items);  // On parse `cart_items` (qui est une chaîne JSON) pour l'utiliser dans le front
+            order.created_at = new Date(order.created_at).toISOString(); // Format ISO pour la date
+
+            return order;
+        });
+
+        res.json(formattedResults);  // Renvoi des commandes de l'utilisateur sous format JSON
+    });
+});
+
 
 
 // toujours à la fin

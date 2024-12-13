@@ -61,19 +61,8 @@
             <div class="grid-container">
                 <!-- Dernières commandes -->
                 <div class="orders-section card">
-                    <h2>Dernières Commandes</h2>
-                    <div class="order-item">
-                        <p><strong>Commande #12345</strong></p>
-                        <p>3 Articles - Total : 45,90€</p>
-                        <p>Date : 01/12/2024</p>
-                        <a href="order-details.html" class="btn">Voir les détails</a>
-                    </div>
-                    <div class="order-item">
-                        <p><strong>Commande #12344</strong></p>
-                        <p>2 Articles - Total : 25,50€</p>
-                        <p>Date : 15/11/2024</p>
-                        <a href="order-details.html" class="btn">Voir les détails</a>
-                    </div>
+                        <h2>Mes Commandes</h2>
+                        <ul id="orders-list"></ul>  <!-- Liste des commandes -->
                 </div>
 
                 <!-- Paramètres de confidentialité et suppression -->
@@ -111,6 +100,7 @@
             } else {
                 const userId = localStorage.getItem("userId"); // Récupère l'ID utilisateur
                 fetchUserData(userId); // Appel de la fonction pour récupérer les données de cet utilisateur
+                fetchUserOrders(userId)
             }
         });
 
@@ -133,6 +123,50 @@
             }
         }
 
+
+         // Fonction pour récupérer les commandes de l'utilisateur
+         async function fetchUserOrders(userId) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/orders/user/${userId}`);
+                if (response.ok) {
+                    const orders = await response.json();
+                    displayOrders(orders);
+                } else {
+                    console.error('Erreur lors de la récupération des commandes');
+                    document.getElementById("orders-list").innerHTML = "<li>Aucune commande trouvée.</li>";
+                }
+            } catch (err) {
+                console.error('Erreur de connexion:', err);
+            }
+        }
+
+        // Fonction pour afficher les commandes
+        function displayOrders(orders) {
+            const ordersList = document.getElementById("orders-list");
+            ordersList.innerHTML = ''; // Vider la liste avant d'ajouter les nouvelles commandes
+        
+            if (orders.length === 0) {
+                ordersList.innerHTML = "<p>Aucune commande trouvée.</p>";
+                return;
+            }
+        
+            orders.forEach(order => {
+                const orderItem = document.createElement('div');
+                orderItem.classList.add('order-item');
+        
+                orderItem.innerHTML = `
+                    <p><strong>Commande #${order.order_id}</strong></p>
+                    <p>Total : ${order.total_price.toFixed(2)}€</p>
+                    <p>Date de la commande : ${new Date(order.created_at).toLocaleDateString()}</p>
+                    <a href="order-details.html" class="btn">Voir les détails</a>
+                `;
+        
+                ordersList.appendChild(orderItem);
+            });
+        }
+
+
+    
         // Fonction de déconnexion
         function logout() {
             localStorage.removeItem("isLoggedIn");
@@ -144,3 +178,5 @@
     </script>
 </body>
 </html>
+
+

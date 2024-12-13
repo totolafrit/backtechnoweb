@@ -34,8 +34,9 @@
             <a href="myaccount.html" class="back-arrow"><i class="bx bx-undo"></i></a>
             <h1>Supprimer le Compte</h1>
             <p>Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.</p>
+            
             <div class="action-buttons">
-                <button class="confirm-button">Oui, supprimer</button>
+                <button class="confirm-button" onclick="deleteAccount()">Oui je confirme</button>
                 <button class="cancel-button"><a href="myaccount.html">Non, annuler</a></button>
             </div>
         </div>
@@ -49,6 +50,47 @@
          <i class="bx bx-sun"></i>
      </button>
  </div>
+
+ <script>
+
+      // Fonction pour supprimer le compte de l'utilisateur
+async function deleteAccount() {
+    const userId = localStorage.getItem("userId");
+
+    if (!userId) {
+        alert("Utilisateur non identifié.");
+        return;
+    }
+
+    if (!confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+            method: 'DELETE',
+        });
+
+        if (response.ok) {
+            alert('Compte supprimé avec succès');
+            
+            // Suppression des données locales et redirection
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("username");
+            localStorage.removeItem("userId");
+            window.location.href = "accueil.html";
+        } else {
+            const data = await response.json();
+            alert('Erreur : ' + data.message);
+        }
+    } catch (error) {
+        console.error('Erreur :', error);
+        alert('Erreur lors de la suppression du compte');
+    }
+}
+
+
+ </script>
    
 </body>
 </html>
