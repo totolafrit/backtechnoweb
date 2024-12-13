@@ -28,7 +28,9 @@
                 <li><a href="actualites.html">Les Infos-Vertes</a></li>
                 <li>
                     <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
-                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
+                    <!-- <a href="connection.html"><i class="bx bxs-user-circle"></i></a> -->
+                    <a id="user-link"><i class="bx bxs-user-circle"></i></a>
+                  
                 </li>
             </ul>
         </nav>
@@ -117,7 +119,15 @@
         </button>
     </div>
     
-    </body>
-    </html>
+    <script src="auth.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        checkUserLink("user-link");
+    });
+</script>
+    
 </body>
 </html>
+
+
+

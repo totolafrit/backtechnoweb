@@ -145,26 +145,30 @@
 
 </script>
 
-    <script> // pour passer la commande
-            function validateOrder() {
-                const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-                
-                if (cartItems.length === 0) {
-                    alert("Votre panier est vide. Ajoutez des articles pour passer la commande.");
-                    return;
-                }else {
-       // Vérifier si l'utilisateur est connecté
-              
-       if (!localStorage.getItem('isLoggedIn')) { // si non connecté
-        alert('Veuillez vous connecter avant de payer!');
-        window.location.href = 'connection.html';
-    } else {
-       
-                window.location.href = 'payement.html'; 
+<script>
+
+    function validateOrder() {
+        const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        if (cartItems.length === 0) {
+            alert("Votre panier est vide. Ajoutez des articles pour passer la commande.");
+            return;
+        }
+    
+        if (!localStorage.getItem('isLoggedIn')) { 
+            // Stocker la page cible avant redirection
+            localStorage.setItem('redirectAfterLogin', 'payement.html');
+            alert('Veuillez vous connecter avant de payer!');
+            window.location.href = 'connection.html';
+        } else {
+            window.location.href = 'payement.html'; 
+        }
     } 
-                }
-            } 
-        </script>
+    
+
+</script>
+
+   
         
 
        
