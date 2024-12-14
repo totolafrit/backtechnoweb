@@ -502,28 +502,28 @@ app.put('/api/users/:id/change-password', (req, res) => {
 
 
 // route pour enregistrer une commande
+       
 
 app.post('/create-order', (req, res) => {
-    const { userId, cart, totalPrice } = req.body;
-    console.log("Données reçues dans /create-order :", req.body);
+    const { userId, cart, totalPrice, pickupDate, pickupSlot } = req.body;
+    //console.log('Données reçues:', { userId, cart, totalPrice, pickupDate, pickupSlot });
 
-    if (!userId || !cart || cart.length === 0) {  // verifier si l'userid et le panier sont présents
-        return res.status(400).json({ error: 'User ID or cart is missing.' });
-    }
+    const query = `INSERT INTO orders (user_id, total_price, cart_items, created_at, pickup_date, pickup_slot)
+                   VALUES (?, ?, ?, NOW(), ?, ?)`;
 
-    const query = 'INSERT INTO orders (user_id, total_price, cart_items) VALUES (?, ?, ?)'; // add ici si on veut dire quand recup la commande
-    const cartJson = JSON.stringify(cart);  // on converti le panier en JSON pour l'enregistrer
-
-    db.query(query, [userId, totalPrice, cartJson], (err, results) => {
+    db.query(query, [userId, totalPrice, JSON.stringify(cart), pickupDate, pickupSlot], (err, result) => {
         if (err) {
-            console.error('Erreur lors de la création de la commande :', err);
-            return res.status(500).json({ error: 'Erreur lors de la création de la commande.' });
+            console.error('Erreur de requête SQL:', err);
+            return res.status(500).json({ message: 'Erreur lors de la création de la commande' });
         }
 
-        res.json({ message: 'Commande créée avec succès!', orderId: results.insertId });
+        res.status(200).json({ message: 'Commande créée avec succès' });
     });
 });
-       
+
+
+
+
 
 // route pour récupérer les commandes côté admin
 app.get('/api/orders', (req, res) => {
@@ -542,7 +542,9 @@ app.get('/api/orders', (req, res) => {
             users.username, 
             orders.total_price, 
             orders.cart_items, 
-            orders.created_at 
+            orders.created_at, 
+            orders.pickup_date, 
+            orders.pickup_slot   
         FROM orders
         JOIN users ON orders.user_id = users.id
         ORDER BY ${orderBy}
@@ -559,7 +561,7 @@ app.get('/api/orders', (req, res) => {
             order.cart_items = JSON.parse(order.cart_items);  // on parse `cart_items` (qui est une chaîne JSON) pour l'utiliser dans le front de manage-orders.html
 
             order.created_at = new Date(order.created_at).toISOString(); // changement en format ISO de la date à laquelle la commande a été réalisé
-
+            order.pickup_date = new Date(order.pickup_date).toISOString();
             return order;
         });
 
@@ -611,6 +613,18 @@ app.get('/api/orders/user/:userId', (req, res) => {
     });
 });
 
+// Route pour récupérer le nombre d'utilisateurs (clients)
+app.get('/api/clients-count', (req, res) => {
+    // On compte tous les utilisateurs dans la table "users"
+    db.query('SELECT COUNT(*) AS clientCount FROM users', (err, result) => {
+      if (err) {
+        console.error('Erreur lors de la récupération du nombre d\'utilisateurs:', err);
+        res.status(500).json({ error: 'Erreur serveur' });
+      } else {
+        res.json({ clientCount: result[0].clientCount });
+      }
+    });
+  });
 
 
 // toujours à la fin

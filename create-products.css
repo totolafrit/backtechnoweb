@@ -1,96 +1,149 @@
-/* Style général */
+/* ========================= Styles généraux ========================= */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #f0f0f5;
     color: #333;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-form {
-    width: 100%;
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+/* En-tête */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 999;
 }
 
-/* Titres */
-h1 {
-    text-align: center;
+header .logo img {
+    width: 60px;
+}
+
+header .nav-menu {
+    display: flex;
+    gap: 20px;
+}
+
+header .nav-menu a {
+    text-decoration: none;
     color: #333;
-    margin-bottom: 20px;
-    font-size: 2em;
-}
-
-/* Labels et champs du formulaire */
-label {
-    display: block;
-    margin-bottom: 10px;
     font-weight: bold;
-    color: #555;
+    transition: color 0.3s;
 }
 
-input[type="text"], input[type="number"], textarea {
+header .nav-menu a:hover {
+    color: #4CAF50;
+}
+
+
+
+/* ========================= Formulaire d'ajout de produit ========================= */
+form {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+form input,
+form textarea {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 1em;
-    box-sizing: border-box;
+    font-size: 14px;
 }
 
-textarea {
-    height: 100px;
-    resize: vertical;
+form input[type="number"] {
+    width: 49%;
+    display: inline-block;
 }
 
-/* Bouton d'ajout */
-button {
+form button {
+    width: 100%;
+    padding: 12px;
     background-color: #4CAF50;
     color: white;
-    padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    font-size: 1.2em;
+    font-size: 16px;
     cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
-button:hover {
+form button:hover {
     background-color: #45a049;
 }
 
-/* Validation et erreurs */
-input:invalid, textarea:invalid {
-    border-color: red;
+/* ========================= Styles supplémentaires ========================= */
+input:focus,
+textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
 }
 
-input:valid, textarea:valid {
-    border-color: green;
+textarea {
+    resize: vertical;
 }
 
-/* Message d'alerte */
-.alert {
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 15px;
-    margin-top: 20px;
-    border-radius: 5px;
-    display: none;
+button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
 }
 
-.alert.success {
-    background-color: #d4edda;
-    color: #155724;
+/* ========================= Mode sombre ========================= */
+body.dark-theme {
+    background-color: #121212;
+    color: #e0e0e0;
 }
 
-.alert.error {
-    background-color: #f8d7da;
-    color: #721c24;
+body.dark-theme header {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
 }
 
+body.dark-theme header .nav-menu a {
+    color: #e0e0e0;
+}
+
+body.dark-theme form {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
+
+body.dark-theme form input,
+body.dark-theme form textarea {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+    border: 1px solid #444;
+}
+
+body.dark-theme form button {
+    background-color: #45a049;
+}
+
+body.dark-theme form button:hover {
+    background-color: #3e8e41;
+}
+
+/* ========================= Transition générale ========================= */
+a,
+button {
+    transition: all 0.3s ease;
+}

@@ -4,66 +4,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>À propos de nous</title>
+    <title>Administration</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="admin.css">
 </head>
 
 <body>
-
     <!-- En-tête -->
-    <header>
+    <header class="top-bar">
         <div class="logo">
             <img src="logo.png" alt="Logo">
         </div>
-        <nav>
-            <ul class="nav-menu">
-                <li><a href="accueil.html">Home</a></li>
-                <li><a href="aboutus.html">About us</a></li>
-
-                <li><a href="shop.html">Shop</a></li>
-                <li><a href="project.html">Project</a></li>
-                <li><a href="actualites.html">News</a></li>
-                <li><a href="conseils.html">Advices</a></li>
-                <li><a href="connection.html">Connexion</a></li>
-                <li class="cart-icon">
-                    <a href="fakepanier.html">
-                       
-                        <i class="bx bx-cart" style="font-size: 24px; color: #333;"></i>
-                    </a>
-                </li>
-            </ul>
+        <nav class="nav-menu">
+            <a href="manage-products.html" class="nav-link">
+                <i class="bx bxs-box"></i>
+                <span>Manage Products</span>
+            </a>
+            <a href="manage-clients.html" class="nav-link">
+                <i class="bx bxs-user"></i>
+                <span>Manage Clients</span>
+            </a>
+            <a href="manage-orders.html" class="nav-link">
+                <i class="bx bxs-cart"></i>
+                <span>Manage Orders</span>
+            </a>
+            <!-- Bouton de déconnexion -->
+            <a class="logout-btn" href="javascript:void(0);" onclick="logout()">
+                <i class="bx bx-log-out"></i>
+                Déconnexion
+            </a>
         </nav>
     </header>
-    </header>
-    <main class="admin-menu">
-        <h2>Select a Section to Manage</h2>
-        <div class="menu-grid">
-            <a href="manage-products.html" class="menu-item">
-                <img src="products-icon.png" alt="Products">
-                <h3>Manage Products</h3>
-            </a>
-  
-            <a href="manage-clients.html" class="menu-item">
-                <img src="projects-icon.png" alt="Projects">
-                <h3>Manage Clients</h3>
-            </a>
-            
-            <a href="manage-orders.html" class="menu-item">
-                <img src="orders-icon.png" alt="Orders">
-                <h3>Manage Orders</h3>
-            </a>
-            
-            <!-- <a href="manage-news.html" class="menu-item">
-                <img src="news-icon.png" alt="News">
-                <h3>Manage News</h3>
-            </a> -->
-        </div>
+
+    <!-- Tableau de bord -->
+    <main class="dashboard">
+        <!-- Section des statistiques -->
+        <section class="stats-section">
+            <h2>Statistiques</h2>
+            <div class="stats-grid">
+                <div class="stats-card">
+                    <h3>Visiteurs</h3>
+                    <p>1,245</p>
+                </div>
+        
+                <div class="stats-card">
+                    <h3>Clients</h3>
+                    <p id="clients-count">Chargement...</p>
+                </div>
+                
+                <div class="stats-card">
+                    <h3>Temps moyen par visiteur</h3>
+                    <p>5m 32s</p>
+                </div>
+            </div>
+            <div class="stats-filter">
+                <label for="filter">Filtrer par :</label>
+                <select id="filter">
+                    <option>Derniers 24h</option>
+                    <option>Dernier Mois</option>
+                    <option>Dernière Année</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Section des commandes récentes -->
+        <section class="orders-section">
+            <h2>Commandes Récentes</h2>
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Numéro de Commande</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Détails</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#12345</td>
+                        <td>12/12/2024</td>
+                        <td>89,50€</td>
+                        <td><a href="#">Voir</a></td>
+                    </tr>
+                    <tr>
+                        <td>#12344</td>
+                        <td>11/12/2024</td>
+                        <td>45,20€</td>
+                        <td><a href="#">Voir</a></td>
+                    </tr>
+                    <tr>
+                        <td>#12343</td>
+                        <td>10/12/2024</td>
+                        <td>25,30€</td>
+                        <td><a href="#">Voir</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <a href="manage-orders.html" class="view-all">Voir toutes les commandes</a>
+        </section>
     </main>
 
+    <!-- Pied de page -->
     <footer>
-        <p>&copy; 2024 L'Arbre Envie - All Rights Reserved</p>
+        <p>&copy; 2024 L'Arbre En Vie - Tous droits réservés</p>
     </footer>
 
+    <script>
+        function logout() {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("username");
+            localStorage.removeItem("userId");
+
+            window.location.href = "accueil.html"; // Redirige vers la page d'accueil après déconnexion
+        }
+    </script>
+    <script>
+        // Fonction pour obtenir le nombre d'utilisateurs (clients)
+        function getClientsCount() {
+            fetch('http://localhost:3000/api/clients-count') // URL de l'API backend
+                .then(response => response.json())
+                .then(data => {
+                    const clientCount = data.clientCount;
+                    // Mettre à jour la statistique sur la page admin.html
+                    document.getElementById('clients-count').textContent = clientCount;
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération du nombre de clients:', error);
+                });
+        }
+    
+        // Appeler la fonction au chargement de la page
+        window.onload = function() {
+            getClientsCount();
+        };
+    </script>
+    
+
+    <script src="theme.js"></script>
+    <!-- Bouton de changement de thème -->
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
 </body>
+
 </html>

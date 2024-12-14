@@ -1,255 +1,217 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Produits</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="manage-products.css">
-    <title>Manage Products</title>
 </head>
-
+<body>
 <header>
-    <nav>
-        <ul class="nav-menu">
-            <li><a href="shop.html">Shop</a></li>
-        </ul>
+    <div class="logo"><img src="logo.png" alt="Logo"></div>
+    <nav class="nav-menu">
+        <a href="manage-products.html" class="nav-link"><i class="bx bxs-box"></i><span>Manage Products</span></a>
+        <a href="manage-client.html" class="nav-link"><i class="bx bxs-user"></i><span>Manage Clients</span></a>
+        <a href="manage-orders.html" class="nav-link"><i class="bx bxs-cart"></i><span>Manage Orders</span></a>
     </nav>
 </header>
-<body>
-    <div id="create-product-container" style="margin: 20px; text-align: center;">
-        <button onclick="window.location.href='create-products.html'" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
-            Créer un produit
-        </button>
-    </div>
 
-    <div id="filter-container">
-        <input type="text" id="search-bar" placeholder="Rechercher par nom..." oninput="filterProducts()">
+<main>
+    <aside class="sidebar">
+        <a href="admin.html" class="undo-link"><i class="bx bx-undo"></i></a>
+        <h3>Actions</h3>
+        <button onclick="startEdit()" class="action-btn" id="edit-btn" disabled>Modifier</button>
+        <button onclick="startDelete()" class="action-btn" id="delete-btn" disabled>Supprimer</button>
+        <button onclick="window.location.href='create-products.html'" class="action-btn" id="add-btn">Ajouter un produit</button>
+
+        <div id="edit-form-container" style="display: none;">
+            <h2>Modifier le produit</h2>
+            <form id="edit-product-form">
+                <input type="hidden" id="edit-product-id">
+                <label for="edit-name">Nom du produit :</label>
+                <input type="text" id="edit-name" required>
+                <label for="edit-price">Prix :</label>
+                <input type="number" id="edit-price" required>
+                <label for="edit-description">Description :</label>
+                <textarea id="edit-description" required></textarea>
+                <label for="edit-category">Catégorie :</label>
+                <input type="text" id="edit-category" required>
+                <label for="edit-image-url">URL de l'image :</label>
+                <input type="text" id="edit-image-url" required>
+                <button type="submit">Enregistrer</button>
+            </form>
+        </div>
+    </aside>
+
+    <section class="product-list-section">
+        <h1>Liste des produits</h1>
+        <input type="text" id="search-bar" placeholder="Rechercher..." oninput="filterProducts()">
+        
         <select id="sort-options" onchange="sortProducts()">
-            <option value="">Trier par</option>
-            <option value="price-asc">Prix croissant</option>
-            <option value="price-desc">Prix décroissant</option>
-            <option value="category">Catégorie</option>
+            <option value="name">Nom du produit</option>
+            <option value="price">Prix</option>
+            <option value="price-asc">Prix Croissant</option>
+            <option value="price-desc">Prix Décroissant</option>
         </select>
-    </div>
-    
-    <table id="products-table">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Prix</th>
-                <th>Description</th>
-                <th>Image</th>
-                <th>Catégorie</th>
-                <th>Supprimer</th>
-                <th>Modifier</th>
-            </tr>
-        </thead>
-        <tbody id="products-list">
-            <!-- produits affiché dynamiquement ici -->
-        </tbody>
-    </table>
-    
-    <!-- EDIT : pour modif un produit -->
-    <div id="edit-form-container" style="display: none;">
-        <h2>Modifier le produit</h2>
-        <form id="edit-product-form">
-            <label for="edit-name">Nom du produit :</label>
-            <input type="text" id="edit-name" required>
 
-            <label for="edit-price">Prix :</label>
-            <input type="number" id="edit-price" step="0.01" required>
+        <div id="product-list" class="product-list"></div>
+    </section>
+</main>
 
-            <label for="edit-description">Description :</label>
-            <textarea id="edit-description" required></textarea>
+<script>
+let allProducts = [];
+let selectedProductId = null;
 
-            <label for="edit-image-url">URL de l'image :</label>
-            <input type="text" id="edit-image-url" required>
+async function fetchProducts() {
+    try {
+        const response = await fetch('http://localhost:3000/api/products');
+        allProducts = await response.json();
+        displayProducts(allProducts);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des produits :', error);
+    }
+}
 
-            <label for="edit-category">Catégorie :</label>
-            <input type="number" id="edit-category" required>
+function displayProducts(products) {
+    const productList = document.getElementById('product-list');
+    productList.innerHTML = '';
+    products.forEach(product => {
+        const productItem = document.createElement('div');
+        productItem.className = 'product-item';
+        productItem.innerHTML = `
+            <div class="product-info" onclick="selectProduct(${product.id})">
+                <h3>${product.name}</h3>
+                <p>Prix : ${product.price}€</p>
+                <p>Description : ${product.description}</p>
+                <p>Catégorie : ${product.category}</p>
+                <td><img src="http://localhost:3000/images/${product.image_url}" width="100"></td>
+            </div>
+        `;
+        productList.appendChild(productItem);
+    });
+}
 
-            <input type="hidden" id="edit-product-id">
-            <button type="submit">Sauvegarder les modifications</button>
-        </form>
-    </div>
-    
-    <script>
-        fetchProducts();
-    </script>
-</body>
-</html>
+function selectProduct(id) {
+    selectedProductId = id;
+    document.getElementById('edit-btn').disabled = false;
+    document.getElementById('delete-btn').disabled = false;
+}
 
-    
-    <script>
+function startEdit() {
+    if (selectedProductId) {
+        editProduct(selectedProductId);
+    }
+}
 
-        let allProducts = []; // tous les produits récupérés du serveur
-
-        async function fetchProducts() {
-            try {
-                const response = await fetch('http://localhost:3000/api/products');
-                const products = await response.json();
-
-                allProducts = products; // Stocker les produits recup
-                displayProducts(products); 
-               
-                console.log('Produits récupérés :', products);
-
-                const productsList = document.getElementById('products-list');
-                productsList.innerHTML = '';
-
-                if (Array.isArray(products) && products.length > 0) {
-    
-                    products.forEach(product => {
-                        console.log('Produit:', product);  
-                        console.log('Image URL:', product.image_url);  
-                        
-                        const row = document.createElement('tr');
-                        // affichage des produits
-                        row.innerHTML = ` 
-                            <td>${product.name}</td>
-                            <td>${product.price} €</td>
-                            <td>${product.description}</td>
-                            <td>
-                                <img src="http://localhost:3000/images/${product.image_url}" alt="${product.name}" width="100">
-                            </td>
-                            <td>${product.category}</td>
-                            <td><button onclick="deleteProduct(${product.id})">Supprimer</button></td>
-                            <td><button onclick="editProduct(${product.id})">Modifier</button></td>
-                        `;
-                        productsList.appendChild(row);
-                    });
-                } else {
-                    console.log("Aucun produit trouvé.");
-                    alert("Aucun produit trouvé.");
-                }
-            } catch (error) {
-                console.error('Erreur lors de la récupération des produits :', error);
-            }
+function startDelete() {
+    if (selectedProductId) {
+        if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
+            deleteProduct(selectedProductId);
         }
+    }
+}
 
-        async function deleteProduct(id) {
-            try {
-                const response = await fetch(`http://localhost:3000/api/products/${id}`, {
-                    method: 'DELETE',
-                });
-
-                if (response.ok) {
-                    alert('Produit supprimé');
-                    fetchProducts(); // update la liste des produits après suppression
-                } else {
-                    const data = await response.json();
-                    alert('Erreur : ' + data.message);
-                }
-            } catch (error) {
-                console.error('Erreur:', error);
-                alert('Erreur lors de la suppression du produit');
-            }
-        }
-
-        // fonction pour mettre à jour le produit
-        document.getElementById('edit-product-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const id = document.getElementById('edit-product-id').value;
-            const name = document.getElementById('edit-name').value;
-            const price = document.getElementById('edit-price').value;
-            const description = document.getElementById('edit-description').value;
-            const image_url = document.getElementById('edit-image-url').value;
-            const category = document.getElementById('edit-category').value;
-
-            try {
-                const response = await fetch(`http://localhost:3000/api/products/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, price, description, image_url, category })
-                });
-
-                if (response.ok) {
-                    fetchProducts(); 
-                    document.getElementById('edit-form-container').style.display = 'none';
-                } else {
-                    const data = await response.json();
-                    alert('Erreur : ' + data.message);
-                }
-            } catch (error) {
-                console.error('Erreur:', error);
-                alert('Erreur lors de la mise à jour du produit');
-            }
+async function deleteProduct(id) {
+    try {
+        const response = await fetch(`http://localhost:3000/api/products/${id}`, {
+            method: 'DELETE',
         });
 
-        async function editProduct(id) {
-            console.log('ID du produit:', id); 
-            try {
-                const response = await fetch(`http://localhost:3000/api/products/${id}`);
-                if (!response.ok) {
-                    throw new Error(`Erreur HTTP : ${response.status}`);
-                }
-        
-                const product = await response.json();
-                console.log('Produit récupéré :', product);
-        
-                document.getElementById('edit-name').value = product.name;
-                document.getElementById('edit-price').value = product.price;
-                document.getElementById('edit-description').value = product.description;
-                document.getElementById('edit-image-url').value = product.image_url;
-                document.getElementById('edit-category').value = product.category;
-                document.getElementById('edit-product-id').value = product.id;
-        
-                // pour afficher le formulaire de modification
-                document.getElementById('edit-form-container').style.display = 'block';
-            } catch (error) {
-                console.error('Erreur lors de la récupération des données du produit :', error);
-                alert('Erreur lors de la récupération des données du produit');
-            }
+        if (response.ok) {
+            alert('Produit supprimé');
+            fetchProducts();
+            selectedProductId = null;
+            document.getElementById('edit-btn').disabled = true;
+            document.getElementById('delete-btn').disabled = true;
+        } else {
+            const data = await response.json();
+            alert('Erreur : ' + data.message);
         }
+    } catch (error) {
+        console.error('Erreur :', error);
+        alert('Erreur lors de la suppression du produit');
+    }
+}
 
-        function displayProducts(products) {
-            const productsList = document.getElementById('products-list');
-            productsList.innerHTML = '';
-        
-            products.forEach(product => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${product.name}</td>
-                    <td>${product.price} €</td>
-                    <td>${product.description}</td>
-                    <td>
-                        <img src="http://localhost:3000/images/${product.image_url}" alt="${product.name}" width="100">
-                    </td>
-                    <td>${product.category}</td>
-                    <td><button onclick="deleteProduct(${product.id})">Supprimer</button></td>
-                    <td><button onclick="editProduct(${product.id})">Modifier</button></td>
-                `;
-                productsList.appendChild(row);
-            });
-        }
+function filterProducts() {
+    const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+    
+    const filteredProducts = allProducts.filter(product => 
+        product.name.toLowerCase().includes(searchQuery) ||
+        product.price.toString().includes(searchQuery) ||
+        product.description.toLowerCase().includes(searchQuery)
+    );
 
-        function filterProducts() {
-            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
-            const filteredProducts = allProducts.filter(product =>
-                product.name.toLowerCase().includes(searchQuery)
-            );
-            displayProducts(filteredProducts);
-        }
+    displayProducts(filteredProducts);
+}
 
-        function sortProducts() {
-            const sortOption = document.getElementById('sort-options').value;
-            let sortedProducts = [...allProducts]; // copie des produits
-            
-            if (sortOption === 'price-asc') {
-                sortedProducts.sort((a, b) => a.price - b.price);
-            } else if (sortOption === 'price-desc') {
-                sortedProducts.sort((a, b) => b.price - a.price);
-            } else if (sortOption === 'category') {
-                sortedProducts.sort((a, b) => {
-                    
-                    return String(a.category).localeCompare(String(b.category));// convertit les catégories en chaînes de caractères avant de les comparer
-                });
-            }
-            
-            displayProducts(sortedProducts);
+async function editProduct(id) {
+    try {
+        const response = await fetch(`http://localhost:3000/api/products/${id}`);
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP : ${response.status}`);
         }
-        
-        fetchProducts();
-    </script>
+        const product = await response.json();
+        document.getElementById('edit-name').value = product.name;
+        document.getElementById('edit-price').value = product.price;
+        document.getElementById('edit-description').value = product.description;
+        document.getElementById('edit-image-url').value = product.image_url;
+        document.getElementById('edit-category').value = product.category;
+        document.getElementById('edit-product-id').value = product.id;
+        document.getElementById('edit-form-container').style.display = 'block';
+    } catch (error) {
+        console.error('Erreur lors de la récupération du produit :', error);
+        alert('Erreur lors de la récupération du produit');
+    }
+}
+
+document.getElementById('edit-product-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const id = document.getElementById('edit-product-id').value;
+    const name = document.getElementById('edit-name').value;
+    const price = document.getElementById('edit-price').value;
+    const description = document.getElementById('edit-description').value;
+    const image_url = document.getElementById('edit-image-url').value;
+    const category = document.getElementById('edit-category').value;
+
+    try {
+        const response = await fetch(`http://localhost:3000/api/products/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, price, description, image_url, category })
+        });
+
+        if (response.ok) {
+            fetchProducts();
+            document.getElementById('edit-form-container').style.display = 'none';
+        } else {
+            const data = await response.json();
+            alert('Erreur : ' + data.message);
+        }
+    } catch (error) {
+        console.error('Erreur :', error);
+        alert('Erreur lors de la mise à jour du produit');
+    }
+});
+
+function sortProducts() {
+    const sortOption = document.getElementById('sort-options').value;
+    let sortedProducts;
+
+    if (sortOption === 'price-asc') {
+        sortedProducts = [...allProducts].sort((a, b) => a.price - b.price);
+    } else if (sortOption === 'price-desc') {
+        sortedProducts = [...allProducts].sort((a, b) => b.price - a.price);
+    } else {
+        sortedProducts = [...allProducts].sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    displayProducts(sortedProducts);
+}
+
+fetchProducts();
+</script>
 </body>
 </html>

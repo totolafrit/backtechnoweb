@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <title>Choix du Paiement</title>
+    <link rel="stylesheet" href="selectpayement.css">
+</head>
+
+<body>
+
+    <!-- Étapes de progression -->
+    <div class="progress-bar">
+        <div class="progress-step">
+            <i class="bx bx-calendar"></i>
+            <p>Sélectionner la date</p>
+        </div>
+        <div class="progress-step">
+            <i class="bx bx-check-circle"></i>
+            <p>Confirmation</p>
+        </div>
+        <div class="progress-step active">
+            <i class="bx bx-credit-card"></i>
+            <p>Choix du paiement</p>
+        </div>
+        <div class="progress-step">
+            <i class="bx bx-money"></i>
+            <p>Paiement</p>
+        </div>
+        <div class="progress-step">
+            <i class="bx bx-envelope"></i>
+            <p>Envoi du mail</p>
+        </div>
+    </div>
+
+    <!-- Conteneur Principal -->
+    <div class="payment-container">
+        <h1 class="payment-title">Choisissez votre méthode de paiement</h1>
+        <div class="payment-options">
+            <a href="payementCB.html" class="payment-button">Paiement par Carte</a>
+            <a href="payementPaypal.html" class="payment-button">Paiement PayPal</a>
+        </div>
+    </div>
+
+    <!-- Script pour le thème -->
+    <script src="theme.js"></script>
+
+    <!-- Bouton de changement de thème -->
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
+
+</body>
+
+</html>
