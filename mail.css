@@ -1,3 +1,4 @@
+/* Styles globaux */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f8f9fa;
@@ -58,55 +59,72 @@ body {
     color: #28a745;
 }
 
-
-/* Payment Container */
-.payment-container {
+/* Conteneur principal */
+.mail-container {
     background-color: #ffffff;
-    width: 600px;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 40px 30px;
+    max-width: 600px;
+    width: 90%;
     text-align: center;
-    margin: 120px auto; /* Décalage pour inclure la barre de progression */
+    animation: fadeIn 0.3s ease-in-out;
+    margin: 120px auto; /* Ajustement pour l'espacement avec la navbar */
 }
 
-/* Title */
-.payment-title {
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
+/* Icône de succès */
+.success-icon {
+    font-size: 50px;
+    color: #28a745;
     margin-bottom: 20px;
 }
 
-/* Payment Options */
-.payment-options {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+/* Titre */
+.mail-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
 }
 
-.payment-button {
-    background-color: #007bff;
-    color: white;
+/* Description */
+.mail-description {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* Bouton Retour */
+.return-button {
+    background-color: #28a745;
+    color: #fff;
+    text-decoration: none;
     font-size: 16px;
     font-weight: bold;
-    padding: 15px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.payment-button:hover {
-    background-color: #0056b3;
-    transform: scale(1.02);
+.return-button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
 }
 
-.payment-button:active {
-    transform: scale(0.98);
+/* Animation d'apparition */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
-/* Theme Toggle Button */
+/* Style pour le bouton de changement de thème */
 #theme-toggle {
     position: fixed;
     bottom: 20px;
@@ -131,7 +149,7 @@ body {
     transform: scale(1.1);
 }
 
-/* Dark Theme */
+/* Mode sombre */
 body.dark-theme {
     background-color: #121212;
     color: #e0e0e0;
@@ -141,24 +159,16 @@ body.dark-theme .progress-header {
     background-color: #1f1f1f;
 }
 
-body.dark-theme .payment-container {
+body.dark-theme .mail-container {
     background-color: #1f1f1f;
     color: #e0e0e0;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
 }
 
-body.dark-theme .payment-button {
+body.dark-theme .return-button {
     background-color: #45a049;
 }
 
-body.dark-theme .payment-button:hover {
+body.dark-theme .return-button:hover {
     background-color: #3c8c40;
-}
-
-body.dark-theme #theme-toggle button {
-    background-color: #4CAF50;
-}
-
-body.dark-theme #theme-toggle button:hover {
-    background-color: #333;
 }

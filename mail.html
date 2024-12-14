@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation - Mail envoyé</title>
+    <link rel="stylesheet" href="mail.css">
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navbar avec logo et étapes -->
+    <header class="progress-header">
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <nav class="progress-bar">
+            <div class="progress-step completed">
+                <i class="bx bx-calendar"></i>
+                <p>Sélectionner la date</p>
+            </div>
+            <div class="progress-step completed">
+                <i class="bx bx-check-circle"></i>
+                <p>Confirmation</p>
+            </div>
+            <div class="progress-step completed">
+                <i class="bx bx-credit-card"></i>
+                <p>Choix du paiement</p>
+            </div>
+            <div class="progress-step completed">
+                <i class="bx bx-money"></i>
+                <p>Paiement</p>
+            </div>
+            <div class="progress-step active">
+                <i class="bx bx-envelope"></i>
+                <p>Envoi du mail</p>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenu principal -->
+    <div class="mail-container">
+        <i class="bx bx-check-circle success-icon"></i>
+        <h1 class="mail-title">Commande passée avec succès !</h1>
+        <p class="mail-description">
+           Votre Commande à bien était passé , une facture est désormais disponible en téléchargement , retrouver la également 
+           dans "Mon Compte" .
+        </p>
+        <a href="myaccount.html" class="return-button">Mon Compte</a>
+    </div>
+
+    <!-- Script pour le thème -->
+    <script src="theme.js"></script>
+
+    <!-- Bouton de changement de thème -->
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
+
+</body>
+</html>
