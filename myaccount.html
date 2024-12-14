@@ -21,7 +21,7 @@
                 <li><a href="project.html">Services</a></li>
                 <li><a href="actualites.html">Les Infos-Vertes</a></li>
                 <li>
-                    <a href="cart.html"><i class="bx bx-cart"></i></a>
+                    <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
                     <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
                 </li>
             </ul>
@@ -40,11 +40,14 @@
             <div class="grid-container">
                 <!-- Mes informations -->
                 <div class="info-section card">
-                    <h2>Mes Informations</h2>
-                    <p><strong>Nom :</strong> Jean Dupont</p>
-                    <p><strong>Email :</strong> jean.dupont@example.com</p>
-                
-                    <a href="modif.html" class="btn">Changer mes informations personnelles</a>                </div>
+                    
+                        <h2>Mes Informations</h2>
+                        <p><strong>Nom :</strong> <span id="userName">Chargement...</span></p>
+                        <p><strong>Email :</strong> <span id="userEmail">Chargement...</span></p>
+                        
+                        <a href="modif.html" class="btn">Changer mes informations personnelles</a>
+                    
+                </div>
 
                 <!-- Gestion du mot de passe -->
                 <div class="password-section card">
@@ -58,19 +61,8 @@
             <div class="grid-container">
                 <!-- Dernières commandes -->
                 <div class="orders-section card">
-                    <h2>Dernières Commandes</h2>
-                    <div class="order-item">
-                        <p><strong>Commande #12345</strong></p>
-                        <p>3 Articles - Total : 45,90€</p>
-                        <p>Date : 01/12/2024</p>
-                        <a href="order-details.html" class="btn">Voir les détails</a>
-                    </div>
-                    <div class="order-item">
-                        <p><strong>Commande #12344</strong></p>
-                        <p>2 Articles - Total : 25,50€</p>
-                        <p>Date : 15/11/2024</p>
-                        <a href="order-details.html" class="btn">Voir les détails</a>
-                    </div>
+                        <h2>Mes Commandes</h2>
+                        <ul id="orders-list"></ul>  <!-- Liste des commandes -->
                 </div>
 
                 <!-- Paramètres de confidentialité et suppression -->
@@ -101,25 +93,90 @@
     <script src="theme.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => { // secu supp
+        document.addEventListener("DOMContentLoaded", () => { 
+            // Vérifie si l'utilisateur est connecté
             if (localStorage.getItem("isLoggedIn") !== "true") {
-                window.location.href = "connection.html";
+                window.location.href = "connection.html"; // Redirige si non connecté
+            } else {
+                const userId = localStorage.getItem("userId"); // Récupère l'ID utilisateur
+                fetchUserData(userId); // Appel de la fonction pour récupérer les données de cet utilisateur
+                fetchUserOrders(userId)
             }
         });
-        </script>
-        
 
-    <script>
-        function logout() { // faut supprimer les données de connexion
+         // Fonction pour récupérer les données de l'utilisateur connecté depuis l'API
+
+        async function fetchUserData(userId) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/users/${userId}`);
+                if (response.ok) {
+                    const user = await response.json(); 
+                    
+                    // Mettre à jour les éléments HTML avec les informations de l'utilisateur
+                    document.getElementById("userName").textContent = user.username || "Nom non disponible";
+                    document.getElementById("userEmail").textContent = user.email || "Email non disponible";
+                } else {
+                    console.error('Erreur lors de la récupération des données de l\'utilisateur');
+                }
+            } catch (err) {
+                console.error('Erreur de connexion:', err);
+            }
+        }
+
+
+         // Fonction pour récupérer les commandes de l'utilisateur
+         async function fetchUserOrders(userId) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/orders/user/${userId}`);
+                if (response.ok) {
+                    const orders = await response.json();
+                    displayOrders(orders);
+                } else {
+                    console.error('Erreur lors de la récupération des commandes');
+                    document.getElementById("orders-list").innerHTML = "<li>Aucune commande trouvée.</li>";
+                }
+            } catch (err) {
+                console.error('Erreur de connexion:', err);
+            }
+        }
+
+        // Fonction pour afficher les commandes
+        function displayOrders(orders) {
+            const ordersList = document.getElementById("orders-list");
+            ordersList.innerHTML = ''; // Vider la liste avant d'ajouter les nouvelles commandes
+        
+            if (orders.length === 0) {
+                ordersList.innerHTML = "<p>Aucune commande trouvée.</p>";
+                return;
+            }
+        
+            orders.forEach(order => {
+                const orderItem = document.createElement('div');
+                orderItem.classList.add('order-item');
+        
+                orderItem.innerHTML = `
+                    <p><strong>Commande #${order.order_id}</strong></p>
+                    <p>Total : ${order.total_price.toFixed(2)}€</p>
+                    <p>Date de la commande : ${new Date(order.created_at).toLocaleDateString()}</p>
+                    <a href="order-details.html" class="btn">Voir les détails</a>
+                `;
+        
+                ordersList.appendChild(orderItem);
+            });
+        }
+
+
+    
+        // Fonction de déconnexion
+        function logout() {
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("username");
-        
-            window.location.href = "accueil.html";
+            localStorage.removeItem("userId");
+
+            window.location.href = "accueil.html"; // Redirige vers la page d'accueil après déconnexion
         }
-        </script>
+    </script>
 </body>
 </html>
 
-    
-        
 

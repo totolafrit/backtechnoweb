@@ -59,18 +59,20 @@ body {
 }
 
 
-/* Payment Container */
+/* Conteneur principal */
 .payment-container {
     background-color: #ffffff;
-    width: 600px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 90%;
     text-align: center;
-    margin: 120px auto; /* Décalage pour inclure la barre de progression */
+    margin: 120px auto; /* Ajustement pour inclure la navbar */
+    animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Title */
+/* Titre */
 .payment-title {
     font-size: 28px;
     font-weight: bold;
@@ -78,35 +80,46 @@ body {
     margin-bottom: 20px;
 }
 
-/* Payment Options */
-.payment-options {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+/* Description */
+.payment-description {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
 }
 
-.payment-button {
-    background-color: #007bff;
-    color: white;
+/* Boutons */
+.paypal-button {
+    display: inline-block;
+    background-color: #FFC439;
+    color: #000;
     font-size: 16px;
     font-weight: bold;
-    padding: 15px 20px;
+    padding: 12px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    width: 100%;
 }
 
-.payment-button:hover {
-    background-color: #0056b3;
-    transform: scale(1.02);
+.paypal-button:hover {
+    background-color: #e0ac2c;
+    transform: scale(1.03);
 }
 
-.payment-button:active {
-    transform: scale(0.98);
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
-/* Theme Toggle Button */
+/* Bouton de changement de thème */
 #theme-toggle {
     position: fixed;
     bottom: 20px;
@@ -131,7 +144,7 @@ body {
     transform: scale(1.1);
 }
 
-/* Dark Theme */
+/* Mode sombre */
 body.dark-theme {
     background-color: #121212;
     color: #e0e0e0;
@@ -147,12 +160,8 @@ body.dark-theme .payment-container {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
 }
 
-body.dark-theme .payment-button {
-    background-color: #45a049;
-}
-
-body.dark-theme .payment-button:hover {
-    background-color: #3c8c40;
+body.dark-theme .paypal-button {
+    background-color: #FFC439;
 }
 
 body.dark-theme #theme-toggle button {

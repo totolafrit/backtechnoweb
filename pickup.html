@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choisissez votre date et créneau horaire</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="pickup.css">
+</head>
+
+<body>
+    <header class="progress-header">
+        <div class="logo">
+            <img src="logo.png" alt="Logo L'Arbre Envie">
+        </div>
+        <nav class="progress-bar">
+            <div class="progress-step active">
+                <i class="bx bx-calendar"></i>
+                <p>Sélectionner la date</p>
+            </div>
+            <div class="progress-step">
+                <i class="bx bx-check-circle"></i>
+                <p>Confirmation</p>
+            </div>
+            <div class="progress-step">
+                <i class="bx bx-credit-card"></i>
+                <p>Choix du paiement</p>
+            </div>
+            <div class="progress-step">
+                <i class="bx bx-money"></i>
+                <p>Paiement</p>
+            </div>
+            <div class="progress-step">
+                <i class="bx bx-envelope"></i>
+                <p>Envoi du mail</p>
+            </div>
+        </nav>
+    </header>
+
+    <div class="pickup-container">
+        <h1 class="pickup-title">Point de retrait</h1>
+        <p class="pickup-description">Sélectionnez une date et un créneau horaire précis pour retirer votre commande.</p>
+        <form class="pickup-form">
+            <div class="form-group">
+                <label for="pickup-date" class="form-label">Date :</label>
+                <input type="date" id="pickup-date" class="form-select" required>
+            </div>
+
+            <div class="form-group">
+                <label for="pickup-slot" class="form-label">Créneau horaire :</label>
+                <select id="pickup-slot" class="form-select" required>
+                    <option value="" disabled selected>Choisissez un créneau horaire</option>
+                </select>
+            </div>
+
+            <button type="button" class="continue-button" onclick="validatePickup()">Confirmer</button>
+        </form>
+    </div>
+
+    <script>
+        const dateInput = document.getElementById('pickup-date');
+        const slotSelect = document.getElementById('pickup-slot');
+
+        const generateTimeSlots = () => {
+            const openingTime = 16;
+            const closingTime = 20;
+            const interval = 30;
+            const slots = [];
+            for (let hour = openingTime; hour < closingTime; hour++) {
+                for (let minute = 0; minute < 60; minute += interval) {
+                    const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                    slots.push(time);
+                }
+            }
+            return slots;
+        };
+
+        const populateSlots = () => {
+            const selectedDate = new Date(dateInput.value);
+            const day = selectedDate.getDay(); 
+            slotSelect.innerHTML = '<option value="" disabled selected>Choisissez un créneau horaire</option>';
+
+            if (day === 0 || day === 6) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'Les retraits ne sont pas possibles le week-end';
+                slotSelect.appendChild(option);
+                slotSelect.disabled = true;
+                return;
+            }
+
+            const slots = generateTimeSlots();
+            slots.forEach(slot => {
+                const option = document.createElement('option');
+                option.value = slot;
+                option.textContent = slot;
+                slotSelect.appendChild(option);
+            });
+            slotSelect.disabled = false;
+        };
+
+        dateInput.addEventListener('change', populateSlots);
+
+        const validatePickup = () => {
+            if (dateInput.value && slotSelect.value) {
+                // Reformater la date en DD/MM/YYYY
+                const selectedDate = new Date(dateInput.value);
+                const day = selectedDate.getDate().toString().padStart(2, '0'); // Jour avec deux chiffres
+                const month = (selectedDate.getMonth() + 1).toString().padStart(2, '0'); // Mois avec deux chiffres (les mois sont de 0 à 11)
+                const year = selectedDate.getFullYear();
+        
+                const formattedDate = `${day}/${month}/${year}`; // Format DD/MM/YYYY
+        
+                const pickupDetails = {
+                    date: formattedDate,  // Utiliser la date formatée
+                    timeSlot: slotSelect.value
+                };
+        
+                localStorage.setItem("pickupDetails", JSON.stringify(pickupDetails));
+                window.location.href = "confirmation.html";
+            } else {
+                alert('Veuillez sélectionner une date et un créneau horaire.');
+            }
+        };
+        
+
+        const themeToggleButton = document.getElementById("theme-toggle-btn");
+        const body = document.body;
+
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+            body.classList.add(savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        themeToggleButton.addEventListener("click", () => {
+            if (body.classList.contains("dark-theme")) {
+                body.classList.remove("dark-theme");
+                localStorage.setItem("theme", "light-theme");
+                updateThemeIcon("light-theme");
+            } else {
+                body.classList.add("dark-theme");
+                localStorage.setItem("theme", "dark-theme");
+                updateThemeIcon("dark-theme");
+            }
+        });
+
+        function updateThemeIcon(theme) {
+            const icon = themeToggleButton.querySelector("i");
+            icon.classList.toggle("bx-sun", theme === "light-theme");
+            icon.classList.toggle("bx-moon", theme === "dark-theme");
+        }
+    </script>
+
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
+</body>
+
+</html>

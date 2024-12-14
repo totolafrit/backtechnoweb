@@ -46,13 +46,17 @@
         
                     if (responseData.userId) {
                         localStorage.setItem('isLoggedIn', 'true');
-                        localStorage.setItem('userRole', responseData.role);
+                        localStorage.setItem('userRole', responseData.role); // Rôle récupéré
                         localStorage.setItem('userId', responseData.userId);
         
-                        // Vérifie s'il y a une page cible après la connexion
-                        const redirectTarget = localStorage.getItem('redirectAfterLogin') || 'accueil.html';
-                        localStorage.removeItem('redirectAfterLogin');
-                        window.location.href = redirectTarget;
+                        // Redirection basée sur le rôle
+                        if (responseData.role === 'admin') {
+                            window.location.href = 'admin.html';
+                        } else {
+                            const redirectTarget = localStorage.getItem('redirectAfterLogin') || 'accueil.html';
+                            localStorage.removeItem('redirectAfterLogin');
+                            window.location.href = redirectTarget;
+                        }
                     } else {
                         alert("Erreur: L'ID utilisateur n'a pas été récupéré.");
                     }

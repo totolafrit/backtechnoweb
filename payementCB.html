@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <title>Paiement</title>
+    <title>Paiement par Carte</title>
     <link rel="stylesheet" href="payementCB.css">
 </head>
 <body>
@@ -68,10 +68,8 @@
     <script>
         document.getElementById('payment-form').addEventListener('submit', function(event) {
             event.preventDefault(); // Empêche le comportement par défaut du formulaire
-            // Simule le traitement du paiement (vous pouvez ajouter une logique ici)
-            alert('Paiement réussi !');
-            // Redirige vers mail.html
-            window.location.href = 'mail.html';
+            alert('Paiement réussi !'); // Simule le paiement
+            window.location.href = 'mail.html'; // Redirige vers la page suivante
         });
     </script>
 

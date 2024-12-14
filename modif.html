@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier mes informations</title>
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="modif.css"> <!-- Inclure votre fichier CSS -->
+    <link rel="stylesheet" href="modif.css"> 
 </head>
 <body>
     <!-- Barre de navigation -->
@@ -26,33 +26,83 @@
                 <h2>Modifier mes Informations</h2>
             </div>
             
-            <form id="updateForm">
-                <label for="name">Nom :</label>
-                <input type="text" id="name" name="name" value="Jean Dupont" required>
+            <form id="modif-form">
+                <label for="username">Nom :</label>
+                <input type="text" id="username" name="username" required>
 
                 <label for="email">Email :</label>
-                <input type="email" id="email" name="email" value="jean.dupont@example.com" required>
+                <input type="email" id="email" name="email" required>
 
-                <button type="submit" class="submit-btn">Valider</button>
+                <button type="submit" class="submit-btn"> Valider la modification</button>
             </form>
+            <p id="message" class="message"></p>
         </section>
     </main>
-
+    <footer>
+        <p>&copy; 2024 L'Arbre Envie - Tous droits réservés</p>
+    </footer>
+    
+   
     <script>
-        // Quand le formulaire est soumis
-        document.getElementById('updateForm').addEventListener('submit', function (event) {
-            event.preventDefault();
+        document.addEventListener("DOMContentLoaded", () => { 
+            // Vérifie si l'utilisateur est connecté
+            if (localStorage.getItem("isLoggedIn") !== "true") {
+                window.location.href = "connection.html"; // Redirige si non connecté
+            } else {
+                const userId = localStorage.getItem("userId"); // Récupère l'ID utilisateur
+                fetchUserData(userId); // Appel de la fonction pour récupérer les données de cet utilisateur
+            }
+        });
 
-            // On récupère les nouvelles données (pour exemple ici, il faudrait vraiment mettre à jour dans un backend)
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
+        // Fonction pour récupérer les données de l'utilisateur connecté
+        async function fetchUserData(userId) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/users/${userId}`);
+                if (response.ok) {
+                    const user = await response.json();
+                    document.getElementById("username").value = user.username || "";
+                    document.getElementById("email").value = user.email || "";
+                } else {
+                    console.error('Erreur lors de la récupération des données de l\'utilisateur');
+                }
+            } catch (err) {
+                console.error('Erreur de connexion:', err);
+            }
+        }
 
-            // Afficher une alerte ou envoyer vers une API pour sauvegarder les données
-            alert(`Les informations ont été mises à jour :
-                  Nom: ${name}, Email: ${email}`);
+        // Fonction pour soumettre le formulaire de modification
+        document.getElementById("modif-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
 
-            // Rediriger vers la page myaccount.html après la mise à jour
-            window.location.href = 'myaccount.html';
+            const userId = localStorage.getItem("userId");
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/users/profile/${userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        email: email
+                    })
+                });
+
+                const messageElement = document.getElementById("message");
+                if (response.ok) {
+                    messageElement.textContent = "Informations mises à jour avec succès!";
+                    messageElement.style.color = "green";
+                } else {
+                    const data = await response.json();
+                    messageElement.textContent = data.message || "Erreur lors de la mise à jour.";
+                    messageElement.style.color = "red";
+                }
+            } catch (err) {
+                console.error('Erreur de connexion:', err);
+                document.getElementById("message").textContent = "Une erreur est survenue.";
+            }
         });
     </script>
 

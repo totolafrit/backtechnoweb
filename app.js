@@ -126,6 +126,33 @@ app.post('/login', async (req, res) => {
 });
 
 
+
+
+
+
+// // Mettre à jour les informations d'un utilisateur
+// app.put('/user/:id', async (req, res) => {
+//     const userId = req.params.id;
+//     const { username, email } = req.body;
+
+//     try {
+//         const [result] = await db.query(
+//             'UPDATE users SET username = ?, email = ? WHERE id = ?',
+//             [username, email, userId]
+//         );
+
+//         if (result.affectedRows > 0) {
+//             res.json({ message: "Informations mises à jour avec succès" });
+//         } else {
+//             res.status(404).json({ message: "Utilisateur non trouvé" });
+//         }
+//     } catch (error) {
+//         res.status(500).json({ message: "Erreur du serveur", error });
+//     }
+// });
+
+
+
 // route DELETE pour supprimer un utilisateur (admin uniquement)
 
 app.delete('/delete-user/:id', checkAdminRole, (req, res) => {
@@ -177,6 +204,82 @@ app.get('/api/products', (req, res) => {
         res.status(200).json(result);  
     });
 });
+
+
+// Récupérer les informations d'un utilisateur par son ID 
+
+// app.get('/api/users', (req, res) => {
+//     const query = 'SELECT * FROM users';
+//     db.query(query, (err, result) => {
+//         if (err) {
+//             console.error('Erreur lors de la récupération des produits:', err);
+//             return res.status(500).json({ message: 'Erreur lors de la récupération des produits' });
+//         }
+//         res.status(200).json(result);  
+//     });
+// });
+
+
+// app.get('/api/users', (req, res) => {
+//     const username = req.query.username;  // Récupérer le username passé dans la requête
+//     const query = 'SELECT * FROM users WHERE username = ?';  // Sélectionner l'utilisateur par username
+    
+//     db.query(query, [username], (err, result) => {
+//         if (err) {
+//             console.error('Erreur lors de la récupération des utilisateurs:', err);
+//             return res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs' });
+//         }
+//         if (result.length === 0) {
+//             return res.status(404).json({ message: 'Utilisateur non trouvé' });
+//         }
+//         res.status(200).json(result[0]);  // Renvoyer le premier utilisateur trouvé
+//     });
+// });
+
+
+app.get('/api/users/:id', (req, res) => {
+    const userId = req.params.id;  // Récupère l'ID de l'utilisateur depuis l'URL
+    const query = 'SELECT * FROM users WHERE id = ?';  // Sélectionne l'utilisateur par ID
+    
+    db.query(query, [userId], (err, result) => {
+        if (err) {
+            console.error('Erreur lors de la récupération des utilisateurs:', err);
+            return res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs' });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        }
+        res.status(200).json(result[0]);  // Renvoyer l'utilisateur correspondant
+    });
+});
+
+// modif profil cote client
+
+app.put('/api/users/profile/:id', (req, res) => {
+    const userId = req.params.id;
+    const { username, email } = req.body;
+
+    if (!username || !email) {
+        return res.status(400).json({ message: 'Nom d\'utilisateur et email sont requis.' });
+    }
+
+    const query = 'UPDATE users SET username = ?, email = ? WHERE id = ?';
+    db.query(query, [username, email, userId], (err, result) => {
+        if (err) {
+            console.error('Erreur lors de la mise à jour de l\'utilisateur :', err);
+            return res.status(500).json({ message: 'Erreur serveur' });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        }
+
+        res.status(200).json({ message: 'Informations personnelles mises à jour avec succès.' });
+    });
+});
+
+
+
 
 
 
@@ -284,7 +387,7 @@ app.get('/api/users/:id', (req, res) => {
     });
 });
 
-//rute pour mettre à jour un user
+//rute pour mettre à jour un user côté admin
 app.put('/api/users/:id', (req, res) => {
     const userId = req.params.id;
     const { username, email, role } = req.body;
@@ -354,6 +457,50 @@ app.post('/api/users', async (req, res) => {
 });
 
 
+// Mise à jour du mot de passe
+app.put('/api/users/:id/change-password', (req, res) => {
+    const { id } = req.params;
+    const { currentPassword, newPassword } = req.body;
+
+    //console.log("ID reçu :", id);
+    //console.log("Ancien mot de passe :", currentPassword);
+    //console.log("Nouveau mot de passe :", newPassword);
+
+    db.query("SELECT * FROM users WHERE id = ?", [id], async (err, rows) => {
+        if (err) {
+            console.error("Erreur lors de la requête :", err);
+            return res.status(500).json({ message: "Erreur serveur lors de la récupération de l'utilisateur" });
+        }
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: "Utilisateur introuvable" });
+        }
+
+        const user = rows[0];
+
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        //console.log("Correspondance des mots de passe :", isMatch);
+
+        if (!isMatch) {
+            return res.status(400).json({ message: "Mot de passe actuel incorrect" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        //console.log("Nouveau mot de passe haché :", hashedPassword);
+
+        db.query("UPDATE users SET password = ? WHERE id = ?", [hashedPassword, id], (err, result) => {
+            if (err) {
+                console.error("Erreur lors de la mise à jour du mot de passe :", err);
+                return res.status(500).json({ message: "Erreur serveur lors de la mise à jour du mot de passe" });
+            }
+
+            res.status(200).json({ message: "Mot de passe mis à jour avec succès" });
+        });
+    });
+});
+
+
+
 // route pour enregistrer une commande
 
 app.post('/create-order', (req, res) => {
@@ -419,6 +566,51 @@ app.get('/api/orders', (req, res) => {
         res.json(formattedResults);
     });
 });
+
+
+// route pour recupérer les commandes coté client
+app.get('/api/orders/user/:userId', (req, res) => {
+    const { sort } = req.query; 
+    const userId = req.params.userId; // Récupérer l'userId à partir des paramètres d'URL
+
+    let orderBy = 'created_at DESC'; // tri par défaut - les commandes les plus récentes 
+    if (sort === 'created_at_asc') orderBy = 'created_at ASC';
+    if (sort === 'total_price_asc') orderBy = 'total_price ASC';
+    if (sort === 'total_price_desc') orderBy = 'total_price DESC';
+
+    // Créer la requête SQL avec un filtre basé sur le user_id
+    const query = `
+        SELECT 
+            orders.order_id, 
+            orders.user_id, 
+            users.username, 
+            orders.total_price, 
+            orders.cart_items, 
+            orders.created_at 
+        FROM orders
+        JOIN users ON orders.user_id = users.id
+        WHERE orders.user_id = ?
+        ORDER BY ${orderBy}
+    `;
+
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('Erreur lors de la récupération des commandes :', err);
+            return res.status(500).json({ error: 'Erreur lors de la récupération des commandes.' });
+        }
+
+        // Formatage des résultats
+        const formattedResults = results.map(order => {
+            order.cart_items = JSON.parse(order.cart_items);  // On parse `cart_items` (qui est une chaîne JSON) pour l'utiliser dans le front
+            order.created_at = new Date(order.created_at).toISOString(); // Format ISO pour la date
+
+            return order;
+        });
+
+        res.json(formattedResults);  // Renvoi des commandes de l'utilisateur sous format JSON
+    });
+});
+
 
 
 // toujours à la fin
