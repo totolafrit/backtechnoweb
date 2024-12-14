@@ -57,40 +57,43 @@
         }
     }
 
-    function displayOrders(orders) { // aff les commandes dans la liste
-        const orderList = document.getElementById('order-list');
-        orderList.innerHTML = ''; // vider le contenu précédent
+    function displayOrders(orders) { // Affiche les commandes dans la liste
+    const orderList = document.getElementById('order-list');
+    orderList.innerHTML = ''; // Vider le contenu précédent
 
-        if (orders.length === 0) {
-            orderList.innerHTML = '<p>Aucune commande trouvée.</p>';
-            return;
-        }
-
-        orders.forEach(order => {
-            const orderItem = document.createElement('div');
-            orderItem.classList.add('admin-item');
-            const cartItems = order.cart_items; 
-
-            orderItem.innerHTML = `
-                <h3>Order #${order.order_id}</h3>
-                <p>Customer: ${order.username}</p>
-                <p>Customer ID: ${order.user_id}</p>
-                <p>Total Price: €${order.total_price.toFixed(2)}</p>
-                <p>Order Date: ${new Date(order.created_at).toLocaleString()}</p>
-                <p>Products:</p>
-                <ul>
-                    ${cartItems.map(item => `<li>${item.name} - €${item.price.toFixed(2)} x ${item.quantity}</li>`).join('')}
-                </ul>
-                <div class="order-actions">
-                    <button onclick="updateOrderStatus(${order.order_id}, 'Being Prepared')">Mark as Being Prepared</button>
-                    <button onclick="updateOrderStatus(${order.order_id}, 'Ready for Pickup')">Mark as Ready for Pickup</button>
-                    <button onclick="updateOrderStatus(${order.order_id}, 'Delivered')">Mark as Delivered</button>
-                    <button onclick="cancelOrder(${order.order_id})">Cancel Order</button>
-                </div>
-            `;
-            orderList.appendChild(orderItem);
-        });
+    if (orders.length === 0) {
+        orderList.innerHTML = '<p>Aucune commande trouvée.</p>';
+        return;
     }
+
+    orders.forEach(order => {
+        const orderItem = document.createElement('div');
+        orderItem.classList.add('admin-item');
+        const cartItems = order.cart_items; 
+
+        orderItem.innerHTML = `
+            <h3>Order #F56HDKSB${order.order_id}</h3>
+            <p>Client: ${order.username}</p>
+            <p>ID du client: ${order.user_id}</p>
+            <p>Prix total: €${order.total_price.toFixed(2)}</p>
+            <p>Paiement effectué le: ${new Date(order.created_at).toLocaleString()}</p>
+            <p>Jour de récupération de la commande: ${new Date(order.pickup_date).toLocaleDateString()}</p>
+
+            <p>Créneau horaire: ${order.pickup_slot}</p> <!-- Pickup Slot -->
+            <p>Détail de la commande:</p>
+            <ul>
+                ${cartItems.map(item => `<li>${item.name} - €${item.price.toFixed(2)} x ${item.quantity}</li>`).join('')}
+            </ul>
+            <div class="order-actions">
+                <button onclick="updateOrderStatus(${order.order_id}, 'Being Prepared')">Mark as Being Prepared</button>
+                <button onclick="updateOrderStatus(${order.order_id}, 'Ready for Pickup')">Mark as Ready for Pickup</button>
+                <button onclick="updateOrderStatus(${order.order_id}, 'Delivered')">Mark as Delivered</button>
+                <button onclick="cancelOrder(${order.order_id})">Cancel Order</button>
+            </div>
+        `;
+        orderList.appendChild(orderItem);
+    });
+}
 
     // fonction pour changer de filtre
     function filterOrders() {

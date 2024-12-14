@@ -542,7 +542,9 @@ app.get('/api/orders', (req, res) => {
             users.username, 
             orders.total_price, 
             orders.cart_items, 
-            orders.created_at 
+            orders.created_at, 
+            orders.pickup_date, 
+            orders.pickup_slot   
         FROM orders
         JOIN users ON orders.user_id = users.id
         ORDER BY ${orderBy}
@@ -559,7 +561,7 @@ app.get('/api/orders', (req, res) => {
             order.cart_items = JSON.parse(order.cart_items);  // on parse `cart_items` (qui est une chaîne JSON) pour l'utiliser dans le front de manage-orders.html
 
             order.created_at = new Date(order.created_at).toISOString(); // changement en format ISO de la date à laquelle la commande a été réalisé
-
+            order.pickup_date = new Date(order.pickup_date).toISOString();
             return order;
         });
 
@@ -611,6 +613,18 @@ app.get('/api/orders/user/:userId', (req, res) => {
     });
 });
 
+// Route pour récupérer le nombre d'utilisateurs (clients)
+app.get('/api/clients-count', (req, res) => {
+    // On compte tous les utilisateurs dans la table "users"
+    db.query('SELECT COUNT(*) AS clientCount FROM users', (err, result) => {
+      if (err) {
+        console.error('Erreur lors de la récupération du nombre d\'utilisateurs:', err);
+        res.status(500).json({ error: 'Erreur serveur' });
+      } else {
+        res.json({ clientCount: result[0].clientCount });
+      }
+    });
+  });
 
 
 // toujours à la fin
