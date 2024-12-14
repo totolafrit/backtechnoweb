@@ -60,71 +60,69 @@
 
     <script>
         const dateInput = document.getElementById('pickup-date');
-        const slotSelect = document.getElementById('pickup-slot');
+    const slotSelect = document.getElementById('pickup-slot');
 
-        const generateTimeSlots = () => {
-            const openingTime = 16;
-            const closingTime = 20;
-            const interval = 30;
-            const slots = [];
-            for (let hour = openingTime; hour < closingTime; hour++) {
-                for (let minute = 0; minute < 60; minute += interval) {
-                    const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-                    slots.push(time);
-                }
+    const generateTimeSlots = () => {
+        const openingTime = 16;
+        const closingTime = 20;
+        const interval = 30;
+        const slots = [];
+        for (let hour = openingTime; hour < closingTime; hour++) {
+            for (let minute = 0; minute < 60; minute += interval) {
+                const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                slots.push(time);
             }
-            return slots;
-        };
+        }
+        return slots;
+    };
 
-        const populateSlots = () => {
+    const populateSlots = () => {
+        const selectedDate = new Date(dateInput.value);
+        const day = selectedDate.getDay(); 
+        slotSelect.innerHTML = '<option value="" disabled selected>Choisissez un créneau horaire</option>';
+
+        if (day === 0 || day === 6) {
+            const option = document.createElement('option');
+            option.value = '';
+            option.textContent = 'Les retraits ne sont pas possibles le week-end';
+            slotSelect.appendChild(option);
+            slotSelect.disabled = true;
+            return;
+        }
+
+        const slots = generateTimeSlots();
+        slots.forEach(slot => {
+            const option = document.createElement('option');
+            option.value = slot;
+            option.textContent = slot;
+            slotSelect.appendChild(option);
+        });
+        slotSelect.disabled = false;
+    };
+
+    dateInput.addEventListener('change', populateSlots);
+
+    const validatePickup = () => {
+        if (dateInput.value && slotSelect.value) {
+            // Reformater la date en YYYY-MM-DD
             const selectedDate = new Date(dateInput.value);
-            const day = selectedDate.getDay(); 
-            slotSelect.innerHTML = '<option value="" disabled selected>Choisissez un créneau horaire</option>';
+            const year = selectedDate.getFullYear();
+            const month = (selectedDate.getMonth() + 1).toString().padStart(2, '0'); // Mois avec deux chiffres
+            const day = selectedDate.getDate().toString().padStart(2, '0'); // Jour avec deux chiffres
 
-            if (day === 0 || day === 6) {
-                const option = document.createElement('option');
-                option.value = '';
-                option.textContent = 'Les retraits ne sont pas possibles le week-end';
-                slotSelect.appendChild(option);
-                slotSelect.disabled = true;
-                return;
-            }
+            const formattedDate = `${year}-${month}-${day}`; // Format YYYY-MM-DD
 
-            const slots = generateTimeSlots();
-            slots.forEach(slot => {
-                const option = document.createElement('option');
-                option.value = slot;
-                option.textContent = slot;
-                slotSelect.appendChild(option);
-            });
-            slotSelect.disabled = false;
-        };
+            const pickupDetails = {
+                date: formattedDate,  // Utiliser la date formatée
+                timeSlot: slotSelect.value
+            };
 
-        dateInput.addEventListener('change', populateSlots);
-
-        const validatePickup = () => {
-            if (dateInput.value && slotSelect.value) {
-                // Reformater la date en DD/MM/YYYY
-                const selectedDate = new Date(dateInput.value);
-                const day = selectedDate.getDate().toString().padStart(2, '0'); // Jour avec deux chiffres
-                const month = (selectedDate.getMonth() + 1).toString().padStart(2, '0'); // Mois avec deux chiffres (les mois sont de 0 à 11)
-                const year = selectedDate.getFullYear();
-        
-                const formattedDate = `${day}/${month}/${year}`; // Format DD/MM/YYYY
-        
-                const pickupDetails = {
-                    date: formattedDate,  // Utiliser la date formatée
-                    timeSlot: slotSelect.value
-                };
-        
-                localStorage.setItem("pickupDetails", JSON.stringify(pickupDetails));
-                window.location.href = "confirmation.html";
-            } else {
-                alert('Veuillez sélectionner une date et un créneau horaire.');
-            }
-        };
-        
-
+            localStorage.setItem("pickupDetails", JSON.stringify(pickupDetails));
+            window.location.href = "confirmation.html";
+        } else {
+            alert('Veuillez sélectionner une date et un créneau horaire.');
+        }
+    };
         const themeToggleButton = document.getElementById("theme-toggle-btn");
         const body = document.body;
 

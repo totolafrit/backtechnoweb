@@ -1,89 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <title>Paiement</title>
-    <link rel="stylesheet" href="payementCB.css">
+    <title>Payement</title>
+    <link rel="stylesheet" href="payement.css"> 
 </head>
 <body>
-
-    <!-- Navbar avec le logo et les étapes -->
-    <header class="progress-header">
+    <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
         </div>
-        <nav class="progress-bar">
-            <div class="progress-step">
-                <i class="bx bx-calendar"></i>
-                <p>Sélectionner la date</p>
-            </div>
-            <div class="progress-step">
-                <i class="bx bx-check-circle"></i>
-                <p>Confirmation</p>
-            </div>
-            <div class="progress-step">
-                <i class="bx bx-credit-card"></i>
-                <p>Choix du paiement</p>
-            </div>
-            <div class="progress-step active">
-                <i class="bx bx-money"></i>
-                <p>Paiement</p>
-            </div>
-            <div class="progress-step">
-                <i class="bx bx-envelope"></i>
-                <p>Envoi du mail</p>
-            </div>
+        <nav>
+            <ul class="nav-menu">
+                <button id="logoutButton">Déconnexion</button>
+                <li><a href="accueil.html">Home</a></li>
+                <li><a href="aboutus.html">About us</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="project.html">Projects</a></li>
+                <li><a href="actualites.html">Actuality</a></li>
+                <li><a href="conseils.html">Advices</a></li>
+                <li><a href="fakepanier.html">Mon panier</a></li>
+                <li><a href="connection.html">Connexion</a></li>
+            </ul>
         </nav>
     </header>
 
-    <!-- Conteneur Principal -->
-    <div class="payment-container">
-        <h1 class="payment-title">Paiement par Carte Bancaire</h1>
-        <form class="payment-form" id="payment-form">
-            <div class="form-group">
-                <label for="cardholder-name">Nom du titulaire :</label>
-                <input type="text" id="cardholder-name" class="form-input" placeholder="Votre nom complet" required>
-            </div>
-            <div class="form-group">
-                <label for="card-number">Numéro de carte :</label>
-                <input type="text" id="card-number" class="form-input" placeholder="1234 5678 9012 3456" required maxlength="19">
-            </div>
-            <div class="form-group-inline">
-                <div>
-                    <label for="expiry-date">Date d'expiration :</label>
-                    <input type="text" id="expiry-date" class="form-input" placeholder="MM/AA" required maxlength="5">
-                </div>
-                <div>
-                    <label for="cvv">CVV :</label>
-                    <input type="text" id="cvv" class="form-input" placeholder="123" required maxlength="3">
+    <main class="payment-page">
+        <h1>Paiement</h1>
+        <div class="payment-container">
+            
+            <div class="order-summary">
+                <h2>Récapitulatif de votre commande</h2>
+                <div id="cart-summary"></div>
+                <div id="order-total">
+                    <h3>Total : €<span id="total-price"></span></h3>
                 </div>
             </div>
-            <button type="submit" class="pay-button">Payer</button>
-        </form>
-    </div>
 
-    <!-- Script pour gérer la redirection -->
+            <!-- à changer comme tu veux ines -->
+            <button id="submit-order">Valider la commande</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 L'Arbre En Vie - Tous droits réservés</p>
+    </footer>
+
     <script>
-        document.getElementById('payment-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Empêche le comportement par défaut du formulaire
-            // Simule le traitement du paiement (vous pouvez ajouter une logique ici)
-            alert('Paiement réussi !');
-            // Redirige vers mail.html
-            window.location.href = 'mail.html';
+        function loadOrderSummary() {    // pour charger les données du panier et aff le recap
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartSummary = document.getElementById('cart-summary');
+            const totalPriceElement = document.getElementById('total-price');
+        
+            cartSummary.innerHTML = ''; // maj le contenu 
+        
+            let totalSum = 0;
+        
+            if (cartItems.length === 0) {
+                cartSummary.innerHTML = '<p>Votre panier est vide.</p>';
+                totalPriceElement.textContent = '0,00';
+            } else {
+                cartItems.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'order-item';
+                    itemDiv.innerHTML = ` 
+                        <div class="order-item">
+                            <img src="${item.image}" alt="${item.name}" width="100">
+                            <div class="order-details">
+                                <h3>${item.name}</h3>
+                                <p>Prix unitaire : €${item.price.toFixed(2).replace('.', ',')}</p>
+                                <p>Quantité : ${item.quantity}</p>
+                                <p>Prix total : €${(item.price * item.quantity).toFixed(2).replace('.', ',')}</p>
+                            </div>
+                        </div>
+                    `;
+                    cartSummary.appendChild(itemDiv);
+                    totalSum += item.price * item.quantity;
+                });
+        
+                totalPriceElement.textContent = totalSum.toFixed(2).replace('.', ',');
+            }
+        }
+
+        window.onload = loadOrderSummary;
+
+        // pour gerer la soumission du formulaire de paiement 
+        document.getElementById('submit-order').addEventListener('click', async () => {
+            const userId = localStorage.getItem('userId'); // recup de l'userId charger depuis connexion.html
+            console.log("User ID récupéré :", userId);
+        
+            if (!userId) {
+                alert("Utilisateur non connecté. Veuillez vous connecter avant de passer une commande.");
+                window.location.href = 'connection.html'; 
+                return;
+            }
+        
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || []; 
+            const totalPrice = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0); 
+        
+            const orderData = {
+                userId: userId,
+                cart: cartItems, 
+                totalPrice: totalPrice.toFixed(2)
+            };
+        
+            console.log("Données envoyées :", orderData); // envoie à la DB
+        
+            try {
+                const response = await fetch('http://localhost:3000/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
+        
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("Erreur réponse serveur :", errorData);
+                    alert(`Erreur lors de la commande : ${errorData.message}`);
+                } else {
+                    alert("Commande passée avec succès !");
+                    window.location.href = 'confirmation.html';
+                }
+            } catch (error) {
+                console.error("Erreur lors de la requête :", error);
+                alert("Erreur de connexion au serveur.");
+            }
         });
     </script>
-
-    <!-- Script pour le thème -->
-    <script src="theme.js"></script>
-
-    <!-- Bouton de changement de thème -->
-    <div id="theme-toggle">
-        <button id="theme-toggle-btn" title="Changer le thème">
-            <i class="bx bx-sun"></i>
-        </button>
-    </div>
     
 </body>
 </html>
