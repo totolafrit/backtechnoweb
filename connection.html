@@ -4,29 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page de Connexion</title>
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="connection.css">
 </head>
 <body>
-    <div class="login-container">
-        <img src="logo.png" alt="Logo de l'Arbre Envie" class="logo">
-        <h2>Connexion</h2>
-        <form action="#" method="POST">
-            <div class="input-group">
-                <label for="username">Nom d'utilisateur</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="input-group">
-                <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">Se connecter</button>
-        </form>
-        <p>Pas encore de compte ? <a href="create.html">S'inscrire</a></p>
+    <div class="container">
+        <div class="login-container">
+            <!-- Logo -->
+            <img src="logo.png" alt="Logo de L'Arbre Envie" class="logo">
+            <h2>Connexion</h2>
+            <form id="login-form" action="#" method="POST">
+                <div class="input-group">
+                    <label for="username">Nom d'utilisateur</label>
+                    <input type="text" id="username" name="username" placeholder="Entrez votre nom d'utilisateur" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Mot de passe</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                        <i class="bx bx-hide toggle-password"></i>
+                    </div>
+                </div>
+                <button type="submit" class="form-button">Se connecter</button>
+            </form>
+            <p>
+                <a href="mdpforget.html" class="forgot-password">Mot de passe oublié ?</a>
+            </p>
+            <p>Pas encore de compte ? <a href="create.html">S'inscrire</a></p>
+        </div>
     </div>
+    <footer>
+        <p>&copy; 2024 L'Arbre Envie - Tous droits réservés</p>
+    </footer>
 
+    <!-- Script pour afficher/masquer le mot de passe -->
     <script>
-        // on récupère ici les infos de la DB pour vérifier les infos
-        document.querySelector('form').addEventListener('submit', async (e) => {
+        const togglePassword = document.querySelector(".toggle-password");
+        const passwordField = document.querySelector("#password");
+
+        togglePassword.addEventListener("click", () => {
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                togglePassword.classList.remove("bx-hide");
+                togglePassword.classList.add("bx-show");
+            } else {
+                passwordField.type = "password";
+                togglePassword.classList.remove("bx-show");
+                togglePassword.classList.add("bx-hide");
+            }
+        });
+    </script>
+
+    <!-- Script pour le changement de thème -->
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
+    <script>
+        const themeToggleButton = document.getElementById("theme-toggle-btn");
+        const body = document.body;
+
+        // Charger le thème stocké dans localStorage
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+            body.classList.add(savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        // Basculer entre les thèmes clair et sombre
+        themeToggleButton.addEventListener("click", () => {
+            if (body.classList.contains("dark-theme")) {
+                body.classList.remove("dark-theme");
+                localStorage.setItem("theme", "light-theme");
+                updateThemeIcon("light-theme");
+            } else {
+                body.classList.add("dark-theme");
+                localStorage.setItem("theme", "dark-theme");
+                updateThemeIcon("dark-theme");
+            }
+        });
+
+        // Mettre à jour l'icône en fonction du thème
+        function updateThemeIcon(theme) {
+            const icon = themeToggleButton.querySelector("i");
+            if (theme === "dark-theme") {
+                icon.classList.remove("bx-sun");
+                icon.classList.add("bx-moon");
+            } else {
+                icon.classList.remove("bx-moon");
+                icon.classList.add("bx-sun");
+            }
+        }
+    </script>
+
+    <!-- Script pour gérer la connexion et faire un POST vers la DB -->
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -66,8 +140,6 @@
                 alert("Erreur de connexion au serveur.");
             }
         });
-        
-        
     </script>
 </body>
 </html>

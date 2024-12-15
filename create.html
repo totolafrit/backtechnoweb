@@ -4,35 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Créer un Compte</title>
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="create.css">
 </head>
 <body>
-    <div class="signup-container">
+    <div class="form-container">
         <img src="logo.png" alt="Logo de l'Arbre Envie" class="logo">
-        <h2>Créer un Compte</h2>
-        <form id="signup-form">
+        <h1 class="form-title">Créer un Compte</h1>
+        <!-- Ajout de l'id signup-form pour le formulaire -->
+        <form id="signup-form" method="POST">
             <div class="input-group">
                 <label for="username">Nom d'utilisateur</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" placeholder="Entrez votre nom d'utilisateur" required>
             </div>
             <div class="input-group">
                 <label for="email">Adresse e-mail</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" placeholder="Entrez votre adresse e-mail" required>
             </div>
             <div class="input-group">
                 <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="password" required>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                    <i class="bx bx-hide toggle-password"></i>
+                </div>
             </div>
             <div class="input-group">
                 <label for="confirm-password">Confirmer le mot de passe</label>
-                <input type="password" id="confirm-password" name="confirm-password" required>
+                <div class="password-container">
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirmez votre mot de passe" required>
+                    <i class="bx bx-hide toggle-password"></i>
+                </div>
             </div>
-            <button type="submit">S'inscrire</button>
+            <button type="submit" class="form-button">S'inscrire</button>
         </form>
-        <p>Déjà un compte ? <a href="connection.html">Se connecter</a></p>
+        <p class="form-footer">Déjà un compte ? <a href="connection.html" class="link">Se connecter</a></p>
     </div>
 
-    <script> // gestion de l'incription et POST vers la DB
+    <!-- Bouton de changement de thème -->
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Changer le thème">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
+
+    <script>
+        // Script pour afficher/masquer les mots de passe
+        const togglePasswordIcons = document.querySelectorAll(".toggle-password");
+        togglePasswordIcons.forEach(icon => {
+            icon.addEventListener("click", () => {
+                const input = icon.previousElementSibling;
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.classList.remove("bx-hide");
+                    icon.classList.add("bx-show");
+                } else {
+                    input.type = "password";
+                    icon.classList.remove("bx-show");
+                    icon.classList.add("bx-hide");
+                }
+            });
+        });
+    
+        // Script pour le changement de thème
+        const themeToggleButton = document.getElementById("theme-toggle-btn");
+        const body = document.body;
+    
+        // Charger le thème stocké dans localStorage
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+            body.classList.add(savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+    
+        // Basculer entre clair et sombre
+        themeToggleButton.addEventListener("click", () => {
+            if (body.classList.contains("dark-theme")) {
+                body.classList.remove("dark-theme");
+                localStorage.setItem("theme", "light-theme");
+                updateThemeIcon("light-theme");
+            } else {
+                body.classList.add("dark-theme");
+                localStorage.setItem("theme", "dark-theme");
+                updateThemeIcon("dark-theme");
+            }
+        });
+    
+        // Mettre à jour l'icône
+        function updateThemeIcon(theme) {
+            const icon = themeToggleButton.querySelector("i");
+            if (theme === "dark-theme") {
+                icon.classList.remove("bx-sun");
+                icon.classList.add("bx-moon");
+            } else {
+                icon.classList.remove("bx-moon");
+                icon.classList.add("bx-sun");
+            }
+        }
+    
+        // Gestion de l'inscription et POST vers la DB
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const username = document.getElementById('username').value;
@@ -40,13 +109,27 @@
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
     
-         
+            // Vérification si les mots de passe correspondent
             if (password !== confirmPassword) {  
                 alert('Les mots de passe ne correspondent pas.');
                 return;
             }
     
-            const response = await fetch('http://localhost:3000/register', {  // route post reigister ici
+            // Vérification que le nom d'utilisateur et l'email sont uniques
+            const checkResponse = await fetch('http://localhost:3000/check-user', {  
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email })
+            });
+    
+            if (!checkResponse.ok) {
+                const errorData = await checkResponse.json();
+                alert(errorData.message);
+                return;
+            }
+    
+            // Si tout est valide, envoyer la requête d'inscription
+            const response = await fetch('http://localhost:3000/register', {  // route POST register ici
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, email, password })
@@ -58,7 +141,7 @@
             } else {
                 const result = await response.json();
                 //alert(result.message);
-                window.location.href = 'connection.html';// redirec  auto vers connexionhtml
+                window.location.href = 'connection.html'; // redirection vers la page de connexion
             }
         });
     </script>

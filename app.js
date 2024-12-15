@@ -89,6 +89,43 @@ app.post('/register', async (req, res) => {
     }
 });
 
+// Vérification de l'utilisateur
+app.post('/check-user', async (req, res) => {
+    const { username, email } = req.body;
+
+    try {
+        //console.log('Vérification de l\'utilisateur et de l\'email');
+        
+        db.query('SELECT * FROM users WHERE username = ?', [username], (err, usernameCheck) => {
+            if (err) {
+                console.error('Erreur lors de la vérification du nom d\'utilisateur:', err);
+                return res.status(500).json({ message: 'Erreur du serveur' });
+            }
+            //console.log('Vérification du nom d\'utilisateur terminée');
+            
+            if (usernameCheck.length > 0) {
+                return res.status(400).json({ message: 'Ce nom d\'utilisateur est déjà pris.' });
+            }
+
+            db.query('SELECT * FROM users WHERE email = ?', [email], (err, emailCheck) => {
+                if (err) {
+                    console.error('Erreur lors de la vérification de l\'email:', err);
+                    return res.status(500).json({ message: 'Erreur du serveur' });
+                }
+                //console.log('Vérification de l\'email terminée');
+                
+                if (emailCheck.length > 0) {
+                    return res.status(400).json({ message: 'Cette adresse e-mail est déjà utilisée.' });
+                }
+
+                res.status(200).json({ message: 'Nom d\'utilisateur et e-mail disponibles.' });
+            });
+        });
+    } catch (error) {
+        console.error('Erreur du serveur:', error);
+        res.status(500).json({ message: 'Erreur du serveur, veuillez réessayer plus tard.' });
+    }
+});
 
 // connexion
 
