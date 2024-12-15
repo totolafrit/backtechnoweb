@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="payementPaypal.css">
     <title>Paiement avec PayPal</title>
-    <script src="https://www.paypal.com/sdk/js?client-id=AbDXM1fx4CqQyV0NAnzWtpN67emI33fVrxsuZ1CI2XcrG_jcfHoL5AK22mJNk3DCLr_JZSJKOPrtXxHB&currency=EUR"></script>
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=AbDXM1fx4CqQyV0NAnzWtpN67emI33fVrxsuZ1CI2XcrG_jcfHoL5AK22mJNk3DCLr_JZSJKOPrtXxHB&currency=EUR"></script>
 </head>
+ 
 <body>
-
+ 
     <!-- Navbar avec le logo et les étapes -->
     <header class="progress-header">
         <div class="logo">
@@ -38,58 +41,82 @@
             </div>
         </nav>
     </header>
-
+ 
     <!-- Conteneur Principal -->
     <div class="payment-container">
         <h1 class="payment-title">Paiement avec PayPal</h1>
         <p class="payment-description">Cliquez ci-dessous pour effectuer un paiement sécurisé via PayPal.</p>
+ 
+        <!-- Montant du panier dynamique -->
+        <p><strong>Total du panier : </strong><span id="cart-total">0,00 €</span></p>
+ 
         <div id="paypal-button-container" class="paypal-button"></div>
     </div>
-
+ 
     <!-- Script PayPal -->
     <script>
-        paypal.Buttons({
-            createOrder: function() {
-                return fetch('http://localhost:3000/create-order', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        value: '47.99',
-                    }),
-                })
-                .then(response => response.json())
-                .then(data => data.id); // Renvoyer l'order ID
-            },
-            onApprove: function(data) {
-                return fetch('http://localhost:3000/capture-order', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        orderID: data.orderID,
-                    }),
-                })
-                .then(response => response.json())
-                .then(details => {
-                    alert('Paiement réussi ! Merci ' + details.payer.name.given_name);
-                    window.location.href = 'thank-you.html';
+        function formatPrice(price) {
+            return price.toFixed(2).replace('.', ',');
+        }
+ 
+        function loadCart() {
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartTotalContainer = document.getElementById('cart-total');
+            const paypalButtonContainer = document.getElementById('paypal-button-container');
+ 
+            cartTotalContainer.textContent = '0,00 €';  // Réinitialisation du total
+ 
+            if (cartItems.length === 0) {
+                cartTotalContainer.textContent = '0,00 €';  // Panier vide
+            } else {
+                let totalSum = 0;
+ 
+                cartItems.forEach(item => {
+                    totalSum += item.price * item.quantity;
                 });
-            },
-        }).render('#paypal-button-container');
+ 
+                // Mise à jour du total dynamique
+                cartTotalContainer.textContent = `${formatPrice(totalSum)} €`;
+ 
+                // Bouton PayPal dynamique
+                paypal.Buttons({
+                    createOrder: function (data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: totalSum.toFixed(2) // Montant dynamique
+                                }
+                            }]
+                        });
+                    },
+                    onApprove: function (data, actions) {
+                        return actions.order.capture().then(function (details) {
+                            alert('Paiement réussi ! Merci ' + details.payer.name.given_name);
+                            clearCart();
+                        });
+                    }
+                }).render('#paypal-button-container');
+            }
+        }
+ 
+        function clearCart() {
+            localStorage.removeItem('cart');
+            loadCart();
+        }
+ 
+        window.onload = loadCart;
     </script>
-
+ 
     <!-- Script pour le thème -->
     <script src="theme.js"></script>
-
+ 
     <!-- Bouton de changement de thème -->
     <div id="theme-toggle">
         <button id="theme-toggle-btn" title="Changer le thème">
             <i class="bx bx-sun"></i>
         </button>
     </div>
-    
+ 
 </body>
+ 
 </html>

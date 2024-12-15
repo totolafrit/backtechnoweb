@@ -251,6 +251,11 @@ body.dark-theme a:hover {
     color: #66BB6A;
 }
 
+/* Pied de page */
+body.dark-theme footer {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
 
 /* Style pour le bouton de changement de thème */
 #theme-toggle {

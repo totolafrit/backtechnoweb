@@ -12,7 +12,6 @@
 <body>
 
     <!-- En-tête -->
-    <!-- En-tête -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
@@ -27,6 +26,7 @@
                 <li>
                     <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
                     <a id="user-link"><i class="bx bxs-user-circle"></i></a>
+                </li>
                 </li>
             </ul>
         </nav>
@@ -47,31 +47,31 @@
             </p>
             <ul>
                 <li>Broyage des herbes hautes, broussailles et végétaux indésirables</li>
-                <li>Suppression des branches basses (<2.5m)</li>
+                <li>Suppression des branches basses (&lt;2.5m)</li>
                 <li>Sélection et suppression des arbres et arbustes à proximité des bâtiments</li>
                 <li>Broyage sur place des végétaux et répartition du mulch</li>
             </ul>
         </article>
 
-        <!-- Carousel -->
+        <!-- Carrousel -->
         <section class="carousel-container">
             <h2>Nos Réalisations</h2>
             <div class="carousel-wrapper">
                 <div class="carousel">
                     <div class="carousel-item">
-                        <img src="debrouss1.jpg" alt="Réalisation 1">
+                        <img src="debrouss1.jpg" alt="Débroussaillage 1">
                     </div>
                     <div class="carousel-item">
-                        <img src="debrouss2.jpg" alt="Réalisation 2">
+                        <img src="debrouss2.jpg" alt="Débroussaillage 2">
                     </div>
                     <div class="carousel-item">
-                        <img src="debrouss3.jpg" alt="Réalisation 3">
+                        <img src="debrouss3.jpg" alt="Débroussaillage 3">
                     </div>
                     <div class="carousel-item">
-                        <img src="debrouss4.jpg" alt="Réalisation 4">
+                        <img src="debrouss4.jpg" alt="Débroussaillage 4">
                     </div>
                     <div class="carousel-item">
-                        <img src="debrouss5.jpg" alt="Réalisation 5">
+                        <img src="debrouss5.jpg" alt="Débroussaillage 5">
                     </div>
                 </div>
             </div>
@@ -81,53 +81,66 @@
         </section>
     </main>
 
-    <!-- Pied de page -->
-    <footer>
-        <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
-    </footer>
+   
 
-    <!-- Bouton de changement de thème -->
-    <div id="theme-toggle">
-        <button id="theme-toggle-btn" title="Changer le thème">
-            <i class="bx bx-sun"></i>
-        </button>
-    </div>
-
-    <!-- Script pour le carousel -->
+    <!-- Script pour le carrousel -->
     <script>
         const carousel = document.querySelector(".carousel");
         const prevBtn = document.querySelector(".carousel-prev");
         const nextBtn = document.querySelector(".carousel-next");
-        const itemWidth = carousel.children[0].offsetWidth + 20;
+        const carouselItems = document.querySelectorAll(".carousel-item");
+        const itemWidth = carouselItems[0].offsetWidth + 20; // Ajustement avec l'espacement
         let currentPosition = 0;
 
-        nextBtn.addEventListener("click", () => {
-            currentPosition += itemWidth;
-            carousel.style.transform = `translateX(-${currentPosition}px)`;
-        });
+        // Clone les éléments pour créer l'effet de boucle infinie
+        carousel.innerHTML += carousel.innerHTML;
 
-        prevBtn.addEventListener("click", () => {
-            currentPosition -= itemWidth;
-            carousel.style.transform = `translateX(-${currentPosition}px)`;
-        });
+        const moveCarousel = (direction) => {
+            currentPosition += direction * itemWidth;
+
+            if (direction === 1 && currentPosition >= itemWidth * (carouselItems.length)) {
+                currentPosition = 0;
+                carousel.style.transition = "none";
+                carousel.style.transform = `translateX(${currentPosition}px)`;
+                setTimeout(() => (carousel.style.transition = "transform 0.5s ease-in-out"), 0);
+            } else if (direction === -1 && currentPosition < 0) {
+                currentPosition = itemWidth * (carouselItems.length - 1);
+                carousel.style.transition = "none";
+                carousel.style.transform = `translateX(-${currentPosition}px)`;
+                setTimeout(() => (carousel.style.transition = "transform 0.5s ease-in-out"), 0);
+            } else {
+                carousel.style.transition = "transform 0.5s ease-in-out";
+                carousel.style.transform = `translateX(-${currentPosition}px)`;
+            }
+        };
+
+        nextBtn.addEventListener("click", () => moveCarousel(1));
+        prevBtn.addEventListener("click", () => moveCarousel(-1));
+
+        let autoSlide = setInterval(() => moveCarousel(1), 3000);
+        carousel.addEventListener("mouseover", () => clearInterval(autoSlide));
+        carousel.addEventListener("mouseout", () => (autoSlide = setInterval(() => moveCarousel(1), 3000)));
     </script>
 
-    <!-- Script pour le changement de thème -->
-    <script>
-        document.getElementById("theme-toggle-btn").addEventListener("click", () => {
-            document.body.classList.toggle("dark-theme");
-            const icon = document.querySelector("#theme-toggle-btn i");
-            icon.classList.toggle("bx-sun");
-            icon.classList.toggle("bx-moon");
-        });
-    </script>
+   <!-- Pied de page -->
+   <footer>
+    <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
+</footer>
+<script src="theme.js"></script>
 
-    <script src="auth.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            checkUserLink("user-link");
-        });
-    </script>
+   <!-- Bouton de changement de thème -->
+   <div id="theme-toggle">
+    <button id="theme-toggle-btn" title="Changer le thème">
+        <i class="bx bx-sun"></i>
+    </button>
+</div>
+<script src="auth.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        checkUserLink("user-link");
+    });
+</script>
+
 </body>
 
 </html>

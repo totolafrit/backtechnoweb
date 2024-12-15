@@ -64,36 +64,41 @@ header {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
-    padding-bottom: 15px;
+    padding-bottom: 10px; /* Réduction du padding */
+    max-width: 300px; /* Limitation de la largeur maximale */
 }
 
 .article img {
-    max-width: 200px; /* Limite la largeur maximale de l'image */
-    height: auto; /* Maintient le ratio d'aspect */
+    width: 80%;
+    max-width: 250px;
+    height: 180px;
+    object-fit: contain;
     display: block;
-    margin: 0 auto; /* Centrer l'image */
+    margin: 0 auto;
+    background-color: #ffffff;
 }
 
 .article h2 {
-    font-size: 1.3em;
-    margin: 15px 0 5px;
+    font-size: 1.1em;
+    margin: 10px 0 5px;
     color: #333;
 }
 
 .article p {
-    font-size: 1em;
+    font-size: 0.9em;
     color: #666;
-    padding: 0 10px;
+    padding: 0 8px;
 }
 
 .read-more {
     display: inline-block;
     margin-top: 10px;
-    padding: 8px 15px;
+    padding: 6px 12px;
     background-color: #4CAF50;
     color: #ffffff;
     text-decoration: none;
     border-radius: 4px;
+    font-size: 0.9em;
     transition: background-color 0.3s ease;
 }
 
@@ -107,6 +112,96 @@ header {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
+/* Conteneur pour le filtre et la flèche */
+#filter-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px; /* Espacement entre les éléments */
+    margin: 20px auto;
+    padding: 10px;
+    max-width: 800px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Flèche retour */
+.back-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    color: #ffffff;
+    background-color: #28a745;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.back-icon:hover {
+    background-color: #218838;
+    transform: scale(1.1);
+}
+
+/* Barre de recherche */
+#search-bar {
+    flex: 1; /* Prend l'espace restant */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+#search-bar:focus {
+    outline: none;
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Menu déroulant de tri */
+#sort-options {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#sort-options:hover {
+    border-color: #007BFF;
+}
+
+#sort-options:focus {
+    outline: none;
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Responsive : ajustement sur mobile */
+@media (max-width: 768px) {
+    #filter-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .back-icon {
+        margin-bottom: 10px;
+    }
+
+    #search-bar,
+    #sort-options {
+        width: 100%;
+    }
+}
+
 /* Pied de page */
 footer {
     background-color: #ffffff;
@@ -118,3 +213,69 @@ footer {
     margin-top: 20px;
     box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
 }
+/* ========================= Mode Sombre ========================= */
+body.dark-theme {
+    background-color: #121212; /* Couleur de fond sombre */
+    color: #e0e0e0; /* Texte en gris clair */
+}
+
+/* En-tête */
+body.dark-theme header {
+    background-color: #1f1f1f; /* Fond de l'en-tête */
+    color: #e0e0e0; /* Texte */
+}
+
+body.dark-theme .nav-menu a {
+    color: #e0e0e0;
+}
+
+body.dark-theme .nav-menu a:hover {
+    color: #4CAF50; /* Couleur d'accent */
+}
+
+/* Catégories */
+body.dark-theme .category-card {
+    background-color: #1f1f1f;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .category-card img {
+    border-bottom: 3px solid #4CAF50;
+}
+
+body.dark-theme .category-title {
+    background-color: #333;
+    color: #4CAF50;
+}
+
+/* Pied de page */
+body.dark-theme footer {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
+
+/* Style pour le bouton de changement de thème */
+#theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+#theme-toggle button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#theme-toggle button:hover {
+    background-color: #4CAF50;
+    transform: scale(1.1);
+}
+

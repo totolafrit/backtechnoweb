@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmation - Mail envoyé</title>
     <link rel="stylesheet" href="mail.css">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Inclusion de jsPDF -->
 </head>
+ 
 <body>
-
+ 
     <!-- Navbar avec logo et étapes -->
     <header class="progress-header">
         <div class="logo">
@@ -37,27 +41,63 @@
             </div>
         </nav>
     </header>
-
+ 
     <!-- Contenu principal -->
     <div class="mail-container">
         <i class="bx bx-check-circle success-icon"></i>
         <h1 class="mail-title">Commande passée avec succès !</h1>
         <p class="mail-description">
-           Votre Commande à bien était passé , une facture est désormais disponible en téléchargement , retrouver la également 
-           dans "Mon Compte" .
+            Votre commande a bien été passée, une facture est désormais disponible en téléchargement. Retrouvez-la
+            également
+            dans "Mon Compte".
         </p>
-        <a href="myaccount.html" class="return-button">Mon Compte</a>
+        <div class="action-buttons">
+            <a href="myaccount.html" class="return-button">Mon Compte</a>
+            <a href="#" class="download-button" id="download-pdf">Télécharger ma facture</a>
+        </div>
     </div>
-
+ 
     <!-- Script pour le thème -->
     <script src="theme.js"></script>
-
+ 
     <!-- Bouton de changement de thème -->
     <div id="theme-toggle">
         <button id="theme-toggle-btn" title="Changer le thème">
             <i class="bx bx-sun"></i>
         </button>
     </div>
-
+ 
+    <script>
+        // Utilisation de jsPDF pour générer un PDF
+        const { jsPDF } = window.jspdf;
+ 
+        // Fonction pour générer le PDF
+        document.getElementById('download-pdf').addEventListener('click', function () {
+            // Création du document PDF
+            const doc = new jsPDF();
+ 
+            // Récupération des informations du panier depuis le localStorage (exemple)
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let total = 0;
+ 
+            // Ajout d'un titre au PDF
+            doc.text("Facture de commande", 20, 20);
+ 
+            // Ajout des détails de la commande
+            doc.text("Résumé de la commande :", 20, 30);
+            cart.forEach((item, index) => {
+                doc.text(`${index + 1}. ${item.name} - ${item.quantity} x ${item.price}€`, 20, 40 + (index * 10));
+                total += item.price * item.quantity;
+            });
+ 
+            // Ajout du total de la commande
+            doc.text(`Total: ${total}€`, 20, 40 + (cart.length * 10) + 10);
+ 
+            // Téléchargement du PDF
+            doc.save('facture_commande.pdf');
+        });
+    </script>
+ 
 </body>
+ 
 </html>

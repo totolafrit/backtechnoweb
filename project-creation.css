@@ -7,6 +7,7 @@ body {
     color: #333;
 }
 
+/* En-tête */
 header {
     display: flex;
     justify-content: space-between;
@@ -51,9 +52,6 @@ main {
 }
 
 main h1 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-size: 36px;
     color: #4CAF50;
     margin-bottom: 20px;
@@ -64,25 +62,6 @@ main p {
     line-height: 1.8;
     color: #333;
     margin-bottom: 20px;
-}
-
-/* Flèche "Undo" */
-.undo-button {
-    display: inline-flex;
-    align-items: center;
-    text-decoration: none;
-    color: #4CAF50;
-    font-size: 24px;
-    margin-right: 15px;
-    transition: color 0.3s ease;
-}
-
-.undo-button i {
-    margin-right: 5px;
-}
-
-.undo-button:hover {
-    color: #66BB6A;
 }
 
 /* Carrousel */
@@ -181,6 +160,7 @@ footer {
     margin-top: 30px;
 }
 
+
 /* ========================= Mode Sombre ========================= */
 body.dark-theme {
     background-color: #121212; /* Couleur de fond sombre */
@@ -271,6 +251,12 @@ body.dark-theme a:hover {
     color: #66BB6A;
 }
 
+/* Pied de page */
+body.dark-theme footer {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
+
 /* Style pour le bouton de changement de thème */
 #theme-toggle {
     position: fixed;
@@ -296,8 +282,30 @@ body.dark-theme a:hover {
     transform: scale(1.1);
 }
 
-/* Style pour le lien actif du menu */
+
+
+
 .nav-menu a[href="project.html"] {
     color: #4CAF50;
     font-weight: bold;
+}
+
+
+/* Flèche "Undo" */
+.undo-button {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: #4CAF50;
+    font-size: 24px;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+
+.undo-button i {
+    margin-right: 5px;
+}
+
+.undo-button:hover {
+    color: #66BB6A;
 }

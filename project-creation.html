@@ -28,6 +28,7 @@
                     <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
                     <a id="user-link"><i class="bx bxs-user-circle"></i></a>
                 </li>
+                </li>
             </ul>
         </nav>
     </header>
@@ -83,10 +84,7 @@
         </section>
     </main>
 
-    <!-- Pied de page -->
-    <footer>
-        <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
-    </footer>
+    
 
     <!-- Script JS -->
     <script>
@@ -127,20 +125,24 @@
         carousel.addEventListener("mouseout", () => (autoSlide = setInterval(() => moveCarousel(1), 3000)));
     </script>
 
-    <!-- Bouton de changement de thème -->
-    <div id="theme-toggle">
-        <button id="theme-toggle-btn" title="Changer le thème">
-            <i class="bx bx-sun"></i>
-        </button>
-    </div>
+   <!-- Pied de page -->
+   <footer>
+    <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
+</footer>
+<script src="theme.js"></script>
 
-
-    <script src="auth.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            checkUserLink("user-link");
-        });
-    </script>
+   <!-- Bouton de changement de thème -->
+   <div id="theme-toggle">
+    <button id="theme-toggle-btn" title="Changer le thème">
+        <i class="bx bx-sun"></i>
+    </button>
+</div>
+<script src="auth.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        checkUserLink("user-link");
+    });
+</script>
 </body>
 
 </html>
