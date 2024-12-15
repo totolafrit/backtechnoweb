@@ -89,13 +89,7 @@ app.get('/', (req, res) => {
     res.send('Le serveur node.js est fonctionnel');
 });
 
-// function checkAdminRole(req, res, next) { // middleware pour vérifier si l'utilisateur est admin
-//     const { role } = req.body; // A fair epour secu : le rôle devrait être passé depuis le front-end ou vérifié via JWT
-//     if (role !== 'admin') {
-//         return res.status(403).json({ message: "Accès refusé. Droits insuffisants." });
-//     }
-//     next();
-// }
+
 function checkAdminRole(req, res, next) {
     const { role } = req.user; // Récupère le rôle à partir du token (req.user)
     if (role !== 'admin') {

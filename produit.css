@@ -166,13 +166,157 @@ button.add-to-cart, button.remove-from-cart {
     font-weight: bold;
 }
 
+/* Style de la flèche retour sous le header */
+.back-icon {
+    display: inline-flex; /* Aligner et centrer l'icône */
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    font-size: 24px; /* Taille de l'icône */
+    color: #ffffff; /* Couleur de l'icône */
+    background-color: #28a745; /* Couleur verte */
+    border-radius: 50%; /* Rendre la flèche ronde */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    margin: 20px; /* Marge pour l'espacement */
+    text-decoration: none; /* Supprimer le soulignement */
+    position: relative; /* Position naturelle sous le header */
+    transition: all 0.3s ease; /* Animation fluide */
+}
+
+.back-icon:hover {
+    background-color: #218838; /* Couleur plus foncée au survol */
+    transform: scale(1.1); /* Zoom léger */
+}
+.product-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-image img {
+    max-width: 300px;
+    height: auto;
+    border-radius: 8px;
+}
+
+.product-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.product-price {
+    font-size: 1.5em;
+    color: #28a745;
+    font-weight: bold;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.add-to-cart {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-cart:hover {
+    background-color: #218838;
+}
 
 
 /* Footer */
 footer {
+    background-color: #ffffff;
     text-align: center;
-    padding: 20px;
-    background: #333;
-    color: white;
-    margin-top: 40px;
+    padding: 15px;
+    font-size: 14px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    margin-top: 20px;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
 }
+/* ========================= Mode Sombre ========================= */
+body.dark-theme {
+    background-color: #121212; /* Couleur de fond sombre */
+    color: #e0e0e0; /* Texte en gris clair */
+}
+
+/* En-tête */
+body.dark-theme header {
+    background-color: #1f1f1f; /* Fond de l'en-tête */
+    color: #e0e0e0; /* Texte */
+}
+
+body.dark-theme .nav-menu a {
+    color: #e0e0e0;
+}
+
+body.dark-theme .nav-menu a:hover {
+    color: #4CAF50; /* Couleur d'accent */
+}
+
+/* Catégories */
+body.dark-theme .category-card {
+    background-color: #1f1f1f;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .category-card img {
+    border-bottom: 3px solid #4CAF50;
+}
+
+body.dark-theme .category-title {
+    background-color: #333;
+    color: #4CAF50;
+}
+
+/* Pied de page */
+body.dark-theme footer {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
+
+/* Style pour le bouton de changement de thème */
+#theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+#theme-toggle button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#theme-toggle button:hover {
+    background-color: #4CAF50;
+    transform: scale(1.1);
+}
+

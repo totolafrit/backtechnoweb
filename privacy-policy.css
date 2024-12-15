@@ -1,0 +1,174 @@
+/* Styles généraux */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Sélecteur de langue */
+.language-selector {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+
+.language-selector img {
+    width: 35px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.language-selector img:hover {
+    transform: scale(1.1);
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 10px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.logo img {
+    width: 60px;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+    color: #4CAF50;
+}
+
+/* Titre de la page Terms and Conditions */
+h1 {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin: 40px 0;
+    color: #333;
+}
+
+/* Contenu des conditions */
+.terms-content {
+    max-width: 75%;
+    margin: 0 auto;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    line-height: 1.8;
+}
+
+.terms-content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: bold;
+}
+
+.terms-content p {
+    margin-bottom: 20px;
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+.terms-content ul,
+.terms-content ol {
+    margin-left: 25px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.terms-content ul li,
+.terms-content ol li {
+    margin-bottom: 10px;
+}
+
+/* Liens dans les conditions */
+.terms-content a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.terms-content a:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-size: 14px;
+    background-color: #f1f1f1;
+}
+
+/* Mode Sombre */
+body.dark-theme {
+    background-color: #1e1e1e;
+    color: #ddd;
+}
+
+body.dark-theme header {
+    background: #2c2c2c;
+    color: #ddd;
+}
+
+body.dark-theme .nav-menu a {
+    color: #ddd;
+}
+
+body.dark-theme .nav-menu a:hover {
+    color: #4CAF50;
+}
+
+body.dark-theme footer {
+    background-color: #2c2c2c;
+    color: #ddd;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .terms-content {
+        max-width: 90%;
+        padding: 20px;
+    }
+
+    .nav-menu {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .language-selector {
+        top: 5px;
+        right: 10px;
+    }
+}
