@@ -109,6 +109,116 @@ header .nav-menu a.active {
     background-color: #e0e0e0;
 }
 
+/* Style global */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Section principale */
+.client-list-section, .product-list-section {
+    padding: 2rem;
+    background-color: #f9f9f9;
+}
+
+.client-list-section h1, .product-list-section h1 {
+    margin-bottom: 1rem;
+    color: #333;
+    text-align: center;
+}
+
+/* Barre de recherche */
+#search-bar {
+    width: 100%;
+    max-width: 600px;
+    padding: 0.8rem;
+    margin: 1rem auto;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* Sélecteur de tri */
+#sort-options {
+    width: 100%;
+    max-width: 300px;
+    padding: 0.8rem;
+    margin: 1rem auto;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: white;
+}
+
+/* Liste des éléments */
+.product-list, .client-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.product-item, .client-item {
+    background: white;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.product-item:hover, .client-item:hover {
+    transform: translateY(-5px);
+}
+
+.product-info, .client-info {
+    text-align: center;
+}
+
+.product-info h3, .client-info h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.product-info p, .client-info p {
+    color: #555;
+    margin: 0.3rem 0;
+}
+
+.product-info img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* Boutons d'action */
+.action-btn {
+    width: 100%;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
+
+.action-btn:hover {
+    background: #218838;
+}
+
+.action-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+
 /* Flèche retour */
 .undo-link {
     font-size: 24px;
@@ -290,6 +400,118 @@ body.dark-theme footer {
     background-color: #1f1f1f;
     color: #e0e0e0;
 }
+
+/* Style pour le conteneur du formulaire */
+#edit-form-container {
+    background-color: #fff;
+    padding: 10px; /* Réduit encore le padding */
+    border-radius: 8px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 320px; /* Réduit la largeur du formulaire */
+    margin: 30px auto; /* Réduit la marge autour du formulaire */
+    display: none;
+    transition: transform 0.3s ease-in-out;
+ }
+ 
+ /* Effet d'animation pour l'apparition du formulaire */
+ #edit-form-container.show {
+    transform: scale(1);
+ }
+ 
+ #edit-form-container h2 {
+    text-align: center;
+    font-size: 18px; /* Réduit la taille du titre */
+    color: #333;
+    margin-bottom: 10px; /* Réduit la marge en bas du titre */
+    font-weight: bold;
+ }
+ 
+ /* Style général des labels */
+ #edit-form-container label {
+    display: block;
+    font-size: 12px; /* Taille de police plus petite */
+    color: #555;
+    margin-bottom: 4px; /* Réduit l'espacement entre le label et l'input */
+ }
+ 
+ /* Style des champs de formulaire */
+ #edit-form-container input,
+ #edit-form-container textarea {
+    width: 100%;
+    padding: 6px; /* Réduit le padding des champs */
+    margin-bottom: 10px; /* Réduit l'espacement entre les champs */
+    font-size: 12px; /* Taille de texte réduite */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+ }
+ 
+ /* Effet de focus sur les champs de formulaire */
+ #edit-form-container input:focus,
+ #edit-form-container textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+ }
+ 
+ /* Style du bouton */
+ #edit-form-container button {
+    width: 100%;
+    padding: 8px; /* Réduit le padding du bouton */
+    font-size: 14px; /* Réduit la taille du texte du bouton */
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+ }
+ 
+ /* Effet au survol du bouton */
+ #edit-form-container button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+ }
+ 
+ /* Effet lorsqu'on clique sur le bouton */
+ #edit-form-container button:active {
+    background-color: #388e3c;
+    transform: scale(1);
+ }
+ 
+ /* Style des messages d'erreur ou de validation */
+ #edit-form-container .error,
+ #edit-form-container .success {
+    font-size: 11px; /* Réduit la taille du texte des messages */
+    color: #e74c3c; /* Rouge pour les erreurs */
+    margin-top: 6px;
+ }
+ 
+ #edit-form-container .success {
+    color: #28a745; /* Vert pour le succès */
+ }
+ 
+ /* Responsivité */
+ @media (max-width: 768px) {
+    #edit-form-container {
+        padding: 8px;
+    }
+    #edit-form-container h2 {
+        font-size: 16px;
+    }
+    #edit-form-container label {
+        font-size: 11px;
+    }
+    #edit-form-container input,
+    #edit-form-container textarea {
+        padding: 5px;
+        font-size: 11px;
+    }
+    #edit-form-container button {
+        font-size: 12px;
+    }
+ }
+ 
 
 /* ========================= Pied de page ========================= */
 footer {

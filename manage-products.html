@@ -12,7 +12,7 @@
     <div class="logo"><img src="logo.png" alt="Logo"></div>
     <nav class="nav-menu">
         <a href="manage-products.html" class="nav-link"><i class="bx bxs-box"></i><span>Manage Products</span></a>
-        <a href="manage-client.html" class="nav-link"><i class="bx bxs-user"></i><span>Manage Clients</span></a>
+        <a href="manage-clients.html" class="nav-link"><i class="bx bxs-user"></i><span>Manage Clients</span></a>
         <a href="manage-orders.html" class="nav-link"><i class="bx bxs-cart"></i><span>Manage Orders</span></a>
     </nav>
 </header>
@@ -32,7 +32,8 @@
                 <label for="edit-name">Nom du produit :</label>
                 <input type="text" id="edit-name" required>
                 <label for="edit-price">Prix :</label>
-                <input type="number" id="edit-price" required>
+                <input type="text" id="edit-price" required>
+
                 <label for="edit-description">Description :</label>
                 <textarea id="edit-description" required></textarea>
                 <label for="edit-category">Catégorie :</label>
@@ -50,7 +51,6 @@
         
         <select id="sort-options" onchange="sortProducts()">
             <option value="name">Nom du produit</option>
-            <option value="price">Prix</option>
             <option value="price-asc">Prix Croissant</option>
             <option value="price-desc">Prix Décroissant</option>
         </select>
@@ -171,10 +171,18 @@ document.getElementById('edit-product-form').addEventListener('submit', async (e
 
     const id = document.getElementById('edit-product-id').value;
     const name = document.getElementById('edit-name').value;
-    const price = document.getElementById('edit-price').value;
+    let price = document.getElementById('edit-price').value;
     const description = document.getElementById('edit-description').value;
     const image_url = document.getElementById('edit-image-url').value;
     const category = document.getElementById('edit-category').value;
+
+    // Remplacer la virgule par un point et convertir en nombre
+    price = parseFloat(price.replace(',', '.'));
+
+    if (isNaN(price)) {
+        alert("Veuillez entrer un prix valide.");
+        return;
+    }
 
     try {
         const response = await fetch(`http://localhost:3000/api/products/${id}`, {
@@ -195,6 +203,7 @@ document.getElementById('edit-product-form').addEventListener('submit', async (e
         alert('Erreur lors de la mise à jour du produit');
     }
 });
+
 
 function sortProducts() {
     const sortOption = document.getElementById('sort-options').value;
