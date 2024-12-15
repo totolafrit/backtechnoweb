@@ -22,8 +22,9 @@
                 <li><a href="project.html">Services</a></li>
                 <li><a href="actualites.html">Les Infos-Vertes</a></li>
                 <li>
-                    <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
-                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
+                    <!-- <a href="fakepanier.html"><i class="bx bx-cart"></i></a> -->
+                    <a id="user-link"><i class="bx bxs-user-circle"></i></a>
+    
                 </li>
             </ul>
         </nav>
@@ -32,6 +33,7 @@
     <main class="cart-container">
         <h1 class="cart-title">Mon Panier</h1>
         <p class="reservation-info">Les articles seront réservés pendant 60 minutes</p>
+        <button class="clear-cart-button" onclick="clearCart()">Vider le panier</button>
     
         <div class="cart-content">
             <!-- Partie Gauche : prod affichées dynamiquements -->
@@ -41,13 +43,14 @@
     
             <!-- Partie Droite -->
             <div class="cart-right">
-                <h2>Total</h2>
-                <p class="cart-summary">Sous-total : <strong id="cart-total">0,00 €</strong></p>
+                
+                <p class="cart-summary"><strong id="cart-total">0,00 €</strong></p>
                 <p>Livraison : <strong>Retrait à l'entrepôt (Gratuit)</strong></p>
     
                 <div class="cart-buttons">
-                    <button class="clear-cart-button" onclick="clearCart()">Vider le panier</button>
-                    <button id="checkout-btn" onclick="validateOrder()">Passer la commande</button>
+                       
+                    <a href="shop.html" class="buy-more-button">Acheter plus</a>
+                    <button id="checkout-btn" onclick="validateOrder()">Payer</button>
                 </div>
     
                 <p class="cart-payment-info">Nous acceptons :</p>
@@ -156,7 +159,7 @@
     
         if (!localStorage.getItem('isLoggedIn')) { 
             // Stocker la page cible avant redirection
-            localStorage.setItem('redirectAfterLogin', 'payement.html');
+            localStorage.setItem('redirectAfterLogin', 'pickup.html');
             alert('Veuillez vous connecter avant de payer!');
             window.location.href = 'connection.html';
         } else {
@@ -175,6 +178,13 @@
             // redirection vers la page d'accueil après déconnexion -> devient un visitor
             window.location.href = 'accueil.html';
         });
+        </script>
+
+        <script src="auth.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                checkUserLink("user-link");
+            });
         </script>
 </body>
 </html>

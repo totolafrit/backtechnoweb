@@ -6,35 +6,35 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #D8CFC4; 
+    background-color: #f0f0f5;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    position: relative;
 }
 
-.signup-container { /* Changement de nom de classe */
-    background-color: #738b66; 
+.form-container {
+    background-color: #ffffff;
     padding: 40px;
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.836);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 400px;
     text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
 }
 
 .logo {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%; 
-    object-fit: cover;
+    width: 100px;
+    height: auto;
     margin-bottom: 20px;
 }
 
-h2 {
-    font-size: 2em;
-    margin-bottom: 30px;
-    color: #f4f4f4; 
+.form-title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #333;
 }
 
 .input-group {
@@ -44,46 +44,151 @@ h2 {
 
 .input-group label {
     display: block;
-    margin-bottom: 10px;
-    font-size: 1.2em;
-    color: #f4f4f4; /* Texte en blanc */
+    margin-bottom: 8px;
+    font-size: 1rem;
+    color: #4CAF50;
 }
 
 .input-group input {
     width: 100%;
-    padding: 15px;
-    font-size: 1.2em;
-    border: 1px solid #f4f4f4; /* Bordure blanche */
-    border-radius: 8px;
-    background-color: #f4f4f4;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: border 0.3s;
 }
 
-button {
-    width: 100%;
-    padding: 15px;
-    font-size: 1.2em;
-    background-color: #000000; /* Bouton noir */
-    color: white; /* Texte du bouton en blanc */
-    border: none;
-    border-radius: 8px;
+.input-group input:focus {
+    border-color: #4CAF50;
+}
+
+.password-container {
+    display: flex;
+    align-items: center;
+}
+
+.password-container input {
+    flex: 1;
+}
+
+.password-container .toggle-password {
     cursor: pointer;
+    margin-left: 8px;
+    color: #4CAF50;
+    font-size: 1.2rem;
 }
 
-button:hover {
-    background-color: #1a1a1a; /* Bouton devient plus foncé au survol */
+.form-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-p {
+.form-button:hover {
+    background-color: #388E3C;
+}
+
+.form-footer {
     margin-top: 20px;
-    font-size: 1.1em;
-    color: #f4f4f4; /* Texte en blanc */
+    font-size: 0.9rem;
 }
 
-p a {
-    color: #f4f4f4; /* Liens en blanc */
+.form-footer .link {
+    color: #4CAF50;
     text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
 }
 
-p a:hover {
+.form-footer .link:hover {
+    color: #388E3C;
     text-decoration: underline;
+}
+
+/* Bouton de changement de thème */
+#theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+#theme-toggle button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#theme-toggle button:hover {
+    background-color: #4CAF50;
+    transform: scale(1.1);
+}
+
+/* Mode sombre */
+body.dark-theme {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.dark-theme .form-container {
+    background-color: #1f1f1f;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme input {
+    background-color: #333;
+    border: 1px solid #555;
+    color: #e0e0e0;
+}
+
+body.dark-theme input:focus {
+    border-color: #4CAF50;
+}
+
+body.dark-theme .form-button {
+    background-color: #388E3C;
+}
+
+body.dark-theme .form-button:hover {
+    background-color: #2E7D32;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+
+.password-strength {
+    height: 5px;
+    background-color: #ddd;
+    margin-top: 5px;
+    border-radius: 5px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.password-strength.valid {
+    background-color: #28a745;
+}
+
+.password-strength.medium {
+    background-color: orange;
+}
+
+.password-strength.weak {
+    background-color: red;
 }
