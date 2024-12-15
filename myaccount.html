@@ -104,6 +104,9 @@
             }
         });
 
+    
+        
+
          // Fonction pour récupérer les données de l'utilisateur connecté depuis l'API
 
         async function fetchUserData(userId) {
@@ -169,12 +172,29 @@
     
         // Fonction de déconnexion
         function logout() {
-            localStorage.removeItem("isLoggedIn");
-            localStorage.removeItem("username");
-            localStorage.removeItem("userId");
-
-            window.location.href = "accueil.html"; // Redirige vers la page d'accueil après déconnexion
+            // Envoyer la requête de déconnexion au serveur pour détruire la session
+            fetch('http://localhost:3000/logout', {
+                method: 'POST',
+                credentials: 'same-origin', // Assurez-vous que les cookies de session sont envoyés avec la requête
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Supprimer les informations de session côté client
+                    localStorage.removeItem("isLoggedIn");
+                    localStorage.removeItem("username");
+                    localStorage.removeItem("userId");
+        
+                    // Rediriger l'utilisateur vers la page d'accueil
+                    window.location.href = "accueil.html";
+                } else {
+                    console.error('Erreur lors de la déconnexion');
+                }
+            })
+            .catch(err => {
+                console.error('Erreur de connexion:', err);
+            });
         }
+        
     </script>
 </body>
 </html>

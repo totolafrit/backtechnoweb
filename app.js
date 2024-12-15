@@ -1,24 +1,71 @@
-require('dotenv').config(); // pour charger les informations de info.env
+require('dotenv').config({ path: './info.env' }); // pour eviter les problèmes de chemins
 const express = require('express'); // créer et gérer le serveur web
 const mysql = require('mysql'); // Se connecter à la DB
 const cors = require('cors'); // gérer  API
 const path = require('path'); // pour def le chemin
+const session = require('express-session'); // express-session pour sécuriser chaque session
+const jwt = require('jsonwebtoken'); // Assure-toi que jwt est bien importé
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const xssClean = require('xss-clean');
+const validator = require('validator');
+
+
 const router = express.Router();
 
-
-require('dotenv').config({ path: './info.env' }); // pour eviter les problèmes de chemins
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json()); 
-
 app.use(express.urlencoded({ extended: true }));
+app.use(xssClean());
 
 app.use('/images', express.static('images')); // middleware pour servir le doc images
 
-//app.use('/images', express.static(path.join(__dirname, 'public/images'))); // debug
+
+
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'", "'unsafe-inline'"],
+    objectSrc: ["'none'"],
+    imgSrc: ["'self'", "data:"],
+    styleSrc: ["'self'", "'unsafe-inline'"],
+    fontSrc: ["'self'"],
+  },
+}));
+
+// Configurer express-session
+
+  app.use(session({
+    secret: process.env.SESSION_SECRET || 'secret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      httpOnly: true, // Empêcher l'accès au cookie via JavaScript
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 3600000,// Durée de vie du cookie (1 heure)
+      sameSite: 'strict', // Empêche l'envoi de cookies lors des requêtes inter-sites
+    }
+  }));
+  
+
+
+  const loginLimiter = rateLimit({
+    windowMs: 1 * 15 * 1000, // 15 s
+    max: 2, // 2 attempts
+    message: "Trop de tentatives de connexion, veuillez réessayer après 15 minutes.",
+    handler: (req, res) => {
+
+      const remainingAttempts = 2 - req.rateLimit.remaining;
+      res.status(429).json({
+        message: "Trop de tentatives de connexion.",
+        remainingAttempts: remainingAttempts
+      });
+    }
+  });
 
 
 // connexion à la base de données dbtechnoback - verifiez le info.env 
@@ -42,8 +89,15 @@ app.get('/', (req, res) => {
     res.send('Le serveur node.js est fonctionnel');
 });
 
-function checkAdminRole(req, res, next) { // middleware pour vérifier si l'utilisateur est admin
-    const { role } = req.body; // A fair epour secu : le rôle devrait être passé depuis le front-end ou vérifié via JWT
+// function checkAdminRole(req, res, next) { // middleware pour vérifier si l'utilisateur est admin
+//     const { role } = req.body; // A fair epour secu : le rôle devrait être passé depuis le front-end ou vérifié via JWT
+//     if (role !== 'admin') {
+//         return res.status(403).json({ message: "Accès refusé. Droits insuffisants." });
+//     }
+//     next();
+// }
+function checkAdminRole(req, res, next) {
+    const { role } = req.user; // Récupère le rôle à partir du token (req.user)
     if (role !== 'admin') {
         return res.status(403).json({ message: "Accès refusé. Droits insuffisants." });
     }
@@ -57,37 +111,68 @@ const bcrypt = require('bcrypt'); // methode pour hasher les mdp
 
 //create un compte
 
+
 app.post('/register', async (req, res) => {
     const { username, email, password, role } = req.body;
 
+    // Vérification des champs obligatoires
     if (!username || !email || !password) {
         return res.status(400).json({ message: "Les champs nom d'utilisateur, email, et mot de passe sont requis." });
     }
 
-    try {
-        // hachage du mdp
-        const saltRounds = 10; // nombre de rounds de salage
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        
-        console.log("Mot de passe original :", password);
-        console.log("Mot de passe haché :", hashedPassword);
-
-
-        const query = 'INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)';
-        const userRole = role || 'user';
-
-        db.query(query, [username, email, hashedPassword, userRole], (err, result) => {
-            if (err) {
-                console.error("Erreur lors de l'ajout de l'utilisateur :", err);
-                return res.status(500).json({ message: "Erreur lors de l'ajout de l'utilisateur" });
-            }
-            res.status(201).json({ message: 'Utilisateur créé avec succès', role: userRole });
-        });
-    } catch (error) {
-        console.error("Erreur lors du hachage du mot de passe :", error);
-        res.status(500).json({ message: "Erreur interne lors de la création de l'utilisateur." });
+    // Validation de l'email
+    if (!validator.isEmail(email)) {
+        return res.status(400).json({ message: "L'email fourni n'est pas valide." });
     }
+
+    // Validation de la longueur du nom d'utilisateur
+    if (!validator.isLength(username, { min: 3, max: 20 })) {
+        return res.status(400).json({ message: "Le nom d'utilisateur doit être compris entre 3 et 20 caractères." });
+    }
+
+    // Validation de la complexité du mot de passe
+    if (!validator.isStrongPassword(password, {
+        minLength: 8,
+        minUppercase: 1,
+        minLowercase: 1,
+        minNumbers: 1,
+        minSymbols: 1
+    })) {
+        return res.status(400).json({ message: "Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un symbole." });
+    }
+
+    // Vérification que l'email n'est pas déjà utilisé
+    db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
+        if (err) {
+            console.error("Erreur lors de la vérification de l'email :", err);
+            return res.status(500).json({ message: "Erreur lors de la vérification de l'email." });
+        }
+        if (results.length > 0) {
+            return res.status(400).json({ message: "Cet email est déjà utilisé." });
+        }
+
+        // Hachage du mot de passe
+        const saltRounds = 10;
+        bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
+            if (err) {
+                console.error("Erreur lors du hachage du mot de passe :", err);
+                return res.status(500).json({ message: "Erreur interne lors de la création de l'utilisateur." });
+            }
+
+            // Insertion de l'utilisateur dans la base de données
+            const userRole = role || 'user';
+            const query = 'INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)';
+            db.query(query, [username, email, hashedPassword, userRole], (err, result) => {
+                if (err) {
+                    console.error("Erreur lors de l'ajout de l'utilisateur :", err);
+                    return res.status(500).json({ message: "Erreur lors de l'ajout de l'utilisateur" });
+                }
+                res.status(201).json({ message: 'Utilisateur créé avec succès', role: userRole });
+            });
+        });
+    });
 });
+
 
 // Vérification de l'utilisateur
 app.post('/check-user', async (req, res) => {
@@ -129,7 +214,8 @@ app.post('/check-user', async (req, res) => {
 
 // connexion
 
-app.post('/login', async (req, res) => {
+// Appliquer le rate limiter à la route /login
+app.post('/login', loginLimiter, async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -154,41 +240,43 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ message: "Nom d'utilisateur ou mot de passe incorrect." });
         }
 
+        // Générer un JWT
+        const token = jwt.sign(
+            { userId: user.id, role: user.role },  // Payload
+            process.env.JWT_SECRET, // Clé secrète (à définir dans .env)
+            { expiresIn: '1h' } // Expiration du token (1 heure)
+        );
+        
+        // Répondre avec un message de succès et le token JWT
         res.json({
             message: 'Connexion réussie!',
-            userId: user.id,  // ajout de luserId
-            role: user.role,   // utile pour se connecter en tant qu'admin
+            userId: user.id,  // ID de l'utilisateur (utile pour la gestion des sessions)
+            role: user.role,   // Role de l'utilisateur (utile pour les permissions)
+            token: token       // Le token JWT à utiliser pour les requêtes futures
         });
     });
 });
 
+// Middleware pour vérifier le token JWT
+const verifyToken = (req, res, next) => {
+    const token = req.headers['authorization']?.split(' ')[1]; // Récupérer le token du header Authorization
 
+    if (!token) {
+        return res.status(403).json({ message: 'Token manquant ou invalide' });
+    }
 
+    // Vérifier et décoder le token
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({ message: 'Token invalide ou expiré' });
+        }
 
+        // Si le token est valide, on ajoute les informations de l'utilisateur décodées dans req.user
+        req.user = decoded; // { userId, role }
 
-
-// // Mettre à jour les informations d'un utilisateur
-// app.put('/user/:id', async (req, res) => {
-//     const userId = req.params.id;
-//     const { username, email } = req.body;
-
-//     try {
-//         const [result] = await db.query(
-//             'UPDATE users SET username = ?, email = ? WHERE id = ?',
-//             [username, email, userId]
-//         );
-
-//         if (result.affectedRows > 0) {
-//             res.json({ message: "Informations mises à jour avec succès" });
-//         } else {
-//             res.status(404).json({ message: "Utilisateur non trouvé" });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ message: "Erreur du serveur", error });
-//     }
-// });
-
-
+        next(); // Passer à la route suivante
+    });
+};
 
 // route DELETE pour supprimer un utilisateur (admin uniquement)
 
@@ -486,6 +574,25 @@ app.post('/api/users', async (req, res) => {
     } catch (error) {
         console.error('Erreur lors du hachage du mot de passe :', error);
         res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
+
+
+app.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ message: 'Erreur lors de la déconnexion' });
+        }
+        console.log('Session détruite avec succès');
+        res.json({ message: 'Déconnexion réussie' });
+    });
+});
+
+app.get('/check-session', (req, res) => {
+    if (req.session.userId) {
+        res.json({ message: 'Utilisateur connecté', userId: req.session.userId });
+    } else {
+        res.json({ message: 'Aucun utilisateur connecté' });
     }
 });
 
