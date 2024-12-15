@@ -173,6 +173,30 @@ app.delete('/delete-user/:id', checkAdminRole, (req, res) => {
     });
 });
 
+
+// Route pour supprimer une commande par ID
+app.delete('/api/orders/:orderId', (req, res) => {
+    const orderId = req.params.orderId;  // Récupère l'ID de la commande à partir de l'URL
+
+    // Requête SQL pour supprimer la commande de la table orders
+    const query = 'DELETE FROM orders WHERE order_id = ?';
+
+    db.query(query, [orderId], (err, results) => {
+        if (err) {
+            console.error('Erreur lors de la suppression de la commande:', err);
+            return res.status(500).json({ error: 'Erreur lors de la suppression de la commande.' });
+        }
+
+        if (results.affectedRows > 0) {
+            res.status(200).json({ message: 'Commande annulée avec succès.' });
+        } else {
+            res.status(404).json({ message: 'Commande non trouvée.' });
+        }
+    });
+});
+
+
+
 // Ajout d'un produit (admin)
 
 app.post('/api/products', (req, res) => {
@@ -207,34 +231,6 @@ app.get('/api/products', (req, res) => {
 
 
 // Récupérer les informations d'un utilisateur par son ID 
-
-// app.get('/api/users', (req, res) => {
-//     const query = 'SELECT * FROM users';
-//     db.query(query, (err, result) => {
-//         if (err) {
-//             console.error('Erreur lors de la récupération des produits:', err);
-//             return res.status(500).json({ message: 'Erreur lors de la récupération des produits' });
-//         }
-//         res.status(200).json(result);  
-//     });
-// });
-
-
-// app.get('/api/users', (req, res) => {
-//     const username = req.query.username;  // Récupérer le username passé dans la requête
-//     const query = 'SELECT * FROM users WHERE username = ?';  // Sélectionner l'utilisateur par username
-    
-//     db.query(query, [username], (err, result) => {
-//         if (err) {
-//             console.error('Erreur lors de la récupération des utilisateurs:', err);
-//             return res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs' });
-//         }
-//         if (result.length === 0) {
-//             return res.status(404).json({ message: 'Utilisateur non trouvé' });
-//         }
-//         res.status(200).json(result[0]);  // Renvoyer le premier utilisateur trouvé
-//     });
-// });
 
 
 app.get('/api/users/:id', (req, res) => {
@@ -526,15 +522,83 @@ app.post('/create-order', (req, res) => {
 
 
 // route pour récupérer les commandes côté admin
+// app.get('/api/orders', (req, res) => {
+
+//     const { sort } = req.query; 
+
+//     let orderBy = 'created_at DESC'; // tri par defaut - les commandes les plus recentes 
+//     if (sort === 'created_at_asc') orderBy = 'created_at ASC';
+//     if (sort === 'total_price_asc') orderBy = 'total_price ASC';
+//     if (sort === 'total_price_desc') orderBy = 'total_price DESC';
+
+//     const query = `
+//         SELECT 
+//             orders.order_id, 
+//             orders.user_id, 
+//             users.username, 
+//             orders.total_price, 
+//             orders.cart_items, 
+//             orders.created_at, 
+//             orders.pickup_date, 
+//             orders.pickup_slot   
+//         FROM orders
+//         JOIN users ON orders.user_id = users.id
+//         ORDER BY ${orderBy}
+//     `;
+
+//     db.query(query, (err, results) => {
+//         if (err) {
+//             console.error('Erreur lors de la récupération des commandes :', err);
+//             return res.status(500).json({ error: 'Erreur lors de la récupération des commandes.' });
+//         }
+
+//         // formatage des résultats
+//         const formattedResults = results.map(order => {
+//             order.cart_items = JSON.parse(order.cart_items);  // on parse `cart_items` (qui est une chaîne JSON) pour l'utiliser dans le front de manage-orders.html
+
+//             order.created_at = new Date(order.created_at).toISOString(); // changement en format ISO de la date à laquelle la commande a été réalisé
+//             order.pickup_date = new Date(order.pickup_date).toISOString();
+//             return order;
+//         });
+
+//         res.json(formattedResults);
+//     });
+// });
+
+app.patch('/api/orders/:orderId', (req, res) => {
+    const orderId = req.params.orderId;
+    const newStatus = req.body.status;  // Par exemple, 'picked_up'
+
+    if (newStatus === 'picked_up') {
+        const query = 'UPDATE orders SET status = ?, pickup = NOW() WHERE order_id = ?';
+        
+        db.query(query, ['picked_up', orderId], (err, results) => {
+            if (err) {
+                console.error('Erreur lors de la mise à jour du statut de la commande:', err);
+                return res.status(500).json({ error: 'Erreur lors de la mise à jour du statut de la commande.' });
+            }
+
+            if (results.affectedRows > 0) {
+                res.status(200).json({ message: 'Commande marquée comme récupérée.' });
+            } else {
+                res.status(404).json({ message: 'Commande non trouvée.' });
+            }
+        });
+    } else {
+        res.status(400).json({ message: 'Statut non valide.' });
+    }
+});
+
+
 app.get('/api/orders', (req, res) => {
+    const { sort } = req.query;
 
-    const { sort } = req.query; 
-
-    let orderBy = 'created_at DESC'; // tri par defaut - les commandes les plus recentes 
+    let orderBy = 'created_at DESC'; // tri par défaut - les commandes les plus récentes
     if (sort === 'created_at_asc') orderBy = 'created_at ASC';
     if (sort === 'total_price_asc') orderBy = 'total_price ASC';
     if (sort === 'total_price_desc') orderBy = 'total_price DESC';
 
+    // Ajouter une condition pour ne pas récupérer les commandes avec un statut de "récupéré"
     const query = `
         SELECT 
             orders.order_id, 
@@ -544,9 +608,10 @@ app.get('/api/orders', (req, res) => {
             orders.cart_items, 
             orders.created_at, 
             orders.pickup_date, 
-            orders.pickup_slot   
+            orders.pickup_slot
         FROM orders
         JOIN users ON orders.user_id = users.id
+        WHERE orders.pickup IS NULL  -- Exclure les commandes récupérées
         ORDER BY ${orderBy}
     `;
 
@@ -556,11 +621,11 @@ app.get('/api/orders', (req, res) => {
             return res.status(500).json({ error: 'Erreur lors de la récupération des commandes.' });
         }
 
-        // formatage des résultats
+        // Formatage des résultats
         const formattedResults = results.map(order => {
-            order.cart_items = JSON.parse(order.cart_items);  // on parse `cart_items` (qui est une chaîne JSON) pour l'utiliser dans le front de manage-orders.html
+            order.cart_items = JSON.parse(order.cart_items);  // Parse `cart_items` pour l'utiliser dans le front-end
 
-            order.created_at = new Date(order.created_at).toISOString(); // changement en format ISO de la date à laquelle la commande a été réalisé
+            order.created_at = new Date(order.created_at).toISOString(); // Format ISO pour la date
             order.pickup_date = new Date(order.pickup_date).toISOString();
             return order;
         });
@@ -568,6 +633,7 @@ app.get('/api/orders', (req, res) => {
         res.json(formattedResults);
     });
 });
+
 
 
 // route pour recupérer les commandes coté client
@@ -625,6 +691,33 @@ app.get('/api/clients-count', (req, res) => {
       }
     });
   });
+
+  app.get('/api/orders-count', (req, res) => {
+    // Connexion à la base de données et récupération du nombre de commandes
+    db.query('SELECT COUNT(*) AS orderCount FROM orders', (err, result) => {
+        if (err) {
+            console.error('Erreur lors de la récupération du nombre de commandes:', err);
+            return res.status(500).send('Erreur interne du serveur');
+        }
+        res.json({ orderCount: result[0].orderCount });
+    });
+});
+
+// Route pour obtenir la moyenne du panier
+app.get('/api/average-cart-price', (req, res) => {
+    const query = 'SELECT AVG(total_price) AS avg_cart_price FROM orders';
+    
+    db.query(query, (err, result) => {
+      if (err) {
+        console.error('Erreur lors de la récupération de la moyenne du panier:', err);
+        res.status(500).json({ error: 'Erreur lors de la récupération des données' });
+      } else {
+        const avgCartPrice = result[0].avg_cart_price;
+        res.json({ avgCartPrice });
+      }
+    });
+  });
+
 
 
 // toujours à la fin
