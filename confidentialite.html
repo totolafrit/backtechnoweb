@@ -9,7 +9,6 @@
 </head>
 <body>
     <!-- En-tête -->
-    <!-- En-tête -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
@@ -37,23 +36,21 @@
             <p>Gérez vos préférences de confidentialité ci-dessous :</p>
             <div class="privacy-option">
                 <label for="cookies">Activer les Cookies :</label>
-                <input type="checkbox" id="cookies" checked>
+                <input type="checkbox" id="cookies">
             </div>
             <div class="privacy-option">
-                <label for="location">Activer le Suivi de Localisation :</label>
-                <input type="checkbox" id="location">
+                <p>Consultez notre <a href="privacy-policy.html">Politique de Confidentialité</a> pour en savoir plus sur la manière dont nous collectons et utilisons vos données personnelles.</p>
             </div>
             <div class="privacy-option">
-                <label for="notifications">Recevoir des Notifications par Email :</label>
-                <input type="checkbox" id="notifications" checked>
+                <p>Consultez nos <a href="terms.html">Conditions Générales d'Utilisation</a> pour comprendre les termes relatifs à l'utilisation de notre service.</p>
             </div>
         </div>
     </main>
 
     <script src="theme.js"></script>
 
-       <!-- Bouton de changement de thème -->
-       <div id="theme-toggle">
+    <!-- Bouton de changement de thème -->
+    <div id="theme-toggle">
         <button id="theme-toggle-btn" title="Changer le thème">
             <i class="bx bx-sun"></i>
         </button>
@@ -62,10 +59,37 @@
     <script src="auth.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            checkUserLink("user-link");
+            // Fonction pour charger les préférences depuis le localStorage
+            function loadPreferences() {
+                const cookiesPreference = localStorage.getItem("cookiesAccepted") === "true"; // "true" ou "false"
+                const locationPreference = localStorage.getItem("location") === "true"; 
+                const notificationsPreference = localStorage.getItem("notifications") === "true"; 
+
+                // Mettre à jour l'état des cases à cocher
+                document.getElementById("cookies").checked = cookiesPreference;
+                document.getElementById("location").checked = locationPreference;
+                document.getElementById("notifications").checked = notificationsPreference;
+            }
+
+            // Sauvegarder les préférences dans le localStorage quand une case est cochée/décochée
+            function savePreferences() {
+                const cookiesPreference = document.getElementById("cookies").checked;
+                const locationPreference = document.getElementById("location").checked;
+                const notificationsPreference = document.getElementById("notifications").checked;
+
+                localStorage.setItem("cookiesAccepted", cookiesPreference);
+                localStorage.setItem("location", locationPreference);
+                localStorage.setItem("notifications", notificationsPreference);
+            }
+
+            // Charger les préférences au chargement de la page
+            loadPreferences();
+
+            // Écouter les changements d'état des cases
+            document.getElementById("cookies").addEventListener("change", savePreferences);
+            document.getElementById("location").addEventListener("change", savePreferences);
+            document.getElementById("notifications").addEventListener("change", savePreferences);
         });
     </script>
-    
-    
 </body>
 </html>

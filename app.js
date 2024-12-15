@@ -9,16 +9,30 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const xssClean = require('xss-clean');
 const validator = require('validator');
+const bodyParser = require("body-parser");
+const paypal = require('@paypal/checkout-server-sdk');
+const Stripe = require('stripe');
 
 
 const router = express.Router();
 
 
 const app = express();
+const stripe = require('stripe')('sk_test_51QPq4BF4cmnoEMxGc0F5ozEQiQvHaGI0Hk0SG3qQjCG4Z5zAJg2ojdlSsI2OJPkZ2mD2lWqkiT0J4T0r1D3DgVA200Sf6M5RdY'); //ma clé secrète 
 const PORT = process.env.PORT || 3000;
 
+// Configurer PayPal avec un ID spécifique
+const PAYPAL_CLIENT_ID = 'AVwktE-9JNv3Orkxo5Bq0EYzVN55VBfgmkx3aenxs4n4MQd9e_lo9kQ8Zb3FUohrx2gsJGe8Df0JApHj';  // Remplace par ton Client ID PayPal
+const PAYPAL_SECRET = 'EKTegtINRyE0rTYc1xYtltfhrEnSG65xaaLQB_p0cQ0tQeLb26ysafBEtkLSYJdXYXR8HgJmUcF-OlFJ';        // Remplace par ton Secret PayPal
+
+const environment = new paypal.core.SandboxEnvironment(
+    PAYPAL_CLIENT_ID,
+    PAYPAL_SECRET
+);
+const client = new paypal.core.PayPalHttpClient(environment);
+
 app.use(cors());
-app.use(express.json()); 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(xssClean());
 
@@ -27,45 +41,45 @@ app.use('/images', express.static('images')); // middleware pour servir le doc i
 
 
 app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'"],
-    objectSrc: ["'none'"],
-    imgSrc: ["'self'", "data:"],
-    styleSrc: ["'self'", "'unsafe-inline'"],
-    fontSrc: ["'self'"],
-  },
+    directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        objectSrc: ["'none'"],
+        imgSrc: ["'self'", "data:"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        fontSrc: ["'self'"],
+    },
 }));
 
 // Configurer express-session
 
-  app.use(session({
+app.use(session({
     secret: process.env.SESSION_SECRET || 'secret',
     resave: false,
     saveUninitialized: true,
     cookie: {
-      httpOnly: true, // Empêcher l'accès au cookie via JavaScript
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 3600000,// Durée de vie du cookie (1 heure)
-      sameSite: 'strict', // Empêche l'envoi de cookies lors des requêtes inter-sites
+        httpOnly: true, // Empêcher l'accès au cookie via JavaScript
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 3600000,// Durée de vie du cookie (1 heure)
+        sameSite: 'strict', // Empêche l'envoi de cookies lors des requêtes inter-sites
     }
-  }));
-  
+}));
 
 
-  const loginLimiter = rateLimit({
+
+const loginLimiter = rateLimit({
     windowMs: 1 * 15 * 1000, // 15 s
     max: 2, // 2 attempts
     message: "Trop de tentatives de connexion, veuillez réessayer après 15 minutes.",
     handler: (req, res) => {
 
-      const remainingAttempts = 2 - req.rateLimit.remaining;
-      res.status(429).json({
-        message: "Trop de tentatives de connexion.",
-        remainingAttempts: remainingAttempts
-      });
+        const remainingAttempts = 2 - req.rateLimit.remaining;
+        res.status(429).json({
+            message: "Trop de tentatives de connexion.",
+            remainingAttempts: remainingAttempts
+        });
     }
-  });
+});
 
 
 // connexion à la base de données dbtechnoback - verifiez le info.env 
@@ -89,7 +103,13 @@ app.get('/', (req, res) => {
     res.send('Le serveur node.js est fonctionnel');
 });
 
-
+// function checkAdminRole(req, res, next) { // middleware pour vérifier si l'utilisateur est admin
+//     const { role } = req.body; // A fair epour secu : le rôle devrait être passé depuis le front-end ou vérifié via JWT
+//     if (role !== 'admin') {
+//         return res.status(403).json({ message: "Accès refusé. Droits insuffisants." });
+//     }
+//     next();
+// }
 function checkAdminRole(req, res, next) {
     const { role } = req.user; // Récupère le rôle à partir du token (req.user)
     if (role !== 'admin') {
@@ -174,14 +194,14 @@ app.post('/check-user', async (req, res) => {
 
     try {
         //console.log('Vérification de l\'utilisateur et de l\'email');
-        
+
         db.query('SELECT * FROM users WHERE username = ?', [username], (err, usernameCheck) => {
             if (err) {
                 console.error('Erreur lors de la vérification du nom d\'utilisateur:', err);
                 return res.status(500).json({ message: 'Erreur du serveur' });
             }
             //console.log('Vérification du nom d\'utilisateur terminée');
-            
+
             if (usernameCheck.length > 0) {
                 return res.status(400).json({ message: 'Ce nom d\'utilisateur est déjà pris.' });
             }
@@ -192,7 +212,7 @@ app.post('/check-user', async (req, res) => {
                     return res.status(500).json({ message: 'Erreur du serveur' });
                 }
                 //console.log('Vérification de l\'email terminée');
-                
+
                 if (emailCheck.length > 0) {
                     return res.status(400).json({ message: 'Cette adresse e-mail est déjà utilisée.' });
                 }
@@ -240,7 +260,7 @@ app.post('/login', loginLimiter, async (req, res) => {
             process.env.JWT_SECRET, // Clé secrète (à définir dans .env)
             { expiresIn: '1h' } // Expiration du token (1 heure)
         );
-        
+
         // Répondre avec un message de succès et le token JWT
         res.json({
             message: 'Connexion réussie!',
@@ -272,6 +292,97 @@ const verifyToken = (req, res, next) => {
     });
 };
 
+// Route pour créer un paiement avec Stripe
+app.post('/create-payment-intent', async (req, res) => {
+    const { amount } = req.body;
+
+    // Vérifier que le montant est bien passé dans la requête
+    if (!amount) {
+        return res.status(400).json({ error: 'Le montant est requis' });
+    }
+
+    try {
+        // Créer un PaymentIntent avec le montant dynamique
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: amount, // Montant en centimes
+            currency: 'eur', // Devise
+        });
+
+        // Retourner le clientSecret pour finaliser le paiement
+        res.json({
+            clientSecret: paymentIntent.client_secret,
+        });
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+});
+
+// Endpoint pour créer une commande avec PayPal
+app.post('/create-order', async (req, res) => {
+    const { value } = req.body;
+
+    // Vérifier que le montant est bien passé dans la requête
+    if (!value) {
+        return res.status(400).json({ error: 'Le montant est requis' });
+    }
+
+    const request = new paypal.orders.OrdersCreateRequest();
+    request.prefer('return=representation');
+    request.requestBody({
+        intent: 'CAPTURE',
+        purchase_units: [
+            {
+                amount: {
+                    currency_code: 'EUR',
+                    value: value, // Montant de la commande
+                },
+            },
+        ],
+    });
+
+    try {
+        const order = await client.execute(request);
+        res.status(201).json({ id: order.result.id });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Une erreur est survenue lors de la création de la commande.' });
+    }
+});
+
+// Endpoint pour capturer une commande PayPal
+app.post('/capture-order', async (req, res) => {
+    const { orderID } = req.body;
+
+    const request = new paypal.orders.OrdersCaptureRequest(orderID);
+    request.requestBody({});
+
+    try {
+        const capture = await client.execute(request);
+        res.status(200).json(capture.result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Une erreur est survenue lors de la capture de la commande.' });
+    }
+});
+
+// Route pour vérifier le statut du paiement Stripe
+app.get('/check-payment-status/:id', async (req, res) => {
+    const paymentIntentId = req.params.id;
+
+    try {
+        const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+
+        if (paymentIntent.status === 'succeeded') {
+            res.json({ status: 'success', message: 'Paiement réussi.' });
+        } else if (paymentIntent.status === 'requires_action') {
+            res.json({ status: 'incomplete', message: 'Action requise du client.' });
+        } else {
+            res.json({ status: paymentIntent.status, message: 'Paiement non finalisé.' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 // route DELETE pour supprimer un utilisateur (admin uniquement)
 
 app.delete('/delete-user/:id', checkAdminRole, (req, res) => {
@@ -344,7 +455,7 @@ app.get('/api/products', (req, res) => {
             console.error('Erreur lors de la récupération des produits:', err);
             return res.status(500).json({ message: 'Erreur lors de la récupération des produits' });
         }
-        res.status(200).json(result);  
+        res.status(200).json(result);
     });
 });
 
@@ -355,7 +466,7 @@ app.get('/api/products', (req, res) => {
 app.get('/api/users/:id', (req, res) => {
     const userId = req.params.id;  // Récupère l'ID de l'utilisateur depuis l'URL
     const query = 'SELECT * FROM users WHERE id = ?';  // Sélectionne l'utilisateur par ID
-    
+
     db.query(query, [userId], (err, result) => {
         if (err) {
             console.error('Erreur lors de la récupération des utilisateurs:', err);
@@ -428,7 +539,7 @@ app.get('/api/products/:id', (req, res) => {
             return res.status(404).json({ message: 'Produit non trouvé' });
         }
 
-        res.status(200).json(result[0]);  
+        res.status(200).json(result[0]);
     });
 });
 
@@ -636,9 +747,9 @@ app.put('/api/users/:id/change-password', (req, res) => {
 
 
 // route pour enregistrer une commande
-       
 
-app.post('/create-order', (req, res) => {
+
+app.post('/create-db-order', (req, res) => {
     const { userId, cart, totalPrice, pickupDate, pickupSlot } = req.body;
     //console.log('Données reçues:', { userId, cart, totalPrice, pickupDate, pickupSlot });
 
@@ -709,7 +820,7 @@ app.patch('/api/orders/:orderId', (req, res) => {
 
     if (newStatus === 'picked_up') {
         const query = 'UPDATE orders SET status = ?, pickup = NOW() WHERE order_id = ?';
-        
+
         db.query(query, ['picked_up', orderId], (err, results) => {
             if (err) {
                 console.error('Erreur lors de la mise à jour du statut de la commande:', err);
@@ -776,7 +887,7 @@ app.get('/api/orders', (req, res) => {
 
 // route pour recupérer les commandes coté client
 app.get('/api/orders/user/:userId', (req, res) => {
-    const { sort } = req.query; 
+    const { sort } = req.query;
     const userId = req.params.userId; // Récupérer l'userId à partir des paramètres d'URL
 
     let orderBy = 'created_at DESC'; // tri par défaut - les commandes les plus récentes 
@@ -821,16 +932,16 @@ app.get('/api/orders/user/:userId', (req, res) => {
 app.get('/api/clients-count', (req, res) => {
     // On compte tous les utilisateurs dans la table "users"
     db.query('SELECT COUNT(*) AS clientCount FROM users', (err, result) => {
-      if (err) {
-        console.error('Erreur lors de la récupération du nombre d\'utilisateurs:', err);
-        res.status(500).json({ error: 'Erreur serveur' });
-      } else {
-        res.json({ clientCount: result[0].clientCount });
-      }
+        if (err) {
+            console.error('Erreur lors de la récupération du nombre d\'utilisateurs:', err);
+            res.status(500).json({ error: 'Erreur serveur' });
+        } else {
+            res.json({ clientCount: result[0].clientCount });
+        }
     });
-  });
+});
 
-  app.get('/api/orders-count', (req, res) => {
+app.get('/api/orders-count', (req, res) => {
     // Connexion à la base de données et récupération du nombre de commandes
     db.query('SELECT COUNT(*) AS orderCount FROM orders', (err, result) => {
         if (err) {
@@ -844,17 +955,17 @@ app.get('/api/clients-count', (req, res) => {
 // Route pour obtenir la moyenne du panier
 app.get('/api/average-cart-price', (req, res) => {
     const query = 'SELECT AVG(total_price) AS avg_cart_price FROM orders';
-    
+
     db.query(query, (err, result) => {
-      if (err) {
-        console.error('Erreur lors de la récupération de la moyenne du panier:', err);
-        res.status(500).json({ error: 'Erreur lors de la récupération des données' });
-      } else {
-        const avgCartPrice = result[0].avg_cart_price;
-        res.json({ avgCartPrice });
-      }
+        if (err) {
+            console.error('Erreur lors de la récupération de la moyenne du panier:', err);
+            res.status(500).json({ error: 'Erreur lors de la récupération des données' });
+        } else {
+            const avgCartPrice = result[0].avg_cart_price;
+            res.json({ avgCartPrice });
+        }
     });
-  });
+});
 
 
 
