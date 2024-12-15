@@ -7,10 +7,12 @@
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <title>Paiement par Carte</title>
     <link rel="stylesheet" href="payementCB.css">
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 
 <body>
 
+    <!-- Navbar avec le logo et les étapes -->
     <header class="progress-header">
         <div class="logo">
             <img src="logo.png" alt="Logo">
@@ -39,6 +41,7 @@
         </nav>
     </header>
 
+    <!-- Conteneur Principal -->
     <div class="payment-container">
         <h1 class="payment-title">Paiement par Carte Bancaire</h1>
         <form class="payment-form" id="payment-form">
@@ -46,32 +49,100 @@
                 <label for="cardholder-name">Nom du titulaire :</label>
                 <input type="text" id="cardholder-name" class="form-input" placeholder="Votre nom complet" required>
             </div>
-            <div class="form-group">
-                <label for="card-number">Numéro de carte :</label>
-                <input type="text" id="card-number" class="form-input" placeholder="1234 5678 9012 3456" required>
+            <div id="card-element" class="form-group">
+                <!-- Stripe Card Element -->
             </div>
-            <div class="form-group">
-                <label for="expiry-date">Date d'expiration :</label>
-                <input type="text" id="expiry-date" class="form-input" placeholder="MM/AA" required>
-            </div>
-            <div class="form-group">
-                <label for="cvv">CVV :</label>
-                <input type="text" id="cvv" class="form-input" placeholder="123" required>
-            </div>
+            <div id="card-errors" role="alert" style="color: red;"></div>
             <button type="submit" class="pay-button">Payer</button>
         </form>
     </div>
 
+    <!-- Script Stripe -->
     <script>
+        const stripe = Stripe('pk_test_51QPq4BF4cmnoEMxG5hIqP2koZrTdibvkMtlZDmxjZEp0V0G0vahcJx4qK1pDTWa4Hie0bQPuP2qZWjC5n04ms4YE00WijlTE2i');
+        const elements = stripe.elements();
+
+        const style = {
+            base: {
+                color: '#32325d',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a'
+            }
+        };
+
+        const card = elements.create('card', { style });
+        card.mount('#card-element');
+
+        card.on('change', function (event) {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        function calculateTotal() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            return Math.round(total * 100); // En centimes
+        }
+
         const form = document.getElementById('payment-form');
-        form.addEventListener('submit', function (event) {
+        form.addEventListener('submit', async function (event) {
             event.preventDefault();
-            alert('Paiement simulé avec succès !');
-            window.location.href = 'mail.html';
+
+            const amount = calculateTotal();
+
+            const { paymentMethod, error } = await stripe.createPaymentMethod({
+                type: 'card',
+                card: card,
+            });
+
+            if (error) {
+                document.getElementById('card-errors').textContent = error.message;
+            } else {
+                const response = await fetch('http://localhost:3000/create-payment-intent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ amount }),
+                });
+
+                const paymentIntentResponse = await response.json();
+
+                if (paymentIntentResponse.clientSecret) {
+                    const { clientSecret } = paymentIntentResponse;
+
+                    const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                        payment_method: paymentMethod.id,
+                    });
+
+                    if (confirmError) {
+                        document.getElementById('card-errors').textContent = confirmError.message;
+                    } else {
+                        alert('Paiement effectué avec succès !');
+                        window.location.href = 'mail.html';
+                    }
+                } else {
+                    document.getElementById('card-errors').textContent = 'Erreur lors de la création du paiement.';
+                }
+            }
         });
     </script>
 
+    <!-- Script pour le thème -->
     <script src="theme.js"></script>
+
+    <!-- Bouton de changement de thème -->
     <div id="theme-toggle">
         <button id="theme-toggle-btn" title="Changer le thème">
             <i class="bx bx-sun"></i>

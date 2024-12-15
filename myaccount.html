@@ -161,9 +161,10 @@
                     <p><strong>Commande #${order.order_id}</strong></p>
                     <p>Total : ${order.total_price.toFixed(2)}€</p>
                     <p>Date de la commande : ${new Date(order.created_at).toLocaleDateString()}</p>
-                    <a href="order-details.html" class="btn">Voir les détails</a>
+                    <a href="#" class="btn download-facture" data-order-id="${order.order_id}">Télécharger la facture</a>
+
                 `;
-        
+        // c'est le bouton ici qui doit télécharger une facture à la place de order-detail.html
                 ordersList.appendChild(orderItem);
             });
         }
@@ -203,6 +204,56 @@
             checkUserLink("user-link");
         });
     </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+    document.addEventListener("click", async (e) => {
+        if (e.target.classList.contains("download-facture")) {
+            e.preventDefault();
+            const orderId = e.target.getAttribute("data-order-id");
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/orders/${orderId}`);
+                if (response.ok) {
+                    const order = await response.json();
+
+                    // Création du document PDF
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+
+                    // Titre de la facture
+                    doc.text("Facture de commande", 20, 20);
+                    doc.text(`Commande #${order.order_id}`, 20, 30);
+                    doc.text(`Date: ${new Date(order.created_at).toLocaleDateString()}`, 20, 40);
+
+                    // Liste des articles
+                    let yPosition = 50;
+                    order.items.forEach((item, index) => {
+                        doc.text(
+                            `${index + 1}. ${item.product_name} - ${item.quantity} x ${item.price.toFixed(2)}€`,
+                            20, yPosition
+                        );
+                        yPosition += 10;
+                    });
+
+                    // Total de la commande
+                    doc.text(`Total: ${order.total_price.toFixed(2)}€`, 20, yPosition + 10);
+
+                    // Téléchargement
+                    doc.save(`facture_commande_${order.order_id}.pdf`);
+                } else {
+                    console.error("Erreur lors de la récupération de la commande.");
+                    alert("Impossible de générer la facture.");
+                }
+            } catch (err) {
+                console.error("Erreur de connexion:", err);
+                alert("Erreur lors de la génération de la facture.");
+            }
+        }
+    });
+</script>
+
 </body>
 </html>
 

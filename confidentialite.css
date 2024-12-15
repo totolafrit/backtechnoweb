@@ -5,27 +5,7 @@ body {
     padding: 0;
     background-color: #f0f0f5;
     color: #333;
-}
-
-/* Sélecteur de langue */
-.language-selector {
-    position: fixed;
-    top: 10px;
-    right: 20px;
-    z-index: 1000;
-    display: flex;
-    gap: 10px;
-}
-
-.language-selector img {
-    width: 35px;
-    height: auto;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.language-selector img:hover {
-    transform: scale(1.1);
+    font-size: 18px; /* Augmenter la taille de la police générale */
 }
 
 /* Header */
@@ -58,29 +38,21 @@ header {
     color: #333;
     font-weight: bold;
     transition: color 0.3s;
+    font-size: 18px; /* Augmenter la taille de la police des liens du menu */
 }
 
 .nav-menu a:hover {
     color: #4CAF50;
 }
 
-/* Conteneur principal */
-main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1;
-    width: 100%;
-}
-
 /* Conteneur des paramètres de confidentialité */
 .privacy-container {
     background-color: #ffffff;
-    padding: 30px 40px;
+    padding: 40px 50px; /* Augmenter l'espacement intérieur */
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 600px;
+    max-width: 700px; /* Augmenter la largeur maximale */
     position: relative;
     text-align: left;
 }
@@ -88,16 +60,16 @@ main {
 /* Titre */
 .privacy-container h1 {
     color: #4CAF50;
-    font-size: 1.8rem;
-    margin-bottom: 20px;
+    font-size: 2.5rem; /* Augmenter la taille du titre */
+    margin-bottom: 30px;
     text-align: center;
 }
 
 /* Texte */
 .privacy-container p {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     color: #555;
-    font-size: 1rem;
+    font-size: 1.2rem; /* Augmenter la taille de la police des paragraphes */
     text-align: center;
 }
 
@@ -106,8 +78,8 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-    font-size: 1rem;
+    margin-bottom: 25px; /* Augmenter l'espacement entre les options */
+    font-size: 1.2rem; /* Augmenter la taille de la police des options */
 }
 
 .privacy-option label {
@@ -115,8 +87,8 @@ main {
 }
 
 .privacy-option input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
+    width: 25px; /* Augmenter la taille de la case à cocher */
+    height: 25px;
 }
 
 /* Flèche de retour */
@@ -124,7 +96,7 @@ main {
     position: absolute;
     top: 20px;
     left: 20px;
-    font-size: 2rem;
+    font-size: 2.5rem; /* Augmenter la taille de la flèche */
     color: #4CAF50;
     text-decoration: none;
     transition: transform 0.3s ease, color 0.3s ease;
@@ -134,16 +106,6 @@ main {
     transform: scale(1.2);
     color: #2e7d32;
 }
-
-
-.nav-menu a[href="myaccount.html"] {
-    color: #4CAF50;
-    font-weight: bold;
-}
-
-
-
-
 
 /* ========================= Mode Sombre ========================= */
 body.dark-theme {
@@ -165,27 +127,6 @@ body.dark-theme .nav-menu a:hover {
     color: #4CAF50; /* Couleur d'accent */
 }
 
-/* Catégories */
-body.dark-theme .category-card {
-    background-color: #1f1f1f;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-body.dark-theme .category-card img {
-    border-bottom: 3px solid #4CAF50;
-}
-
-body.dark-theme .category-title {
-    background-color: #333;
-    color: #4CAF50;
-}
-
-/* Pied de page */
-body.dark-theme footer {
-    background-color: #1f1f1f;
-    color: #e0e0e0;
-}
-
 /* Style pour le bouton de changement de thème */
 #theme-toggle {
     position: fixed;
@@ -200,7 +141,7 @@ body.dark-theme footer {
     border: none;
     padding: 15px;
     border-radius: 50%;
-    font-size: 1.5rem;
+    font-size: 2rem; /* Augmenter la taille du bouton */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
@@ -210,5 +151,64 @@ body.dark-theme footer {
     background-color: #4CAF50;
     transform: scale(1.1);
 }
+/* Conteneur principal */
+main {
+    display: flex;
+    justify-content: center; /* Centre le contenu horizontalement */
+    align-items: center; /* Centre le contenu verticalement */
+    height: 100vh; /* Prend toute la hauteur de la fenêtre */
+    
+}
 
+/* Conteneur des paramètres de confidentialité */
+.privacy-container {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px; /* Largeur maximale du conteneur */
+    position: relative;
+    text-align: left;
+}
 
+/* Titre */
+.privacy-container h1 {
+    color: #4CAF50;
+    font-size: 2rem; /* Augmentation de la taille de la police pour le titre */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Texte */
+.privacy-container p {
+    margin-bottom: 20px;
+    color: #555;
+    font-size: 1.2rem; /* Augmentation de la taille de la police pour le texte */
+    text-align: center;
+}
+
+/* Options de confidentialité */
+.privacy-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 1.2rem; /* Augmentation de la taille de la police pour les options */
+}
+
+/* Flèche de retour */
+.back-arrow {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 2rem;
+    color: #4CAF50;
+    text-decoration: none;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.back-arrow:hover {
+    transform: scale(1.2);
+    color: #2e7d32;
+}

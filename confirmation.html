@@ -37,6 +37,11 @@
                 <p>Envoi du mail</p>
             </div>
         </nav>
+
+        <!-- Bouton pour changer de thème -->
+        <button id="theme-toggle-btn">
+            <i class="bx bx-sun"></i> <!-- Icône par défaut -->
+        </button>
     </header>
 
     <!-- Contenu principal -->
@@ -70,7 +75,7 @@
         </div>
 
         <!-- Bouton de confirmation -->
-        <button type="button" id="submit-order" class="confirm-button" onclick="redirectToPayment()">Confirmer la commande</button>
+        <button type="button" id="submit-order" class="confirm-button">Confirmer la commande</button>
     </div>
 
     <!-- Script pour gérer les données -->
@@ -97,11 +102,6 @@
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const year = date.getFullYear();
             return `${day}/${month}/${year}`;
-        }
-
-        // Fonction de redirection vers le paiement
-        function redirectToPayment() {
-            window.location.href = "selectpayement.html";
         }
 
         // Charger les détails du panier
@@ -156,7 +156,7 @@
             };
 
             try {
-                const response = await fetch('http://localhost:3000/create-order', {
+                const response = await fetch('http://localhost:3000/create-db-order', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(orderData)
@@ -167,7 +167,7 @@
                     alert(`Erreur lors de la commande : ${errorData.message}`);
                 } else {
                     alert("Commande passée avec succès !");
-                    window.location.href = 'confirmation.html';
+                    window.location.href = 'selectpayement.html';
                 }
             } catch (error) {
                 alert("Erreur de connexion au serveur.");
@@ -178,6 +178,7 @@
         window.onload = loadOrderSummary;
     </script>
 
+    <!-- Script pour gérer le changement de thème -->
     <script>
         const themeToggleButton = document.getElementById("theme-toggle-btn");
         const body = document.body;

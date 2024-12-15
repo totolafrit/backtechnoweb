@@ -82,27 +82,7 @@
     </section>
 
     <!-- Promotions -->
-    <h2>Promotions principales</h2>
-    <div class="photo-row">
-        <div class="discount-item">
-            <img src="outils.jpg" alt="Sécateur de Jardin">
-            <p class="item-name">Sécateur de Jardin</p>
-            <p class="item-price">Prix: <span class="old-price">€25</span> <span class="new-price">€20</span></p>
-            <p class="discount-percentage">Réduction: 20%</p>
-        </div>
-        <div class="discount-item">
-            <img src="rabot.webp" alt="Tondeuse à Gazon">
-            <p class="item-name">Tondeuse à Gazon</p>
-            <p class="item-price">Prix: <span class="old-price">€150</span> <span class="new-price">€120</span></p>
-            <p class="discount-percentage">Réduction: 20%</p>
-        </div>
-        <div class="discount-item">
-            <img src="tools.webp" alt="Kit d'outils de Jardinage">
-            <p class="item-name">Kit d'outils de Jardinage</p>
-            <p class="item-price">Prix: <span class="old-price">€50</span> <span class="new-price">€40</span></p>
-            <p class="discount-percentage">Réduction: 20%</p>
-        </div>
-    </div>
+    
     <a href="shop.html" class="see-more">Voir Plus</a>
 
     <!-- Section Infos-Vertes -->
@@ -131,11 +111,14 @@
     </footer>
 
     <!-- Bannière de consentement aux cookies -->
-    <div id="cookie-banner" style="position: fixed; bottom: 0; background: #333; color: #fff; width: 100%; padding: 15px; text-align: center;">
-        <p>Nous utilisons des cookies pour améliorer votre expérience sur notre site. <a href="privacy-policy.html" style="color: #fff;">En savoir plus</a>.</p>
-        <button id="accept-cookies" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none;">Accepter</button>
-        <button id="decline-cookies" style="background-color: #f44336; color: white; padding: 10px 20px; border: none;">Refuser</button>
+    
+
+    <div id="cookie-banner">
+        <p>Nous utilisons des cookies pour améliorer votre expérience sur notre site. <a href="privacy-policy.html">En savoir plus</a>.</p>
+        <button id="accept-cookies">Accepter</button>
+        <button id="decline-cookies">Refuser</button>
     </div>
+    
 
     <script src="theme.js"></script>
 
@@ -145,30 +128,35 @@
             <i class="bx bx-sun"></i>
         </button>
     </div>
-  
+
     <script src="auth.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             checkUserLink("user-link");
         });
-
-        // Vérifie si l'utilisateur a déjà accepté les cookies
-        if (!localStorage.getItem('cookiesAccepted')) {
-            document.getElementById('cookie-banner').style.display = 'block';
-        }
-
-        // Lorsque l'utilisateur accepte les cookies
-        document.getElementById('accept-cookies').addEventListener('click', function() {
-            localStorage.setItem('cookiesAccepted', 'true');
-            document.getElementById('cookie-banner').style.display = 'none';
-            loadGoogleAnalytics();  // Charge Google Analytics après acceptation
-        });
-
-        // Lorsque l'utilisateur refuse les cookies
-        document.getElementById('decline-cookies').addEventListener('click', function() {
-            localStorage.setItem('cookiesAccepted', 'false');
-            document.getElementById('cookie-banner').style.display = 'none';
+    </script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Vérifie si l'utilisateur a déjà accepté les cookies
+            if (!localStorage.getItem('cookiesAccepted')) {
+                document.getElementById('cookie-banner').style.display = 'block';
+            }
+    
+            // Lorsque l'utilisateur accepte les cookies
+            document.getElementById('accept-cookies').addEventListener('click', function() {
+                localStorage.setItem('cookiesAccepted', 'true');
+                document.getElementById('cookie-banner').style.display = 'none';
+                loadGoogleAnalytics();  // Charge Google Analytics après acceptation
+            });
+    
+            // Lorsque l'utilisateur refuse les cookies
+            document.getElementById('decline-cookies').addEventListener('click', function() {
+                localStorage.setItem('cookiesAccepted', 'false');
+                document.getElementById('cookie-banner').style.display = 'none';
+            });
         });
     </script>
+    
 </body>
 </html>
