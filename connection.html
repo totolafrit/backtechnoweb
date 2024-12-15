@@ -127,7 +127,7 @@
                         if (responseData.role === 'admin') {
                             window.location.href = 'admin.html';
                         } else {
-                            const redirectTarget = localStorage.getItem('redirectAfterLogin') || 'accueil.html';
+                            const redirectTarget = localStorage.getItem('redirectAfterLogin') || 'index.html';
                             localStorage.removeItem('redirectAfterLogin');
                             window.location.href = redirectTarget;
                         }
