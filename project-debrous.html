@@ -19,14 +19,14 @@
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="accueil.html">Accueil</a></li>
+                <li><a href="index.html">Accueil</a></li>
                 <li><a href="aboutus.html">À propos</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="project.html">Services</a></li>
                 <li><a href="actualites.html">Les Infos-Vertes</a></li>
                 <li>
                     <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
-                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
+                    <a id="user-link"><i class="bx bxs-user-circle"></i></a>
                 </li>
             </ul>
         </nav>
@@ -122,6 +122,12 @@
         });
     </script>
 
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            checkUserLink("user-link");
+        });
+    </script>
 </body>
 
 </html>
