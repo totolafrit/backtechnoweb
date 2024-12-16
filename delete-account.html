@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supprimer le Compte</title>
+    <title>Delete Account</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="delete-account.css">
 </head>
 <body>
-    <!-- En-tête -->
+    <!-- Header -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
@@ -28,76 +28,72 @@
         </nav>
     </header>
 
-    <!-- Contenu principal -->
+    <!-- Main Content -->
     <main>
         <div class="delete-container">
             <a href="myaccount.html" class="back-arrow"><i class="bx bx-undo"></i></a>
-            <h1>Supprimer le Compte</h1>
-            <p>Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.</p>
+            <h1>Delete Account</h1>
+            <p>Are you sure you want to delete your account? This action is irreversible.</p>
             
             <div class="action-buttons">
-                <button class="confirm-button" onclick="deleteAccount()">Oui je confirme</button>
-                <button class="cancel-button"><a href="myaccount.html">Non, annuler</a></button>
+                <button class="confirm-button" onclick="deleteAccount()">Yes, I confirm</button>
+                <button class="cancel-button"><a href="myaccount.html">No, cancel</a></button>
             </div>
         </div>
     </main>
 
     <script src="theme.js"></script>
 
-    <!-- Bouton de changement de thème -->
+    <!-- Theme toggle button -->
     <div id="theme-toggle">
-     <button id="theme-toggle-btn" title="Changer le thème">
-         <i class="bx bx-sun"></i>
-     </button>
- </div>
+        <button id="theme-toggle-btn" title="Toggle Theme">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
 
- <script>
+    <script>
+        // Function to delete the user account
+        async function deleteAccount() {
+            const userId = localStorage.getItem("userId");
 
-      // Fonction pour supprimer le compte de l'utilisateur
-async function deleteAccount() {
-    const userId = localStorage.getItem("userId");
+            if (!userId) {
+                alert("User not identified.");
+                return;
+            }
 
-    if (!userId) {
-        alert("Utilisateur non identifié.");
-        return;
-    }
+            if (!confirm("Are you sure you want to delete your account? This action is irreversible.")) {
+                return;
+            }
 
-    if (!confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
-        return;
-    }
+            try {
+                const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+                    method: 'DELETE',
+                });
 
-    try {
-        const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
-            method: 'DELETE',
-        });
-
-        if (response.ok) {
-            alert('Compte supprimé avec succès');
-            
-            // Suppression des données locales et redirection
-            localStorage.removeItem("isLoggedIn");
-            localStorage.removeItem("username");
-            localStorage.removeItem("userId");
-            window.location.href = "index.html";
-        } else {
-            const data = await response.json();
-            alert('Erreur : ' + data.message);
+                if (response.ok) {
+                    alert('Account successfully deleted');
+                    
+                    // Clear local data and redirect
+                    localStorage.removeItem("isLoggedIn");
+                    localStorage.removeItem("username");
+                    localStorage.removeItem("userId");
+                    window.location.href = "index.html";
+                } else {
+                    const data = await response.json();
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error occurred while deleting the account');
+            }
         }
-    } catch (error) {
-        console.error('Erreur :', error);
-        alert('Erreur lors de la suppression du compte');
-    }
-}
+    </script>
 
-
- </script>
-
- <script src="auth.js"></script>
- <script>
-     document.addEventListener("DOMContentLoaded", () => {
-         checkUserLink("user-link");
-     });
- </script>
-   
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            checkUserLink("user-link");
+        });
+    </script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation de commande</title>
+    <title>Order Confirmation</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="confirmation.css">
 </head>
@@ -18,7 +18,7 @@
         <nav class="progress-bar">
             <div class="progress-step completed">
                 <i class="bx bx-calendar"></i>
-                <p>Sélectionner la date</p>
+                <p>Select Date</p>
             </div>
             <div class="progress-step active">
                 <i class="bx bx-check-circle"></i>
@@ -26,15 +26,15 @@
             </div>
             <div class="progress-step">
                 <i class="bx bx-credit-card"></i>
-                <p>Choix du paiement</p>
+                <p>Payment Selection</p>
             </div>
             <div class="progress-step">
                 <i class="bx bx-money"></i>
-                <p>Paiement</p>
+                <p>Payment</p>
             </div>
             <div class="progress-step">
                 <i class="bx bx-envelope"></i>
-                <p>Envoi du mail</p>
+                <p>Send Email</p>
             </div>
         </nav>
 
@@ -46,22 +46,22 @@
 
     <!-- Contenu principal -->
     <div class="confirmation-container">
-        <h1 class="confirmation-title">Confirmation de commande</h1>
+        <h1 class="confirmation-title">Order Confirmation</h1>
         <p class="confirmation-description">
-            Vérifiez les détails de votre commande avant de confirmer.
+            Review your order details before confirming.
         </p>
 
         <!-- Détails de la commande -->
         <main class="payment-page">
             <div class="payment-container">
                 <div class="order-details">
-                    <h2 class="section-title">Votre commande</h2>
+                    <h2 class="section-title">Your Order</h2>
                     <div id="cart-summary" class="order-item">
                         <!-- Les détails des articles seront insérés ici -->
                     </div>
                     <div id="order-total" class="order-total">
-                        <p><strong>Livraison : Retrait à l'entrepôt (Gratuit)</strong></p>
-                        <p><strong>Total du panier: <span id="total-price">0,00</span> €</strong></p>
+                        <p><strong>Delivery: Warehouse Pickup (Free)</strong></p>
+                        <p><strong>Cart Total: <span id="total-price">0,00</span> €</strong></p>
                     </div>
                 </div>
             </div>
@@ -69,13 +69,13 @@
 
         <!-- Point de retrait -->
         <div class="pickup-details">
-            <h2 class="section-title">Point de retrait</h2>
-            <p>Date : <span id="pickup-date"></span></p>
-            <p>Créneau horaire : <span id="pickup-slot"></span></p>
+            <h2 class="section-title">Pickup Point</h2>
+            <p>Date: <span id="pickup-date"></span></p>
+            <p>Time Slot: <span id="pickup-slot"></span></p>
         </div>
 
         <!-- Bouton de confirmation -->
-        <button type="button" id="submit-order" class="confirm-button">Confirmer la commande</button>
+        <button type="button" id="submit-order" class="confirm-button">Confirm Order</button>
     </div>
 
     <!-- Script pour gérer les données -->
@@ -91,7 +91,7 @@
             document.getElementById('pickup-date').textContent = pickupDetails.date;
             document.getElementById('pickup-slot').textContent = pickupDetails.timeSlot;
         } else {
-            alert("Aucune information de retrait trouvée. Veuillez recommencer.");
+            alert("No pickup details found. Please start again.");
             window.location.href = "pickup.html";
         }
 
@@ -113,7 +113,7 @@
             let totalSum = 0;
 
             if (cartItems.length === 0) {
-                cartSummary.innerHTML = '<p>Votre panier est vide.</p>';
+                cartSummary.innerHTML = '<p>Your cart is empty.</p>';
                 totalPriceElement.textContent = '0,00';
             } else {
                 cartItems.forEach(item => {
@@ -124,9 +124,9 @@
                             <img src="${item.image}" alt="${item.name}" width="100">
                             <div class="order-details">
                                 <h3>${item.name}</h3>
-                                <p>Prix unitaire : ${item.price.toFixed(2).replace('.', ',')}€</p>
-                                <p>Quantité : ${item.quantity}</p>
-                                <p>Prix total : ${(item.price * item.quantity).toFixed(2).replace('.', ',')}€</p>
+                                <p>Unit Price: ${item.price.toFixed(2).replace('.', ',')}€</p>
+                                <p>Quantity: ${item.quantity}</p>
+                                <p>Total Price: ${(item.price * item.quantity).toFixed(2).replace('.', ',')}€</p>
                             </div>
                         </div>
                     `;
@@ -140,7 +140,7 @@
         // Fonction d'envoi de la commande
         document.getElementById('submit-order').addEventListener('click', async () => {
             if (!userId) {
-                alert("Utilisateur non connecté. Veuillez vous connecter avant de passer une commande.");
+                alert("User not logged in. Please log in before placing an order.");
                 window.location.href = 'connection.html';
                 return;
             }
@@ -164,13 +164,13 @@
 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    alert(`Erreur lors de la commande : ${errorData.message}`);
+                    alert(`Order Error: ${errorData.message}`);
                 } else {
-                    alert("Commande passée avec succès !");
+                    alert("Order successfully placed");
                     window.location.href = 'selectpayement.html';
                 }
             } catch (error) {
-                alert("Erreur de connexion au serveur.");
+                alert("Server connection error.");
             }
         });
 

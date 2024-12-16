@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation - Mail envoyé</title>
+    <title>Confirmation - Email Sent</title>
     <link rel="stylesheet" href="mail.css">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <!-- Inclusion de jsPDF -->
+    <!-- Including jsPDF -->
 </head>
- 
+
 <body>
- 
-    <!-- Navbar avec logo et étapes -->
+
+    <!-- Navbar with logo and steps -->
     <header class="progress-header">
         <div class="logo">
             <img src="logo.png" alt="Logo">
@@ -21,7 +21,7 @@
         <nav class="progress-bar">
             <div class="progress-step completed">
                 <i class="bx bx-calendar"></i>
-                <p>Sélectionner la date</p>
+                <p>Select Date</p>
             </div>
             <div class="progress-step completed">
                 <i class="bx bx-check-circle"></i>
@@ -29,75 +29,127 @@
             </div>
             <div class="progress-step completed">
                 <i class="bx bx-credit-card"></i>
-                <p>Choix du paiement</p>
+                <p>Payment Selection</p>
             </div>
             <div class="progress-step completed">
                 <i class="bx bx-money"></i>
-                <p>Paiement</p>
+                <p>Payment</p>
             </div>
             <div class="progress-step active">
                 <i class="bx bx-envelope"></i>
-                <p>Envoi du mail</p>
+                <p>Email Sent</p>
             </div>
         </nav>
     </header>
- 
-    <!-- Contenu principal -->
+
+    <!-- Main Content -->
     <div class="mail-container">
         <i class="bx bx-check-circle success-icon"></i>
-        <h1 class="mail-title">Commande passée avec succès !</h1>
+        <h1 class="mail-title">Order Successfully Placed!</h1>
         <p class="mail-description">
-            Votre commande a bien été passée, une facture est désormais disponible en téléchargement. Retrouvez-la
-            également
-            dans "Mon Compte".
+            Your order has been placed successfully. An invoice is now available for download and can also be found in
+            "My Account".
         </p>
         <div class="action-buttons">
-            <a href="myaccount.html" class="return-button">Mon Compte</a>
-            <a href="#" class="download-button" id="download-pdf">Télécharger ma facture</a>
+            <a href="myaccount.html" class="return-button">My Account</a>
+            <a href="#" class="download-button" id="download-pdf">Download My Invoice</a>
         </div>
     </div>
- 
-    <!-- Script pour le thème -->
+
+    <!-- Theme Script -->
     <script src="theme.js"></script>
- 
-    <!-- Bouton de changement de thème -->
+
+    <!-- Theme Toggle Button -->
     <div id="theme-toggle">
-        <button id="theme-toggle-btn" title="Changer le thème">
+        <button id="theme-toggle-btn" title="Change Theme">
             <i class="bx bx-sun"></i>
         </button>
     </div>
- 
+
     <script>
-        // Utilisation de jsPDF pour générer un PDF
+        // Using jsPDF to generate a PDF
         const { jsPDF } = window.jspdf;
- 
-        // Fonction pour générer le PDF
+    
+        // Function to generate the PDF
         document.getElementById('download-pdf').addEventListener('click', function () {
-            // Création du document PDF
+            // Create the PDF document
             const doc = new jsPDF();
- 
-            // Récupération des informations du panier depuis le localStorage (exemple)
+    
+            // Retrieve cart information from localStorage (example)
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const pickupDetails = JSON.parse(localStorage.getItem('pickupDetails')) || {};  // Retrieve pickupDetails
             let total = 0;
- 
-            // Ajout d'un titre au PDF
-            doc.text("Facture de commande", 20, 20);
- 
-            // Ajout des détails de la commande
-            doc.text("Résumé de la commande :", 20, 30);
+    
+            // Add company details at the top
+            doc.setFontSize(14);
+            doc.text("L'Arbre Envie", 20, 20);
+            doc.setFontSize(10);
+            doc.text("Address: 12 Rue François Mauriac, Aubagne, 13025 France", 20, 30);
+            doc.text("Phone: +33 6 76 89 53 50", 20, 35);
+            doc.text("Email: contact@arbre-envie.com", 20, 40);
+            doc.text("Website: www.arbre-envie.com", 20, 45);
+    
+            // Add invoice title
+            doc.setFontSize(22);
+            doc.text("Order Summary", 20, 60);
+    
+            // Add order details header
+            doc.setFontSize(16);
+            doc.text("", 20, 70);
+    
+            // Add order ID (for example, based on timestamp)
+            const orderId = "ORD" + new Date().getTime();
+            doc.setFontSize(12);
+            doc.text(`Order ID: ${orderId}`, 20, 80);
+    
+            // Add date of purchase
+            const date = new Date().toLocaleDateString();
+            doc.text(`Date: ${date}`, 120, 80);
+    
+            // Add pickup details if available
+            if (pickupDetails.date && pickupDetails.timeSlot) {
+                doc.text(`Pickup Date: ${pickupDetails.date}`, 20, 100);
+                doc.text(`Pickup Time: ${pickupDetails.timeSlot}`, 20, 110);
+            }
+    
+            // Set up for items list with dynamic position
+            let yOffset = 120;
+            doc.setFontSize(12);
             cart.forEach((item, index) => {
-                doc.text(`${index + 1}. ${item.name} - ${item.quantity} x ${item.price}€`, 20, 40 + (index * 10));
+                // Display each item in the cart
+                doc.text(`${index + 1}. ${item.name} - ${item.quantity} x ${item.price}€`, 20, yOffset);
                 total += item.price * item.quantity;
+                yOffset += 10; // Adjust position for the next item
             });
- 
-            // Ajout du total de la commande
-            doc.text(`Total: ${total}€`, 20, 40 + (cart.length * 10) + 10);
- 
-            // Téléchargement du PDF
-            doc.save('facture_commande.pdf');
+    
+            // Add the total order price at the bottom
+            doc.setFontSize(14);
+            doc.text(`Total: ${total}€`, 20, yOffset + 10);
+    
+            // Add payment method information
+            doc.setFontSize(12);
+            doc.text("Payment Method: Credit Card", 20, yOffset + 20);
+    
+            // Add footer with additional details or thank you message
+            doc.setFontSize(10);
+            doc.text("Thank you for choosing L'Arbre Envie for your purchase!", 20, yOffset + 40);
+            doc.text("We hope you enjoy your products and look forward to serving you again.", 20, yOffset + 45);
+    
+            // Add company contact information (again at the bottom for reference)
+            doc.text("For any inquiries, contact us at contact@arbre-envie.com", 20, yOffset + 55);
+            doc.text("Visit our website at www.arbre-envie.com for more details.", 20, yOffset + 60);
+    
+            // Add page number (optional)
+            const pageCount = doc.internal.pages.length;
+            doc.text(`Page 1 of ${pageCount}`, 180, 285);
+    
+            // Download the PDF
+            doc.save('order_invoice.pdf');
         });
     </script>
- 
+    
+    
+
 </body>
- 
+
 </html>

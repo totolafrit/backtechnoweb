@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <!-- En-tête -->
+    <!-- Header -->
     <header class="top-bar">
         <div class="logo">
             <img src="logo.png" alt="Logo">
@@ -30,63 +30,64 @@
             </a>
         </nav>
     </header>
-<body>
-    
-<form id="add-product-form">
-    <label for="name">Nom du produit :</label>
-    <input type="text" id="name" required>
 
-    <label for="price">Prix :</label>
-    <input type="number" id="price" step="0.01" required> <!-- step pour les decimales -->
+    <!-- Body -->
+    <body>
+        <form id="add-product-form">
+            <label for="name">Product Name:</label>
+            <input type="text" id="name" required>
 
-    <label for="description">Description :</label>
-    <textarea id="description" required></textarea>
+            <label for="price">Price:</label>
+            <input type="number" id="price" step="0.01" required> <!-- step for decimals -->
 
-    <label for="image_url">URL de l'image :</label>
-    <input type="text" id="image_url" required>
+            <label for="description">Description:</label>
+            <textarea id="description" required></textarea>
 
-    <label for="category">Choisir la catégorie :</label>
-    <input type="number" id="category" required>
+            <label for="image_url">Image URL:</label>
+            <input type="text" id="image_url" required>
 
-    <button type="submit">Ajouter le produit</button>
-</form>
+            <label for="category">Choose Category:</label>
+            <input type="number" id="category" required>
 
-<script>
-    document.getElementById('add-product-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
+            <button type="submit">Add Product</button>
+        </form>
 
-        const name = document.getElementById('name').value;
-        let price = document.getElementById('price').value;
-        const description = document.getElementById('description').value;
-        const image_url = document.getElementById('image_url').value;
-        const category = document.getElementById('category').value;
+        <script>
+            document.getElementById('add-product-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
 
-        price = parseFloat(price);
-        if (isNaN(price) || price < 0) {
-            alert('Veuillez entrer un prix valide.');
-            return;
-        }
+                const name = document.getElementById('name').value;
+                let price = document.getElementById('price').value;
+                const description = document.getElementById('description').value;
+                const image_url = document.getElementById('image_url').value;
+                const category = document.getElementById('category').value;
 
-        price = price.toFixed(2);  // avec deux décimales (pour éviter les erreurs de calcul)
+                price = parseFloat(price);
+                if (isNaN(price) || price < 0) {
+                    alert('Please enter a valid price.');
+                    return;
+                }
 
-        try {
-            const response = await fetch('http://localhost:3000/api/products', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, price, description, image_url, category })
+                price = price.toFixed(2); // Ensure two decimals (to avoid calculation errors)
+
+                try {
+                    const response = await fetch('http://localhost:3000/api/products', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, price, description, image_url, category })
+                    });
+
+                    if (!response.ok) {
+                        const data = await response.json();
+                        alert('Error: ' + data.message);
+                    } else {
+                        alert('Product successfully added');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error adding product');
+                }
             });
-
-            if (!response.ok) {
-                const data = await response.json();
-                alert('Erreur : ' + data.message);
-            } else {
-                alert('Produit ajouté avec succès');
-            }
-        } catch (error) {
-            console.error('Erreur:', error);
-            alert('Erreur lors de l\'ajout du produit');
-        }
-    });
-</script>
-</body>
+        </script>
+    </body>
 </html>

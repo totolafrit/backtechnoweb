@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catégorie 1</title>
+    <title>Category 1</title>
     <link rel="stylesheet" href="cat1.css">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- En-tête de navigation -->
+    <!-- Navigation Header -->
     <nav class="navigation">
         <header>
             <div class="logo">
@@ -16,11 +16,11 @@
             </div>
             <nav>
                 <ul class="nav-menu">
-                    <li><a href="index.html">Accueil</a></li>
-                    <li><a href="aboutus.html">À propos</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="aboutus.html">About Us</a></li>
                     <li><a href="shop.html">Shop</a></li>
                     <li><a href="project.html">Services</a></li>
-                    <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                    <li><a href="actualites.html">Green Info</a></li>
                     <li>
                         <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
                         <a id="user-link"><i class="bx bxs-user-circle"></i></a>
@@ -34,29 +34,28 @@
         <a href="shop.html" class="back-icon">
             <i class="bx bx-undo"></i>
         </a>
-        <input type="text" id="search-bar" placeholder="Rechercher par nom..." oninput="filterProducts()">
+        <input type="text" id="search-bar" placeholder="Search by name..." oninput="filterProducts()">
         <select id="sort-options" onchange="sortProducts()">
-            <option value="">Trier par</option>
-            <option value="price-asc">Prix croissant</option>
-            <option value="price-desc">Prix décroissant</option>
-          
+            <option value="">Sort by</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
         </select>
     </div>
 
     <main>
         <section class="article-grid" id="article-grid">
-            <!-- les articles sont insérés dynamiquement ici -->
+            <!-- Products will be dynamically inserted here -->
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
+        <p>&copy; 2024 L'Arbre Envie. All rights reserved.</p>
     </footer>
 
     <script>
         let allProducts = []; 
 
-        // recup les produits lors du chargement de la page
+        // Fetch products when the page loads
         fetch('http://localhost:3000/api/products/category/2')
             .then(response => response.json())
             .then(products => {
@@ -72,29 +71,29 @@
                         </td>
                         <h2>${product.name}</h2>
                         <p>${product.description}</p>
-                        <p>Prix : ${product.price}€</p>
-                        <a href="produit.html?id=${product.id}" class="read-more">Lire plus</a>
+                        <p>Price: ${product.price}€</p>
+                        <a href="produit.html?id=${product.id}" class="read-more">Read more</a>
                     `;
                     articleGrid.appendChild(articleElement);
                 });
             })
             .catch(error => {
-                console.error('Erreur de récupération des produits :', error);
+                console.error('Error fetching products:', error);
             });
         
-        // filtre les produits selon la recherche
+        // Filter products by search
         function filterProducts() {
             const searchQuery = document.getElementById('search-bar').value.toLowerCase();
             const filteredProducts = allProducts.filter(product =>
                 product.name.toLowerCase().includes(searchQuery)
             );
-            displayProducts(filteredProducts); // reaffiche les produits filtrés
+            displayProducts(filteredProducts); // Re-display filtered products
         }
         
-        // trie les produits
+        // Sort products
         function sortProducts() {
             const sortOption = document.getElementById('sort-options').value;
-            let sortedProducts = [...allProducts]; // Copie des produits
+            let sortedProducts = [...allProducts]; // Copy of products
             
             if (sortOption === 'price-asc') {
                 sortedProducts.sort((a, b) => a.price - b.price);
@@ -102,11 +101,11 @@
                 sortedProducts.sort((a, b) => b.price - a.price);
             } 
             
-            console.log('Produits triés :', sortedProducts); // Vérifie le tri
+            console.log('Sorted products:', sortedProducts); // Check sorted products
             displayProducts(sortedProducts); 
         }
         
-        // Fonction pour afficher les produits
+        // Function to display products
         function displayProducts(products) {
             const articleGrid = document.getElementById('article-grid');
             articleGrid.innerHTML = ''; 
@@ -120,17 +119,14 @@
                     </td>
                     <h2>${product.name}</h2>
                     <p>${product.description}</p>
-                    <p>Prix : ${product.price}€</p>
-                    <a href="produit.html?id=${product.id}" class="read-more">Lire plus</a>
+                    <p>Price: ${product.price}€</p>
+                    <a href="produit.html?id=${product.id}" class="read-more">Read more</a>
                 `;
                 articleGrid.appendChild(articleElement);
             });
         }
-        
-        
     </script>
 
-    <script src="auth.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             checkUserLink("user-link");

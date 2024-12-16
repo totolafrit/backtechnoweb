@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Panier</title>
+    <title>My Cart</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="fakepanier.css">
-
 </head>
 <body>
 
@@ -16,53 +15,47 @@
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="project.html">Services</a></li>
-                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li><a href="actualites.html">Green News</a></li>
                 <li>
-                    <!-- <a href="fakepanier.html"><i class="bx bx-cart"></i></a> -->
                     <a id="user-link"><i class="bx bxs-user-circle"></i></a>
-    
                 </li>
             </ul>
         </nav>
     </header>
 
     <main class="cart-container">
-        <h1 class="cart-title">Mon Panier</h1>
-        <p class="reservation-info">Les articles seront réservés pendant 60 minutes</p>
-        <button class="clear-cart-button" onclick="clearCart()">Vider le panier</button>
+        <h1 class="cart-title">My Cart</h1>
+        <p class="reservation-info">Items will be reserved for 60 minutes</p>
+        <button class="clear-cart-button" onclick="clearCart()">Clear Cart</button>
     
         <div class="cart-content">
-            <!-- Partie Gauche : prod affichées dynamiquements -->
+            <!-- Left Section: dynamically displayed products -->
             <div class="cart-left" id="cart-items">
                 <button class="cart-remove">X</button>
             </div>
     
-            <!-- Partie Droite -->
+            <!-- Right Section -->
             <div class="cart-right">
-                
-                <p class="cart-summary"><strong id="cart-total">0,00 €</strong></p>
-                <p>Livraison : <strong>Retrait à l'entrepôt (Gratuit)</strong></p>
+                <p class="cart-summary"><strong id="cart-total">0.00 €</strong></p>
+                <p>Shipping: <strong>Pickup at the warehouse (Free)</strong></p>
     
                 <div class="cart-buttons">
-                       
-                    <a href="shop.html" class="buy-more-button">Acheter plus</a>
-                    <button id="checkout-btn" onclick="validateOrder()">Payer</button>
+                    <a href="shop.html" class="buy-more-button">Buy More</a>
+                    <button id="checkout-btn" onclick="validateOrder()">Checkout</button>
                 </div>
     
-                <p class="cart-payment-info">Nous acceptons :</p>
-                <img src="payementicon.webp" alt="Moyens de paiement" class="cart-payment-icons">
+                <p class="cart-payment-info">We accept:</p>
+                <img src="payementicon.webp" alt="Payment Methods" class="cart-payment-icons">
             </div>
         </div>
     </main>
-    
-
 
     <footer>
-        <p>&copy; 2024 L'Arbre En Vie - Tous droits réservés</p>
+        <p>&copy; 2024 L'Arbre En Vie - All rights reserved</p>
     </footer>
 
 <script>
@@ -98,9 +91,9 @@
                     itemDiv.innerHTML = `
                         <img src="${item.image}" alt="${item.name}" class="cart-item-image" width=100>
                         <h2>${item.name}</h2>
-                        <p>Prix unitaire : €${formatPrice(item.price)}</p>
-                        <p>Quantité : <span id="quantity-${item.name}">${item.quantity}</span></p>
-                        <p>Prix total : €${formatPrice(item.price * item.quantity)}</p>
+                        <p>Unite Price : €${formatPrice(item.price)}</p>
+                        <p>Quantity : <span id="quantity-${item.name}">${item.quantity}</span></p>
+                        <p>Total Price : €${formatPrice(item.price * item.quantity)}</p>
                         <button onclick="updateQuantity('${item.name}', 1)">+1</button>
                         <button onclick="updateQuantity('${item.name}', -1)">-1</button>
                     `;
@@ -117,7 +110,7 @@
     
             // Affichage de la somme totale des articles dans le panier
             cartTotalContainer.innerHTML = `
-                <h3>Total de votre panier : €${formatPrice(totalSum)}</h3>
+                <h3>Cart Total: €${formatPrice(totalSum)}</h3>
             `;
         }
     }

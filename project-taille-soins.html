@@ -1,105 +1,103 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taille et Soins aux Arbres</title>
+    <title>Tree Pruning and Care</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="project-taille-soins.css">
 </head>
 
 <body>
 
-    <!-- En-tête -->
+    <!-- Header -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="project.html">Services</a></li>
-                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li><a href="actualites.html">Green News</a></li>
                 <li>
                     <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
-                    <a id="user-link"><i class="bx bxs-user-circle"></i></a>
-                </li>
+                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
                 </li>
             </ul>
         </nav>
     </header>
 
-    <!-- Contenu principal -->
+    <!-- Main Content -->
     <main>
         <article>
             <h1>
                 <a href="project.html" class="undo-button">
                     <i class="bx bx-undo"></i>
                 </a>
-                Taille et Soins aux Arbres
+                Tree Pruning and Care
             </h1>
-            <p>Découvrez les services de taille et soins aux arbres proposés par L'Arbre Envie.</p>
+            <p>Discover the tree pruning and care services offered by L'Arbre Envie.</p>
             <p>
-                L'Arbre Envie est spécialisé dans la taille et soins aux arbres. Des solutions adaptées à l'arbre et à vos besoins vous seront proposées lors d'une visite :
+                L'Arbre Envie specializes in tree pruning and care. Tailored solutions for your trees and needs will be provided during a site visit:
             </p>
             <ul>
-                <li>Taille d'entretien des houppiers et charpentes de vos arbres</li>
-                <li>Taille d'éclaircie et taille raisonnée</li>
-                <li>Mise en sécurité et taille sanitaire</li>
-                <li>Haubanage</li>
-                <li>Taille de cohabitation (fibre, toitures, façades des bâtiments, voiries...)</li>
-                <li>Démontage et/ou abattage des arbres dangereux ou présentant un risque élevé</li>
+                <li>Pruning and maintenance of tree crowns and branches</li>
+                <li>Thinning and selective pruning</li>
+                <li>Safety pruning and sanitation pruning</li>
+                <li>Tree cabling</li>
+                <li>Pruning for coexistence (fiber cables, roofs, building facades, roadways...)</li>
+                <li>Tree dismantling and/or removal for hazardous or high-risk trees</li>
             </ul>
         </article>
 
         <!-- Carousel -->
         <section class="carousel-container">
-            <h2>Nos Réalisations</h2>
+            <h2>Our Work</h2>
             <div class="carousel-wrapper">
                 <div class="carousel">
                     <div class="carousel-item">
-                        <img src="taille1.jpg" alt="Réalisation 1">
+                        <img src="taille1.jpg" alt="Work 1">
                     </div>
                     <div class="carousel-item">
-                        <img src="taille2.jpg" alt="Réalisation 2">
+                        <img src="taille2.jpg" alt="Work 2">
                     </div>
                     <div class="carousel-item">
-                        <img src="taille3.jpg" alt="Réalisation 3">
+                        <img src="taille3.jpg" alt="Work 3">
                     </div>
                     <div class="carousel-item">
-                        <img src="taille4.jpg" alt="Réalisation 4">
+                        <img src="taille4.jpg" alt="Work 4">
                     </div>
                     <div class="carousel-item">
-                        <img src="taille5.jpg" alt="Réalisation 5">
+                        <img src="taille5.jpg" alt="Work 5">
                     </div>
                 </div>
             </div>
-            <!-- Flèches de navigation -->
+            <!-- Navigation Arrows -->
             <button class="carousel-prev"><i class="bx bx-chevron-left"></i></button>
             <button class="carousel-next"><i class="bx bx-chevron-right"></i></button>
         </section>
     </main>
 
-
-    <!-- Script pour le carrousel infini -->
+    <!-- Infinite Carousel Script -->
     <script>
         const carousel = document.querySelector('.carousel');
         const prevBtn = document.querySelector('.carousel-prev');
         const nextBtn = document.querySelector('.carousel-next');
         const items = document.querySelectorAll('.carousel-item');
-        const itemWidth = items[0].offsetWidth + 20; // Largeur + marge
+        const itemWidth = items[0].offsetWidth + 20; // Width + margin
         let currentPosition = 0;
 
-        // Duplication pour effet infini
+        // Duplicate items for infinite effect
         const firstClone = items[0].cloneNode(true);
         const lastClone = items[items.length - 1].cloneNode(true);
         carousel.appendChild(firstClone);
         carousel.insertBefore(lastClone, carousel.firstChild);
 
-        const totalItems = items.length + 2; // Compte les clones
+        const totalItems = items.length + 2; // Including clones
         currentPosition = itemWidth;
         carousel.style.transform = `translateX(-${currentPosition}px)`;
 
@@ -125,21 +123,21 @@
         nextBtn.addEventListener('click', () => moveCarousel(1));
         prevBtn.addEventListener('click', () => moveCarousel(-1));
 
-        // Auto-défilement
+        // Auto-slide
         let autoSlide = setInterval(() => moveCarousel(1), 3000);
         carousel.addEventListener('mouseover', () => clearInterval(autoSlide));
         carousel.addEventListener('mouseout', () => (autoSlide = setInterval(() => moveCarousel(1), 3000)));
     </script>
 
-    <!-- Pied de page -->
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
+        <p>&copy; 2024 L'Arbre Envie. All rights reserved.</p>
     </footer>
     <script src="theme.js"></script>
 
-       <!-- Bouton de changement de thème -->
-       <div id="theme-toggle">
-        <button id="theme-toggle-btn" title="Changer le thème">
+    <!-- Theme Toggle Button -->
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Change Theme">
             <i class="bx bx-sun"></i>
         </button>
     </div>

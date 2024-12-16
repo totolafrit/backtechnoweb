@@ -1,59 +1,57 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <title>Modifier le mot de passe</title>
+    <title>Change Password</title>
     <link rel="stylesheet" href="modif.css">
 </head>
 <body>
-    <!-- Barre de navigation -->
+    <!-- Navigation Bar -->
     <header class="top-bar">
         <div class="logo">
             <img src="logo.png" alt="Logo" class="logo-image">
         </div>
     </header>
-    
 
     <main class="main-content">
         <section class="form-section">
             <div class="title-container">
-                <!-- Flèche de retour -->
+                <!-- Back Arrow -->
                 <a href="myaccount.html" class="undo-link">
                     <i class="bx bx-undo"></i>
                 </a>
-                <h2>Modifier mon mot de passe</h2>
+                <h2>Change My Password</h2>
             </div>
             <form id="modif-form">
-                <label for="current-password">Mot de passe actuel :</label>
+                <label for="current-password">Current Password:</label>
                 <input type="password" id="current-password" required>
 
-                <label for="new-password">Nouveau mot de passe :</label>
+                <label for="new-password">New Password:</label>
                 <input type="password" id="new-password" required>
 
-                <label for="confirm-password">Confirmer le nouveau mot de passe :</label>
+                <label for="confirm-password">Confirm New Password:</label>
                 <input type="password" id="confirm-password" required>
 
-                <button type="submit" class="submit-btn">Mettre à jour</button>
+                <button type="submit" class="submit-btn">Update</button>
             </form>
         </section>
 
-      <p id="response-message" class="message"></p>
+        <p id="response-message" class="message"></p>
     </main>
 
     <footer>
-        <p>&copy; 2024 L'Arbre Envie - Tous droits réservés</p>
+        <p>&copy; 2024 L'Arbre Envie - All Rights Reserved</p>
     </footer>
 
     <script>
-
         document.getElementById("modif-form").addEventListener("submit", async (e) => {
             e.preventDefault();
         
             const userId = localStorage.getItem("userId");
             if (!userId) {
-                showMessage("Utilisateur non identifié. Veuillez vous reconnecter.", "error");
+                showMessage("User not identified. Please log in again.", "error");
                 return;
             }
         
@@ -62,12 +60,12 @@
             const confirmPassword = document.getElementById("confirm-password").value;
         
             if (newPassword !== confirmPassword) {
-                showMessage("Les mots de passe ne correspondent pas. Veuillez réessayer.", "error");
+                showMessage("Passwords do not match. Please try again.", "error");
                 return;
             }
         
-            if (newPassword.length < 1) { // a changer
-                showMessage("Le mot de passe doit contenir au moins 6 caractères.", "error");
+            if (newPassword.length < 6) { // Example validation
+                showMessage("Password must be at least 6 characters long.", "error");
                 return;
             }
         
@@ -85,21 +83,20 @@
         
                 if (!response.ok) {
                     const errorText = await response.text();
-                    console.error("Erreur serveur : ", errorText);
-                    throw new Error("Le mot de passe actuel n'est pas correct. Veuillez réessayer");
+                    console.error("Server error: ", errorText);
+                    throw new Error("The current password is incorrect. Please try again.");
                 }
         
                 const data = await response.json();
-                showMessage("Mot de passe modifié avec succès.", "success");
+                showMessage("Password successfully updated.", "success");
                 setTimeout(() => {
                     window.location.href = "myaccount.html";
                 }, 2000);
         
             } catch (err) {
-                console.error("Erreur : ", err);
+                console.error("Error: ", err);
                 showMessage(err.message, "error");
             }
-        
         });
         
         function showMessage(message, type) {
@@ -107,8 +104,6 @@
             responseMessage.textContent = message;
             responseMessage.className = `message ${type}`;
         }
-        
-        
     </script>
 </body>
 </html>
