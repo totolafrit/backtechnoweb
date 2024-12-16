@@ -1,29 +1,27 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Les Racines du Mal</title>
+    <title>The Roots of Evil</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="actu.css">
 </head>
 
 <body>
-    <!-- En-tête -->
-  
-    <!-- En-tête -->
+    <!-- Header -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="project.html">Services</a></li>
-                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li><a href="actualites.html">Green News</a></li>
                 <li>
                     <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
                     <a id="user-link"><i class="bx bxs-user-circle"></i></a>
@@ -32,60 +30,60 @@
         </nav>
     </header>
 
-    <!-- Retour aux actualités -->
+    <!-- Back to News -->
     <section class="return-link">
-        <a href="actualites.html"><i class="bx bx-left-arrow-alt"></i> Retour aux Actualités</a>
+        <a href="actualites.html"><i class="bx bx-left-arrow-alt"></i> Back to News</a>
     </section>
 
-    <!-- Contenu principal -->
+    <!-- Main Content -->
     <main>
         <section class="content">
-            <h1>Les Racines du Mal</h1>
+            <h1>The Roots of Evil</h1>
             <p class="description">
-                Découvrez la bande dessinée : <strong>"Les Racines du Mal"</strong>, éditée pour sensibiliser
-                à l'importance de l'entretien et de la gestion durable des arbres. Ce document, richement illustré,
-                met en lumière les erreurs courantes dans la plantation, l'élagage et le soin des arbres,
-                tout en proposant des conseils pratiques pour un jardinage responsable.
+                Discover the comic book: <strong>"The Roots of Evil"</strong>, created to raise awareness
+                about the importance of sustainable tree maintenance and management. This richly illustrated document
+                highlights common mistakes in planting, pruning, and caring for trees,
+                while offering practical advice for responsible gardening.
             </p>
             <p>
-                À travers des anecdotes éducatives et des illustrations captivantes, cette BD offre des outils précieux
-                pour mieux comprendre les impacts des choix et actions sur la santé et le développement des arbres.
-                Utilisez les flèches pour naviguer à travers les pages comme dans un livre.
+                Through educational anecdotes and captivating illustrations, this comic book provides valuable tools
+                to better understand the impact of choices and actions on the health and development of trees.
+                Use the arrows to navigate through the pages like a book.
             </p>
         </section>
 
-        <!-- Visionneuse PDF -->
+        <!-- PDF Viewer -->
         <section class="pdf-viewer">
             <div class="navigation">
-                <button id="prevPage"><i class="bx bx-chevron-left"></i> Précédent</button>
-                <button id="nextPage">Suivant <i class="bx bx-chevron-right"></i></button>
+                <button id="prevPage"><i class="bx bx-chevron-left"></i> Previous</button>
+                <button id="nextPage">Next <i class="bx bx-chevron-right"></i></button>
                 <button id="zoomBtn"><i class="bx bx-zoom-in"></i> Zoom</button>
             </div>
             <canvas id="pdfCanvas"></canvas>
-            <p class="page-info">Page : <span id="pageNum"></span> / <span id="pageCount"></span></p>
+            <p class="page-info">Page: <span id="pageNum"></span> / <span id="pageCount"></span></p>
         </section>
     </main>
 
-    <!-- Pied de page -->
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
+        <p>&copy; 2024 L'Arbre Envie. All rights reserved.</p>
     </footer>
 
-    <!-- Script JS pour le PDF -->
+    <!-- JS Script for PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script>
-        const url = '2021-BD-les-racines-du-mal.pdf'; // Lien vers le PDF
+        const url = '2021-BD-les-racines-du-mal.pdf'; // Link to the PDF
 
         let pdfDoc = null,
             pageNum = 1,
             pageIsRendering = false,
             pageNumIsPending = null;
 
-        const scale = 1, // Réduction de la taille du PDF
+        const scale = 1, // PDF scaling
             canvas = document.getElementById('pdfCanvas'),
             ctx = canvas.getContext('2d');
 
-        // Charger le PDF
+        // Load the PDF
         const renderPage = (num) => {
             pageIsRendering = true;
 
@@ -136,7 +134,7 @@
             queueRenderPage(pageNum);
         };
 
-        // Fonction pour ouvrir le PDF en plein écran
+        // Function to open the PDF in full screen
         const openPDFInNewTab = () => {
             window.open(url, '_blank');
         };
@@ -154,12 +152,12 @@
         document.getElementById('zoomBtn').addEventListener("click", openPDFInNewTab);
     </script>
 
-    <!-- Script pour le changement de thème -->
+    <!-- Script for Theme Change -->
     <script src="theme.js"></script>
 
-    <!-- Bouton de changement de thème -->
+    <!-- Theme Toggle Button -->
     <div id="theme-toggle">
-        <button id="theme-toggle-btn" title="Changer le thème">
+        <button id="theme-toggle-btn" title="Change Theme">
             <i class="bx bx-sun"></i>
         </button>
     </div>

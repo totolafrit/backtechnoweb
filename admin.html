@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <!-- En-tête -->
+    <!-- Header -->
     <header class="top-bar">
         <div class="logo">
             <img src="logo.png" alt="Logo">
@@ -28,64 +28,58 @@
                 <i class="bx bxs-cart"></i>
                 <span>Manage Orders</span>
             </a>
-            <!-- Bouton de déconnexion -->
+            <!-- Logout Button -->
             <a class="logout-btn" href="javascript:void(0);" onclick="logout()">
                 <i class="bx bx-log-out"></i>
-                Déconnexion
+                Logout
             </a>
         </nav>
     </header>
 
-    <!-- Tableau de bord -->
+    <!-- Dashboard -->
     <main class="dashboard">
-        <!-- Section des statistiques -->
+        <!-- Statistics Section -->
         <section class="stats-section">
-            <h2>Statistiques</h2>
+            <h2>Statistics</h2>
             <div class="stats-grid">
                 <div class="stats-card">
-                    <h3>Panier moyen</h3>
-                    <p id="avg-cart-price">Chargement...</p>
+                    <h3>Average Cart Price</h3>
+                    <p id="avg-cart-price">Loading...</p>
                 </div>
-        
                 <div class="stats-card">
                     <h3>Clients</h3>
-                    <p id="clients-count">Chargement...</p>
+                    <p id="clients-count">Loading...</p>
                 </div>
-                
                 <div class="stats-card">
-                    
-                        <h3>Commandes effectuées</h3>
-                            <p id="orders-count">Chargement...</p>
-                    </div>
+                    <h3>Completed Orders</h3>
+                    <p id="orders-count">Loading...</p>
                 </div>
             </div>
-            
         </section>
 
-        <!-- Section des commandes récentes -->
+        <!-- Recent Orders Section -->
         <section class="orders-section">
-            <h2>Commandes Récentes</h2>
+            <h2>Recent Orders</h2>
             <table class="orders-table">
                 <thead>
                     <tr>
-                        <th>Numéro de Commande</th>
-                        <th>Nom du Client</th>
+                        <th>Order Number</th>
+                        <th>Client Name</th>
                         <th>Date</th>
                         <th>Total</th>
-                        
                     </tr>
                 </thead>
                 <tbody id="orders-tbody">
-                    <!-- Les commandes seront ajoutées ici dynamiquement -->
+                    <!-- Orders will be dynamically added here -->
                 </tbody>
             </table>
-            <a href="manage-orders.html" class="view-all">Voir toutes les commandes</a>
+            <a href="manage-orders.html" class="view-all">View All Orders</a>
         </section>
     </main>
 
-    <!-- Pied de page -->
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 L'Arbre En Vie - Tous droits réservés</p>
+        <p>&copy; 2024 L'Arbre En Vie - All rights reserved</p>
     </footer>
 
     <script>
@@ -94,88 +88,85 @@
             localStorage.removeItem("username");
             localStorage.removeItem("userId");
 
-            window.location.href = "index.html"; // Redirige vers la page d'accueil après déconnexion
+            window.location.href = "index.html"; // Redirect to the homepage after logout
         }
     </script>
     <script>
+        // Function to fetch and display recent orders
+        function loadRecentOrders() {
+            fetch('http://localhost:3000/api/orders?sort=created_at_desc') // API URL for recent orders
+                .then(response => response.json())
+                .then(orders => {
+                    const ordersTbody = document.getElementById('orders-tbody');
+                    ordersTbody.innerHTML = ''; // Clear previous orders
 
-            // Fonction pour récupérer et afficher les commandes récentes
-            function loadRecentOrders() {
-                fetch('http://localhost:3000/api/orders?sort=created_at_desc') // URL de l'API backend pour récupérer les commandes récentes
-                    .then(response => response.json())
-                    .then(orders => {
-                        const ordersTbody = document.getElementById('orders-tbody');
-                        ordersTbody.innerHTML = ''; // Effacer les commandes précédentes
-            
-                        // Limiter l'affichage aux 4 commandes les plus récentes
-                        const recentOrders = orders.slice(0, 4);
-            
-                        // Boucler sur les commandes récentes et les afficher
-                        recentOrders.forEach(order => {
-                            const row = document.createElement('tr');
-            
-                            // Ajouter les cellules pour chaque commande
-                            row.innerHTML = `
-                                <td>#${order.order_id}</td>
-                                <td>${order.username}</td> <!-- Afficher le nom du client -->
-                                <td>${new Date(order.created_at).toLocaleDateString('fr-FR')}</td>
-                                <td>${order.total_price.toFixed(2)}€</td>
-                                
-                            `;
-            
-                            // Ajouter la ligne au tableau
-                            ordersTbody.appendChild(row);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Erreur lors de la récupération des commandes récentes:', error);
+                    // Limit to the 4 most recent orders
+                    const recentOrders = orders.slice(0, 4);
+
+                    // Loop through recent orders and display them
+                    recentOrders.forEach(order => {
+                        const row = document.createElement('tr');
+
+                        // Add cells for each order
+                        row.innerHTML = `
+                            <td>#${order.order_id}</td>
+                            <td>${order.username}</td> <!-- Display client name -->
+                            <td>${new Date(order.created_at).toLocaleDateString('en-US')}</td>
+                            <td>${order.total_price.toFixed(2)}€</td>
+                        `;
+
+                        // Add the row to the table
+                        ordersTbody.appendChild(row);
                     });
-            }
-            
-            
+                })
+                .catch(error => {
+                    console.error('Error fetching recent orders:', error);
+                });
+        }
 
-        
+        // Function to get the average cart price
         function getAverageCartPrice() {
-            fetch('http://localhost:3000/api/average-cart-price') // URL de l'API backend
+            fetch('http://localhost:3000/api/average-cart-price') // API URL
                 .then(response => response.json())
                 .then(data => {
                     const avgCartPrice = data.avgCartPrice;
-                    // Mettre à jour la statistique sur la page admin.html
+                    // Update the stat on the admin.html page
                     document.getElementById('avg-cart-price').textContent = avgCartPrice.toFixed(2) + '€';
                 })
                 .catch(error => {
-                    console.error('Erreur lors de la récupération de la moyenne du panier:', error);
-                });
-        }
-        // Fonction pour obtenir le nombre d'utilisateurs (clients)
-        function getClientsCount() {
-            fetch('http://localhost:3000/api/clients-count') // URL de l'API backend
-                .then(response => response.json())
-                .then(data => {
-                    const clientCount = data.clientCount;
-                    // Mettre à jour la statistique sur la page admin.html
-                    document.getElementById('clients-count').textContent = clientCount;
-                })
-                .catch(error => {
-                    console.error('Erreur lors de la récupération du nombre de clients:', error);
-                });
-        }
-    
-         // Fonction pour obtenir le nombre de commandes
-         function getOrdersCount() {
-            fetch('http://localhost:3000/api/orders-count') // URL de l'API backend pour récupérer les commandes
-                .then(response => response.json())
-                .then(data => {
-                    const orderCount = data.orderCount;
-                    // Mettre à jour la statistique sur la page admin.html
-                    document.getElementById('orders-count').textContent = orderCount;
-                })
-                .catch(error => {
-                    console.error('Erreur lors de la récupération du nombre de commandes:', error);
+                    console.error('Error fetching average cart price:', error);
                 });
         }
 
-        // Appeler la fonction au chargement de la page
+        // Function to get the number of clients
+        function getClientsCount() {
+            fetch('http://localhost:3000/api/clients-count') // API URL
+                .then(response => response.json())
+                .then(data => {
+                    const clientCount = data.clientCount;
+                    // Update the stat on the admin.html page
+                    document.getElementById('clients-count').textContent = clientCount;
+                })
+                .catch(error => {
+                    console.error('Error fetching clients count:', error);
+                });
+        }
+
+        // Function to get the number of orders
+        function getOrdersCount() {
+            fetch('http://localhost:3000/api/orders-count') // API URL
+                .then(response => response.json())
+                .then(data => {
+                    const orderCount = data.orderCount;
+                    // Update the stat on the admin.html page
+                    document.getElementById('orders-count').textContent = orderCount;
+                })
+                .catch(error => {
+                    console.error('Error fetching orders count:', error);
+                });
+        }
+
+        // Call functions when the page loads
         window.onload = function() {
             loadRecentOrders();
             getClientsCount();
@@ -183,12 +174,11 @@
             getAverageCartPrice();
         };
     </script>
-    
 
     <script src="theme.js"></script>
-    <!-- Bouton de changement de thème -->
+    <!-- Theme Toggle Button -->
     <div id="theme-toggle">
-        <button id="theme-toggle-btn" title="Changer le thème">
+        <button id="theme-toggle-btn" title="Change Theme">
             <i class="bx bx-sun"></i>
         </button>
     </div>

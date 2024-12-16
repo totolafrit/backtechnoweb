@@ -1,92 +1,88 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Création</title>
+    <title>Creation</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="project-creation.css">
 </head>
 
 <body>
 
-    <!-- En-tête -->
-     <!-- En-tête -->
-     <header>
+    <!-- Header -->
+    <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="project.html">Services</a></li>
-                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li><a href="actualites.html">Green News</a></li>
                 <li>
                     <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
-                    <a id="user-link"><i class="bx bxs-user-circle"></i></a>
-                </li>
+                    <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
                 </li>
             </ul>
         </nav>
     </header>
 
-    <!-- Contenu principal -->
+    <!-- Main Content -->
     <main>
         <article>
             <h1>
                 <a href="project.html" class="undo-button">
                     <i class="bx bx-undo"></i>
                 </a>
-                Création
+                Creation
             </h1>
-            <p>Découvrez les services d'entretien proposés par L'Arbre Envie.</p>
+            <p>Discover the maintenance services offered by L'Arbre Envie.</p>
             <p>
-                L'Arbre Envie propose et conçoit des petits aménagements de vos espaces extérieurs :
+                L'Arbre Envie designs and creates small outdoor space arrangements:
             </p>
             <ul>
-                <li>Plantation d'arbustes de haie et de massif</li>
-                <li>Création de parterres et massifs végétalisés</li>
-                <li>Création de jardinières végétalisées (traverse paysagère)</li>
-                <li>Création de potagers</li>
-                <li>Pose de gazon synthétique ou gazon en rouleaux (petite surface)</li>
-                <li>...et tout projet soumis à étude</li>
+                <li>Planting hedge and mass shrubs</li>
+                <li>Creating vegetated flower beds and borders</li>
+                <li>Creating vegetated planters (landscape sleeper)</li>
+                <li>Creating vegetable gardens</li>
+                <li>Laying synthetic or rolled grass (small areas)</li>
+                <li>...and any project subject to study</li>
             </ul>
         </article>
 
-        <!-- Carrousel -->
+        <!-- Carousel -->
         <section class="carousel-container">
-            <h2>Nos Réalisations</h2>
+            <h2>Our Creations</h2>
             <div class="carousel-wrapper">
                 <div class="carousel">
                     <div class="carousel-item">
-                        <img src="crea1.jpg" alt="Création 1">
+                        <img src="crea1.jpg" alt="Creation 1">
                     </div>
                     <div class="carousel-item">
-                        <img src="crea2.jpg" alt="Création 2">
+                        <img src="crea2.jpg" alt="Creation 2">
                     </div>
                     <div class="carousel-item">
-                        <img src="crea3.jpg" alt="Création 3">
+                        <img src="crea3.jpg" alt="Creation 3">
                     </div>
                     <div class="carousel-item">
-                        <img src="crea4.jpg" alt="Création 4">
+                        <img src="crea4.jpg" alt="Creation 4">
                     </div>
                     <div class="carousel-item">
-                        <img src="crea5.jpg" alt="Création 5">
+                        <img src="crea5.jpg" alt="Creation 5">
                     </div>
                 </div>
             </div>
-            <!-- Flèches de navigation -->
+            <!-- Navigation Arrows -->
             <button class="carousel-prev"><i class="bx bx-chevron-left"></i></button>
             <button class="carousel-next"><i class="bx bx-chevron-right"></i></button>
         </section>
     </main>
 
-    
-
-    <!-- Script JS -->
+    <!-- JavaScript -->
     <script>
         const carousel = document.querySelector(".carousel");
         const prevBtn = document.querySelector(".carousel-prev");
@@ -125,24 +121,19 @@
         carousel.addEventListener("mouseout", () => (autoSlide = setInterval(() => moveCarousel(1), 3000)));
     </script>
 
-   <!-- Pied de page -->
-   <footer>
-    <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
-</footer>
-<script src="theme.js"></script>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 L'Arbre Envie. All rights reserved.</p>
+    </footer>
 
-   <!-- Bouton de changement de thème -->
-   <div id="theme-toggle">
-    <button id="theme-toggle-btn" title="Changer le thème">
-        <i class="bx bx-sun"></i>
-    </button>
-</div>
-<script src="auth.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        checkUserLink("user-link");
-    });
-</script>
+    <!-- Theme Toggle -->
+    <script src="theme.js"></script>
+    <div id="theme-toggle">
+        <button id="theme-toggle-btn" title="Change Theme">
+            <i class="bx bx-sun"></i>
+        </button>
+    </div>
+
 </body>
 
 </html>

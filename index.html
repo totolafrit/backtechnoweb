@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil</title>
+    <title>Home</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="accueil.css">
 </head>
 
-<!-- Le script Google Analytics ne sera pas chargé par défaut -->
+<!-- The Google Analytics script will not load by default -->
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     
-    // Fonction pour charger Google Analytics après consentement
+    // Function to load Google Analytics after consent
     function loadGoogleAnalytics() {
         var script = document.createElement("script");
         script.src = "https://www.googletagmanager.com/gtag/js?id=G-KW7NDZ87V2";
@@ -28,24 +28,24 @@
 </script>
 
 <body>
-    <!-- Sélecteur de langue -->
-    <div class="language-selector">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" alt="Français" id="lang-fr" title="Français">
-        <img src="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg" alt="Anglais" id="lang-en" title="English">
-    </div>
+    <!-- Language selector -->
+    <!-- <div class="language-selector">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" alt="French" id="lang-fr" title="French">
+        <img src="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg" alt="English" id="lang-en" title="English">
+    </div> -->
 
-    <!-- En-tête -->
+    <!-- Header -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="project.html">Services</a></li>
-                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li><a href="actualites.html">Green News</a></li>
                 <li>
                     <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
                     <!-- <a href="connection.html"><i class="bx bxs-user-circle"></i></a> -->
@@ -55,68 +55,62 @@
         </nav>
     </header>
 
-    <!-- Grande photo principale -->
+    <!-- Main banner photo -->
     <div class="main-photo">
-        <img src="baniere.JPG" alt="Bannière principale">
+        <img src="baniere.JPG" alt="Main Banner">
     </div>
 
-    <!-- Section des services -->
-    <h1>Nos Services</h1>
+    <!-- Services Section -->
+    <h1>Our Services</h1>
     <section class="services">
         <a href="project-entretient.html" class="service">
-            <img src="entretient.jpg" alt="Entretien de Jardin">
-            <h3>Entretien De Jardin</h3>
+            <img src="entretient.jpg" alt="Garden Maintenance">
+            <h3>Garden Maintenance</h3>
         </a>
         <a href="project-debrous.html" class="service">
-            <img src="debrouss.jpg" alt="Débroussaillage">
-            <h3>Débroussaillage</h3>
+            <img src="debrouss.jpg" alt="Brush Clearing">
+            <h3>Brush Clearing</h3>
         </a>
         <a href="project-taille-soins.html" class="service">
-            <img src="taille.jpg" alt="Taille Et Soins Aux Arbres">
-            <h3>Taille Et Soins Aux Arbres</h3>
+            <img src="taille.jpg" alt="Tree Pruning and Care">
+            <h3>Tree Pruning and Care</h3>
         </a>
         <a href="project-creation.html" class="service">
-            <img src="creation.jpg" alt="Création">
-            <h3>Création (Petites Créations et Aménagement de Jardin)</h3>
+            <img src="creation.jpg" alt="Creation">
+            <h3>Creation (Small Designs and Garden Landscaping)</h3>
         </a>
     </section>
 
-    <!-- Promotions -->
-    
-    <a href="shop.html" class="see-more">Voir Plus</a>
-
-    <!-- Section Infos-Vertes -->
+    <!-- Green News Section -->
     <section class="green-info">
-        <h2>Les Infos-Vertes</h2>
+        <h2>Green News</h2>
         <div class="green-info-row">
             <div class="green-info-item">
-                <img src="2021-BD-bon-arbre-1.pdf" alt="Bon Arbre, Bon Endroit">
-                <a href="actu1.html">Bon Arbre, Bon Endroit</a>
+                <img src="Bon-Arbre.png" alt="Right Tree, Right Place">
+                <a href="actu1.html">Right Tree, Right Place</a>
             </div>
             <div class="green-info-item">
-                <img src="2021-BD-les-racines-du-mal.pdf" alt="Les Racines du Mal">
-                <a href="actu2.html">Les Racines du Mal</a>
+                <img src="RACINES.png" alt="The Roots of Evil">
+                <a href="actu2.html">The Roots of Evil</a>
             </div>
             <div class="green-info-item">
-                <img src="2021-BD-mort-dun-chene.pdf" alt="Mort d'un Chêne">
-                <a href="actu3.html">Mort d'un Chêne</a>
+                <img src="dead.png" alt="Death of an Oak">
+                <a href="actu3.html">Death of an Oak</a>
             </div>
         </div>
     </section>
 
-    <!-- Pied de page -->
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 L'Arbre Envie - Tous droits réservés</p>
-        <p><a href="terms.html" target="_blank">Termes et conditions</a></p>
+        <p>&copy; 2024 L'Arbre Envie - All Rights Reserved</p>
+        <p><a href="terms.html" target="_blank">Terms and Conditions</a></p>
     </footer>
 
-    <!-- Bannière de consentement aux cookies -->
-    
-
-    <div id="cookie-banner">
-        <p>Nous utilisons des cookies pour améliorer votre expérience sur notre site. <a href="privacy-policy.html">En savoir plus</a>.</p>
-        <button id="accept-cookies">Accepter</button>
-        <button id="decline-cookies">Refuser</button>
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" style="position: fixed; bottom: 0; background: #333; color: #fff; width: 100%; padding: 15px; text-align: center;">
+        <p>We use cookies to improve your experience on our site. <a href="privacy-policy.html" style="color: #fff;">Learn more</a>.</p>
+        <button id="accept-cookies" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none;">Accept</button>
+        <button id="decline-cookies" style="background-color: #f44336; color: white; padding: 10px 20px; border: none;">Decline</button>
     </div>
     
 

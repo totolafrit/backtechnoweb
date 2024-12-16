@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <title>Produit Détail</title>
+    <title>Product Details</title>
     <link rel="stylesheet" href="produit.css">
 </head>
 
@@ -18,11 +18,11 @@
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="project.html">Services</a></li>
-                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li><a href="actualites.html">Green News</a></li>
                 <li>
                     <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
                     <a id="user-link"><i class="bx bxs-user-circle"></i></a>
@@ -50,7 +50,7 @@
                 <p id="product-description"> </p>
             
                 <div class="quantity-control">
-                    <label for="product-quantity">Quantité :</label>
+                    <label for="product-quantity">Quantity:</label>
                     <button class="quantity-btn" onclick="changeQuantity(-1)">
                         <i class='bx bx-minus'></i>
                     </button>
@@ -60,7 +60,7 @@
                     </button>
                 </div>
             
-                <button class="add-to-cart" onclick="addToCart()">Ajouter au panier</button>
+                <button class="add-to-cart" onclick="addToCart()">Add to Cart</button>
             </div>
             
             
@@ -69,7 +69,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2024 L'Arbre En Vie - Tous droits réservés</p>
+        <p>&copy; 2024 L'Arbre En Vie - All Rights Reserved</p>
     </footer>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -88,7 +88,7 @@
     
             })
             .catch(error => {
-                console.error('Erreur lors de la récupération du produit:', error);
+                console.error('Error fetching product details:', error);
             });
 
             let currentQuantity = 1;

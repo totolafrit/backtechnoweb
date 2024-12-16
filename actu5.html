@@ -1,28 +1,27 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tailler ou ne pas Tailler</title>
+    <title>To Prune or Not to Prune</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="actu.css">
 </head>
 
 <body>
-   
-    <!-- En-tête -->
+    <!-- Header -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="project.html">Services</a></li>
-                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li><a href="actualites.html">Green News</a></li>
                 <li>
                     <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
                     <a href="connection.html"><i class="bx bxs-user-circle"></i></a>
@@ -31,63 +30,63 @@
         </nav>
     </header>
 
-    <!-- Retour aux actualités -->
+    <!-- Back to News -->
     <section class="return-link">
-        <a href="actualites.html"><i class="bx bx-left-arrow-alt"></i> Retour aux Actualités</a>
+        <a href="actualites.html"><i class="bx bx-left-arrow-alt"></i> Back to News</a>
     </section>
 
-    <!-- Contenu principal -->
+    <!-- Main Content -->
     <main>
         <section class="content">
-            <h1>Tailler ou ne pas Tailler</h1>
+            <h1>To Prune or Not to Prune</h1>
             <p class="description">
-                La plaquette éducative <strong>"Tailler ou ne pas Tailler"</strong> aborde un sujet crucial : comment entretenir les arbres en respectant leur croissance naturelle.  
-                Ce guide met en lumière les impacts des tailles inadaptées, offrant des conseils pratiques pour préserver la santé et la beauté des arbres.  
-                À travers des illustrations informatives, cette ressource répond aux questions des passionnés de jardinage :  
+                The educational booklet <strong>"To Prune or Not to Prune"</strong> addresses a crucial topic: how to care for trees while respecting their natural growth.  
+                This guide highlights the impacts of improper pruning and provides practical advice for preserving the health and beauty of trees.  
+                Through informative illustrations, this resource answers the questions of gardening enthusiasts:  
             </p>
             <ul>
-                <li>Pourquoi éviter les tailles excessives ?</li>
-                <li>Quels sont les effets sur la vitalité et la longévité des arbres ?</li>
-                <li>Comment adopter des pratiques d’élagage responsables ?</li>
+                <li>Why avoid excessive pruning?</li>
+                <li>What are the effects on the vitality and longevity of trees?</li>
+                <li>How to adopt responsible pruning practices?</li>
             </ul>
             <p>
-                Ce document est idéal pour tous ceux qui souhaitent conjuguer esthétique et durabilité dans l’entretien des espaces verts.
-                Utilisez les flèches pour parcourir les pages et en apprendre davantage sur les bonnes pratiques arboricoles.
+                This document is ideal for anyone looking to combine aesthetics and sustainability in maintaining green spaces.
+                Use the arrows to navigate through the pages and learn more about good arboricultural practices.
             </p>
         </section>
 
-        <!-- Visionneuse PDF -->
+        <!-- PDF Viewer -->
         <section class="pdf-viewer">
             <div class="navigation">
-                <button id="prevPage"><i class="bx bx-chevron-left"></i> Précédent</button>
-                <button id="nextPage">Suivant <i class="bx bx-chevron-right"></i></button>
+                <button id="prevPage"><i class="bx bx-chevron-left"></i> Previous</button>
+                <button id="nextPage">Next <i class="bx bx-chevron-right"></i></button>
                 <button id="zoomBtn"><i class="bx bx-zoom-in"></i> Zoom</button>
             </div>
             <canvas id="pdfCanvas"></canvas>
-            <p class="page-info">Page : <span id="pageNum"></span> / <span id="pageCount"></span></p>
+            <p class="page-info">Page: <span id="pageNum"></span> / <span id="pageCount"></span></p>
         </section>
     </main>
 
-    <!-- Pied de page -->
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
+        <p>&copy; 2024 L'Arbre Envie. All rights reserved.</p>
     </footer>
 
-    <!-- Script JS pour le PDF -->
+    <!-- JS Script for PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script>
-        const url = 'BD-Tailler-ou-ne-pas-tailler-2-1.pdf'; // Lien vers le PDF
+        const url = 'BD-Tailler-ou-ne-pas-tailler-2-1.pdf'; // Link to the PDF
 
         let pdfDoc = null,
             pageNum = 1,
             pageIsRendering = false,
             pageNumIsPending = null;
 
-        const scale = 1, // Réduction de la taille du PDF
+        const scale = 1, // PDF scaling
             canvas = document.getElementById('pdfCanvas'),
             ctx = canvas.getContext('2d');
 
-        // Charger le PDF
+        // Load the PDF
         const renderPage = (num) => {
             pageIsRendering = true;
 
@@ -138,7 +137,7 @@
             queueRenderPage(pageNum);
         };
 
-        // Fonction pour ouvrir le PDF en plein écran
+        // Function to open the PDF in full screen
         const openPDFInNewTab = () => {
             window.open(url, '_blank');
         };
@@ -156,12 +155,12 @@
         document.getElementById('zoomBtn').addEventListener("click", openPDFInNewTab);
     </script>
 
-    <!-- Script pour le changement de thème -->
+    <!-- Script for Theme Change -->
     <script src="theme.js"></script>
 
-    <!-- Bouton de changement de thème -->
+    <!-- Theme Toggle Button -->
     <div id="theme-toggle">
-        <button id="theme-toggle-btn" title="Changer le thème">
+        <button id="theme-toggle-btn" title="Change Theme">
             <i class="bx bx-sun"></i>
         </button>
     </div>

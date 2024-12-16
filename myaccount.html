@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Compte</title>
+    <title>My Account</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="myaccount.css">
 </head>
 <body>
-    <!-- En-tête -->
+    <!-- Header -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="project.html">Services</a></li>
-                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li><a href="actualites.html">Green News</a></li>
                 <li>
                     <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
                     <a id="user-link"><i class="bx bxs-user-circle"></i></a>
@@ -28,64 +28,61 @@
         </nav>
     </header>
 
-    <!-- Contenu principal -->
+    <!-- Main Content -->
     <main>
         <section id="account-section">
             <div class="account-header">
-                <h1>Paramètres du Compte</h1>
-                <button class="logout-button" onclick="logout()">Déconnexion</button>
+                <h1>Account Settings</h1>
+                <button class="logout-button" onclick="logout()">Log Out</button>
             </div>
 
-            <!-- Grille pour les sections -->
+            <!-- Grid for sections -->
             <div class="grid-container">
-                <!-- Mes informations -->
+                <!-- My Information -->
                 <div class="info-section card">
-                    
-                        <h2>Mes Informations</h2>
-                        <p><strong>Nom :</strong> <span id="userName">Chargement...</span></p>
-                        <p><strong>Email :</strong> <span id="userEmail">Chargement...</span></p>
-                        
-                        <a href="modif.html" class="btn">Changer mes informations personnelles</a>
-                    
+                    <h2>My Information</h2>
+                    <p><strong>Name:</strong> <span id="userName">Loading...</span></p>
+                    <p><strong>Email:</strong> <span id="userEmail">Loading...</span></p>
+                    <a href="modif.html" class="btn">Change Personal Information</a>
                 </div>
 
-                <!-- Gestion du mot de passe -->
+                <!-- Password Management -->
                 <div class="password-section card">
-                    <h2>Gestion du Mot de Passe</h2>
-                    <p>Pour assurer la sécurité de votre compte, veuillez régulièrement changer votre mot de passe.</p>
-                    <a href="mdpchange.html" class="btn">Changer mon mot de passe</a>
+                    <h2>Password Management</h2>
+                    <p>To ensure the security of your account, regularly change your password.</p>
+                    <a href="mdpchange.html" class="btn">Change Password</a>
                 </div>
             </div>
 
-            <!-- Dernières commandes et paramètres -->
+            <!-- Orders and Settings -->
             <div class="grid-container">
-                <!-- Dernières commandes -->
+                <!-- Orders -->
                 <div class="orders-section card">
-                        <h2>Mes Commandes</h2>
-                        <ul id="orders-list"></ul>  <!-- Liste des commandes -->
+                    <h2>My Orders</h2>
+                    <ul id="orders-list"></ul> <!-- Orders list -->
                 </div>
 
-                <!-- Paramètres de confidentialité et suppression -->
+                <!-- Privacy Settings and Deletion -->
                 <div class="settings-section card">
-                    <h2>Paramètres de Confidentialité</h2>
-                    <p>Gérez vos données personnelles et vos autorisations.</p>
-                    <a href="confidentialite.html" class="btn">Gérer</a>
-                    <h2>Supprimer le Compte</h2>
-                    <p>Cette action est irréversible.</p>
-                    <a href="delete-account.html" class="btn delete">Supprimer</a>
+                    <h2>Privacy Settings</h2>
+                    <p>Manage your personal data and permissions.</p>
+                    <a href="confidentialite.html" class="btn">Manage</a>
+                    <h2>Delete Account</h2>
+                    <p>This action is irreversible.</p>
+                    <a href="delete-account.html" class="btn delete">Delete</a>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Pied de page -->
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 L'Arbre Envie - Tous droits réservés</p>
+        <p>&copy; 2024 L'Arbre Envie - All Rights Reserved</p>
     </footer>
 
-    <!-- Bouton de changement de thème -->
+    <!-- Theme Toggle Button -->
     <div id="theme-toggle">
-        <button id="theme-toggle-btn" title="Changer le thème">
+        <button id="theme-toggle-btn" title="Change Theme">
             <i class="bx bx-sun"></i>
         </button>
     </div>
@@ -94,62 +91,55 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => { 
-            // Vérifie si l'utilisateur est connecté
+            // Check if user is logged in
             if (localStorage.getItem("isLoggedIn") !== "true") {
-                window.location.href = "connection.html"; // Redirige si non connecté
+                window.location.href = "connection.html"; // Redirect if not logged in
             } else {
-                const userId = localStorage.getItem("userId"); // Récupère l'ID utilisateur
-                fetchUserData(userId); // Appel de la fonction pour récupérer les données de cet utilisateur
-                fetchUserOrders(userId)
+                const userId = localStorage.getItem("userId"); // Get user ID
+                fetchUserData(userId); // Fetch user data
+                fetchUserOrders(userId); // Fetch orders
             }
         });
 
-    
-        
-
-         // Fonction pour récupérer les données de l'utilisateur connecté depuis l'API
-
+        // Fetch user data
         async function fetchUserData(userId) {
             try {
                 const response = await fetch(`http://localhost:3000/api/users/${userId}`);
                 if (response.ok) {
                     const user = await response.json(); 
-                    
-                    // Mettre à jour les éléments HTML avec les informations de l'utilisateur
-                    document.getElementById("userName").textContent = user.username || "Nom non disponible";
-                    document.getElementById("userEmail").textContent = user.email || "Email non disponible";
+                    document.getElementById("userName").textContent = user.username || "Name not available";
+                    document.getElementById("userEmail").textContent = user.email || "Email not available";
                 } else {
-                    console.error('Erreur lors de la récupération des données de l\'utilisateur');
+                    console.error('Error fetching user data');
                 }
             } catch (err) {
-                console.error('Erreur de connexion:', err);
+                console.error('Connection error:', err);
             }
         }
 
-
-         // Fonction pour récupérer les commandes de l'utilisateur
-         async function fetchUserOrders(userId) {
+        // Fetch user orders
+        async function fetchUserOrders(userId) {
             try {
                 const response = await fetch(`http://localhost:3000/api/orders/user/${userId}`);
                 if (response.ok) {
                     const orders = await response.json();
                     displayOrders(orders);
                 } else {
-                    console.error('Erreur lors de la récupération des commandes');
-                    document.getElementById("orders-list").innerHTML = "<li>Aucune commande trouvée.</li>";
+                    console.error('Error fetching orders');
+                    document.getElementById("orders-list").innerHTML = "<li>No orders found.</li>";
                 }
             } catch (err) {
-                console.error('Erreur de connexion:', err);
+                console.error('Connection error:', err);
             }
         }
 
-        // Fonction pour afficher les commandes
+        // Display orders
         function displayOrders(orders) {
             const ordersList = document.getElementById("orders-list");
-            ordersList.innerHTML = ''; // Vider la liste avant d'ajouter les nouvelles commandes
+            ordersList.innerHTML = ''; // Clear previous orders
         
             if (orders.length === 0) {
-                ordersList.innerHTML = "<p>Aucune commande trouvée.</p>";
+                ordersList.innerHTML = "<p>No orders found.</p>";
                 return;
             }
         
@@ -158,44 +148,36 @@
                 orderItem.classList.add('order-item');
         
                 orderItem.innerHTML = `
-                    <p><strong>Commande #${order.order_id}</strong></p>
-                    <p>Total : ${order.total_price.toFixed(2)}€</p>
-                    <p>Date de la commande : ${new Date(order.created_at).toLocaleDateString()}</p>
-                    <a href="#" class="btn download-facture" data-order-id="${order.order_id}">Télécharger la facture</a>
-
+                    <p><strong>Order #${order.order_id}</strong></p>
+                    <p>Total: €${order.total_price.toFixed(2)}</p>
+                    <p>Order Date: ${new Date(order.created_at).toLocaleDateString()}</p>
+                    <a href="order-details.html" class="btn">View Details</a>
                 `;
-        // c'est le bouton ici qui doit télécharger une facture à la place de order-detail.html
+        
                 ordersList.appendChild(orderItem);
             });
         }
 
-
-    
-        // Fonction de déconnexion
+        // Log out
         function logout() {
-            // Envoyer la requête de déconnexion au serveur pour détruire la session
             fetch('http://localhost:3000/logout', {
                 method: 'POST',
-                credentials: 'same-origin', // Assurez-vous que les cookies de session sont envoyés avec la requête
+                credentials: 'same-origin',
             })
             .then(response => {
                 if (response.ok) {
-                    // Supprimer les informations de session côté client
                     localStorage.removeItem("isLoggedIn");
                     localStorage.removeItem("username");
                     localStorage.removeItem("userId");
-        
-                    // Rediriger l'utilisateur vers la page d'accueil
                     window.location.href = "index.html";
                 } else {
-                    console.error('Erreur lors de la déconnexion');
+                    console.error('Logout error');
                 }
             })
             .catch(err => {
-                console.error('Erreur de connexion:', err);
+                console.error('Connection error:', err);
             });
         }
-        
     </script>
 
     <script src="auth.js"></script>
@@ -204,57 +186,5 @@
             checkUserLink("user-link");
         });
     </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<script>
-    document.addEventListener("click", async (e) => {
-        if (e.target.classList.contains("download-facture")) {
-            e.preventDefault();
-            const orderId = e.target.getAttribute("data-order-id");
-
-            try {
-                const response = await fetch(`http://localhost:3000/api/orders/${orderId}`);
-                if (response.ok) {
-                    const order = await response.json();
-
-                    // Création du document PDF
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF();
-
-                    // Titre de la facture
-                    doc.text("Facture de commande", 20, 20);
-                    doc.text(`Commande #${order.order_id}`, 20, 30);
-                    doc.text(`Date: ${new Date(order.created_at).toLocaleDateString()}`, 20, 40);
-
-                    // Liste des articles
-                    let yPosition = 50;
-                    order.items.forEach((item, index) => {
-                        doc.text(
-                            `${index + 1}. ${item.product_name} - ${item.quantity} x ${item.price.toFixed(2)}€`,
-                            20, yPosition
-                        );
-                        yPosition += 10;
-                    });
-
-                    // Total de la commande
-                    doc.text(`Total: ${order.total_price.toFixed(2)}€`, 20, yPosition + 10);
-
-                    // Téléchargement
-                    doc.save(`facture_commande_${order.order_id}.pdf`);
-                } else {
-                    console.error("Erreur lors de la récupération de la commande.");
-                    alert("Impossible de générer la facture.");
-                }
-            } catch (err) {
-                console.error("Erreur de connexion:", err);
-                alert("Erreur lors de la génération de la facture.");
-            }
-        }
-    });
-</script>
-
 </body>
 </html>
-
-

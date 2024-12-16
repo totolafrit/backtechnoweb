@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <title>Paiement par Carte</title>
+    <title>Card Payment</title>
     <link rel="stylesheet" href="payementCB.css">
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 
 <body>
 
-    <!-- Navbar avec le logo et les étapes -->
+    <!-- Navbar with logo and steps -->
     <header class="progress-header">
         <div class="logo">
             <img src="logo.png" alt="Logo">
@@ -20,7 +20,7 @@
         <nav class="progress-bar">
             <div class="progress-step">
                 <i class="bx bx-calendar"></i>
-                <p>Sélectionner la date</p>
+                <p>Select Date</p>
             </div>
             <div class="progress-step">
                 <i class="bx bx-check-circle"></i>
@@ -28,34 +28,35 @@
             </div>
             <div class="progress-step">
                 <i class="bx bx-credit-card"></i>
-                <p>Choix du paiement</p>
+                <p>Payment Choice</p>
             </div>
             <div class="progress-step active">
                 <i class="bx bx-money"></i>
-                <p>Paiement</p>
+                <p>Payment</p>
             </div>
             <div class="progress-step">
                 <i class="bx bx-envelope"></i>
-                <p>Envoi du mail</p>
+                <p>Email Sent</p>
             </div>
         </nav>
     </header>
 
     <!-- Conteneur Principal -->
     <div class="payment-container">
-        <h1 class="payment-title">Paiement par Carte Bancaire</h1>
+        <h1 class="payment-title">Credit Card Payment</h1>
         <form class="payment-form" id="payment-form">
             <div class="form-group">
-                <label for="cardholder-name">Nom du titulaire :</label>
-                <input type="text" id="cardholder-name" class="form-input" placeholder="Votre nom complet" required>
+                <label for="cardholder-name">Cardholder Name:</label>
+                <input type="text" id="cardholder-name" class="form-input" placeholder="Your full name" required>
             </div>
             <div id="card-element" class="form-group">
                 <!-- Stripe Card Element -->
             </div>
             <div id="card-errors" role="alert" style="color: red;"></div>
-            <button type="submit" class="pay-button">Payer</button>
+            <button type="submit" class="pay-button">Pay</button>
         </form>
     </div>
+    
 
     <!-- Script Stripe -->
     <script>
@@ -129,7 +130,7 @@
                     if (confirmError) {
                         document.getElementById('card-errors').textContent = confirmError.message;
                     } else {
-                        alert('Paiement effectué avec succès !');
+                        alert('Payment successful!');
                         window.location.href = 'mail.html';
                     }
                 } else {

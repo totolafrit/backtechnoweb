@@ -1,29 +1,27 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bon Arbre, Bon Endroit</title>
+    <title>Right Tree, Right Place</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="actu.css">
 </head>
 
 <body>
-    <!-- En-tête -->
-   
-    <!-- En-tête -->
+    <!-- Header -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="project.html">Services</a></li>
-                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li><a href="actualites.html">Green News</a></li>
                 <li>
                     <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
                     <a id="user-link"><i class="bx bxs-user-circle"></i></a>
@@ -32,39 +30,40 @@
         </nav>
     </header>
 
-    <!-- Retour aux actualités -->
+    <!-- Back to News -->
     <section class="return-link">
-        <a href="actualites.html"><i class="bx bx-left-arrow-alt"></i> Retour aux Actualités</a>
+        <a href="actualites.html"><i class="bx bx-left-arrow-alt"></i> Back to News</a>
     </section>
 
-    <!-- Contenu principal -->
+    <!-- Main Content -->
     <main>
         <section class="content">
-            <h1>Bon Arbre, Bon Endroit</h1>
+            <h1>Right Tree, Right Place</h1>
             <p class="description">
-                Découvrez le guide complet de l'élagage : <strong>"Bon Arbre, Bon Endroit"</strong>, édité en 2021.
-                Ce document est une ressource précieuse pour les passionnés et les professionnels du jardinage,
-                vous offrant des techniques modernes pour prendre soin de vos arbres et améliorer vos compétences.
+                Discover the complete pruning guide: <strong>"Right Tree, Right Place"</strong>, published in 2021.
+                This document is a valuable resource for gardening enthusiasts and professionals,
+                offering modern techniques to take care of your trees and improve your skills.
             </p>
-            <p>Utilisez les flèches pour naviguer à travers les pages comme dans un livre.</p>
+            <p>Use the arrows to navigate through the pages like a book.</p>
         </section>
 
-        <!-- Visionneuse PDF -->
+        <!-- PDF Viewer -->
         <section class="pdf-viewer">
             <div class="navigation">
-                <button id="prevPage"><i class="bx bx-chevron-left"></i> Précédent</button>
-                <button id="nextPage">Suivant <i class="bx bx-chevron-right"></i></button>
+                <button id="prevPage"><i class="bx bx-chevron-left"></i> Previous</button>
+                <button id="nextPage">Next <i class="bx bx-chevron-right"></i></button>
                 <button id="zoomBtn"><i class="bx bx-zoom-in"></i> Zoom</button>
             </div>
             <canvas id="pdfCanvas"></canvas>
-            <p class="page-info">Page : <span id="pageNum"></span> / <span id="pageCount"></span></p>
+            <p class="page-info">Page: <span id="pageNum"></span> / <span id="pageCount"></span></p>
         </section>
     </main>
 
-    <!-- Pied de page -->
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 L'Arbre Envie. Tous droits réservés.</p>
+        <p>&copy; 2024 L'Arbre Envie. All rights reserved.</p>
     </footer>
+
 
     <!-- Script JS pour le PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>

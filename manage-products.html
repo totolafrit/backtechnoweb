@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Produits</title>
+    <title>Product Management</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="manage-products.css">
 </head>
@@ -21,38 +21,38 @@
     <aside class="sidebar">
         <a href="admin.html" class="undo-link"><i class="bx bx-undo"></i></a>
         <h3>Actions</h3>
-        <button onclick="startEdit()" class="action-btn" id="edit-btn" disabled>Modifier</button>
-        <button onclick="startDelete()" class="action-btn" id="delete-btn" disabled>Supprimer</button>
-        <button onclick="window.location.href='create-products.html'" class="action-btn" id="add-btn">Ajouter un produit</button>
+        <button onclick="startEdit()" class="action-btn" id="edit-btn" disabled>Edit</button>
+        <button onclick="startDelete()" class="action-btn" id="delete-btn" disabled>Delete</button>
+        <button onclick="window.location.href='create-products.html'" class="action-btn" id="add-btn">Add Product</button>
 
         <div id="edit-form-container" style="display: none;">
-            <h2>Modifier le produit</h2>
+            <h2>Edit Product</h2>
             <form id="edit-product-form">
                 <input type="hidden" id="edit-product-id">
-                <label for="edit-name">Nom du produit :</label>
+                <label for="edit-name">Product Name:</label>
                 <input type="text" id="edit-name" required>
-                <label for="edit-price">Prix :</label>
+                <label for="edit-price">Price:</label>
                 <input type="text" id="edit-price" required>
 
-                <label for="edit-description">Description :</label>
+                <label for="edit-description">Description:</label>
                 <textarea id="edit-description" required></textarea>
-                <label for="edit-category">Catégorie :</label>
+                <label for="edit-category">Category:</label>
                 <input type="text" id="edit-category" required>
-                <label for="edit-image-url">URL de l'image :</label>
+                <label for="edit-image-url">Image URL:</label>
                 <input type="text" id="edit-image-url" required>
-                <button type="submit">Enregistrer</button>
+                <button type="submit">Save</button>
             </form>
         </div>
     </aside>
 
     <section class="product-list-section">
-        <h1>Liste des produits</h1>
-        <input type="text" id="search-bar" placeholder="Rechercher..." oninput="filterProducts()">
+        <h1>Product List</h1>
+        <input type="text" id="search-bar" placeholder="Search..." oninput="filterProducts()">
         
         <select id="sort-options" onchange="sortProducts()">
-            <option value="name">Nom du produit</option>
-            <option value="price-asc">Prix Croissant</option>
-            <option value="price-desc">Prix Décroissant</option>
+            <option value="name">Product Name</option>
+            <option value="price-asc">Price Ascending</option>
+            <option value="price-desc">Price Descending</option>
         </select>
 
         <div id="product-list" class="product-list"></div>
@@ -69,7 +69,7 @@ async function fetchProducts() {
         allProducts = await response.json();
         displayProducts(allProducts);
     } catch (error) {
-        console.error('Erreur lors de la récupération des produits :', error);
+        console.error('Error fetching products:', error);
     }
 }
 
@@ -82,10 +82,10 @@ function displayProducts(products) {
         productItem.innerHTML = `
             <div class="product-info" onclick="selectProduct(${product.id})">
                 <h3>${product.name}</h3>
-                <p>Prix : ${product.price}€</p>
-                <p>Description : ${product.description}</p>
-                <p>Catégorie : ${product.category}</p>
-                <td><img src="http://localhost:3000/images/${product.image_url}" width="100"></td>
+                <p>Price: ${product.price}€</p>
+                <p>Description: ${product.description}</p>
+                <p>Category: ${product.category}</p>
+                <img src="http://localhost:3000/images/${product.image_url}" width="100">
             </div>
         `;
         productList.appendChild(productItem);
@@ -106,7 +106,7 @@ function startEdit() {
 
 function startDelete() {
     if (selectedProductId) {
-        if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
+        if (confirm('Are you sure you want to delete this product?')) {
             deleteProduct(selectedProductId);
         }
     }
@@ -119,18 +119,18 @@ async function deleteProduct(id) {
         });
 
         if (response.ok) {
-            alert('Produit supprimé');
+            alert('Product deleted');
             fetchProducts();
             selectedProductId = null;
             document.getElementById('edit-btn').disabled = true;
             document.getElementById('delete-btn').disabled = true;
         } else {
             const data = await response.json();
-            alert('Erreur : ' + data.message);
+            alert('Error: ' + data.message);
         }
     } catch (error) {
-        console.error('Erreur :', error);
-        alert('Erreur lors de la suppression du produit');
+        console.error('Error:', error);
+        alert('Error deleting the product');
     }
 }
 
@@ -150,7 +150,7 @@ async function editProduct(id) {
     try {
         const response = await fetch(`http://localhost:3000/api/products/${id}`);
         if (!response.ok) {
-            throw new Error(`Erreur HTTP : ${response.status}`);
+            throw new Error(`HTTP Error: ${response.status}`);
         }
         const product = await response.json();
         document.getElementById('edit-name').value = product.name;
@@ -161,8 +161,8 @@ async function editProduct(id) {
         document.getElementById('edit-product-id').value = product.id;
         document.getElementById('edit-form-container').style.display = 'block';
     } catch (error) {
-        console.error('Erreur lors de la récupération du produit :', error);
-        alert('Erreur lors de la récupération du produit');
+        console.error('Error fetching product:', error);
+        alert('Error fetching product details');
     }
 }
 
@@ -176,11 +176,11 @@ document.getElementById('edit-product-form').addEventListener('submit', async (e
     const image_url = document.getElementById('edit-image-url').value;
     const category = document.getElementById('edit-category').value;
 
-    // Remplacer la virgule par un point et convertir en nombre
+    // Replace comma with dot and convert to number
     price = parseFloat(price.replace(',', '.'));
 
     if (isNaN(price)) {
-        alert("Veuillez entrer un prix valide.");
+        alert("Please enter a valid price.");
         return;
     }
 
@@ -196,11 +196,11 @@ document.getElementById('edit-product-form').addEventListener('submit', async (e
             document.getElementById('edit-form-container').style.display = 'none';
         } else {
             const data = await response.json();
-            alert('Erreur : ' + data.message);
+            alert('Error: ' + data.message);
         }
     } catch (error) {
-        console.error('Erreur :', error);
-        alert('Erreur lors de la mise à jour du produit');
+        console.error('Error:', error);
+        alert('Error updating product');
     }
 });
 

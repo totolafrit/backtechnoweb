@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Clients</title>
+    <title>Client Management</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="manage-clients.css">
 </head>
@@ -21,32 +21,28 @@
     <aside class="sidebar">
         <a href="admin.html" class="undo-link"><i class="bx bx-undo"></i></a>
         <h3>Actions</h3>
-        <button onclick="startEdit()" class="action-btn" id="edit-btn" disabled>Modifier</button>
-        <button onclick="startDelete()" class="action-btn" id="delete-btn" disabled>Supprimer</button>
+        <button onclick="startEdit()" class="action-btn" id="edit-btn" disabled>Edit</button>
+        <button onclick="startDelete()" class="action-btn" id="delete-btn" disabled>Delete</button>
         <div id="edit-form-container" style="display: none;">
-            <h2>Modifier le client</h2>
+            <h2>Edit Client</h2>
             <form id="edit-client-form">
                 <input type="hidden" id="edit-client-id">
-                <label for="edit-username">Nom d'utilisateur :</label>
+                <label for="edit-username">Username:</label>
                 <input type="text" id="edit-username" required>
-                <label for="edit-email">Email :</label>
+                <label for="edit-email">Email:</label>
                 <input type="email" id="edit-email" required>
-                <label for="edit-role">Rôle :</label>
+                <label for="edit-role">Role:</label>
                 <input type="text" id="edit-role" required>
-                <button type="submit">Enregistrer</button>
+                <button type="submit">Save</button>
             </form>
         </div>
     </aside>
 
     <section class="client-list-section">
-        <h1>Liste des clients</h1>
-        <input type="text" id="search-bar" placeholder="Rechercher..." oninput="filterClients()">
-        
-
+        <h1>Client List</h1>
+        <input type="text" id="search-bar" placeholder="Search..." oninput="filterClients()">
         <div id="client-list" class="client-list"></div>
     </section>
-
-    
 </main>
 
 <script>
@@ -59,7 +55,7 @@ async function fetchClients() {
         allClients = await response.json();
         displayClients(allClients);
     } catch (error) {
-        console.error('Erreur lors de la récupération des clients :', error);
+        console.error('Error fetching clients:', error);
     }
 }
 
@@ -72,8 +68,8 @@ function displayClients(clients) {
         clientItem.innerHTML = `
             <div class="client-info" onclick="selectClient(${client.id})">
                 <h3>${client.username}</h3>
-                <p>Email : ${client.email}</p>
-                <p>Rôle : ${client.role}</p>
+                <p>Email: ${client.email}</p>
+                <p>Role: ${client.role}</p>
             </div>
         `;
         clientList.appendChild(clientItem);
@@ -94,7 +90,7 @@ function startEdit() {
 
 function startDelete() {
     if (selectedClientId) {
-        if (confirm('Êtes-vous sûr de vouloir supprimer ce client ?')) {
+        if (confirm('Are you sure you want to delete this client?')) {
             deleteClient(selectedClientId);
         }
     }
@@ -107,18 +103,18 @@ async function deleteClient(id) {
         });
 
         if (response.ok) {
-            alert('Client supprimé');
+            alert('Client deleted');
             fetchClients(); 
             selectedClientId = null;
             document.getElementById('edit-btn').disabled = true;
             document.getElementById('delete-btn').disabled = true;
         } else {
             const data = await response.json();
-            alert('Erreur : ' + data.message);
+            alert('Error: ' + data.message);
         }
     } catch (error) {
-        console.error('Erreur :', error);
-        alert('Erreur lors de la suppression du client');
+        console.error('Error:', error);
+        alert('Error deleting the client');
     }
 }
 
@@ -136,7 +132,7 @@ async function editClient(id) {
     try {
         const response = await fetch(`http://localhost:3000/api/users/${id}`);
         if (!response.ok) {
-            throw new Error(`Erreur HTTP : ${response.status}`);
+            throw new Error(`HTTP Error: ${response.status}`);
         }
         const client = await response.json();
         document.getElementById('edit-username').value = client.username;
@@ -145,8 +141,8 @@ async function editClient(id) {
         document.getElementById('edit-client-id').value = client.id;
         document.getElementById('edit-form-container').style.display = 'block';
     } catch (error) {
-        console.error('Erreur lors de la récupération du client :', error);
-        alert('Erreur lors de la récupération du client');
+        console.error('Error fetching client:', error);
+        alert('Error fetching client details');
     }
 }
 
@@ -170,11 +166,11 @@ document.getElementById('edit-client-form').addEventListener('submit', async (e)
             document.getElementById('edit-form-container').style.display = 'none';
         } else {
             const data = await response.json();
-            alert('Erreur : ' + data.message);
+            alert('Error: ' + data.message);
         }
     } catch (error) {
-        console.error('Erreur :', error);
-        alert('Erreur lors de la mise à jour du client');
+        console.error('Error:', error);
+        alert('Error updating client');
     }
 });
 

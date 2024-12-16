@@ -405,3 +405,13 @@ body.dark-theme a:hover {
     background-color: #eaf8ea;
     font-weight: bold;
 }
+
+/* Pied de page */
+footer {
+    text-align: center;
+    padding: 15px;
+    font-size: 1rem;
+    color: #555;
+    background-color: #ffffff;
+    border-top: 2px solid #ddd;
+}

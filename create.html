@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer un Compte</title>
+    <title>Create an Account</title>
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="create.css">
 </head>
 <body>
     <div class="form-container">
-        <img src="logo.png" alt="Logo de l'Arbre Envie" class="logo">
-        <h1 class="form-title">Créer un Compte</h1>
+        <img src="logo.png" alt="L'Arbre Envie Logo" class="logo">
+        <h1 class="form-title">Create an Account</h1>
         <form id="signup-form" method="POST">
             <div class="input-group">
-                <label for="username">Nom d'utilisateur</label>
-                <input type="text" id="username" name="username" placeholder="Entrez votre nom d'utilisateur" required>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
             </div>
 
             <div class="input-group">
-                <label for="email">Adresse e-mail</label>
-                <input type="email" id="email" name="email" placeholder="Entrez votre adresse e-mail" required>
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
             </div>
 
             <div class="input-group">
-                <label for="password">Mot de passe</label>
+                <label for="password">Password</label>
                 <div class="password-container">
-                    <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
                     <i class="bx bx-hide toggle-password"></i>
                 </div>
                 <small id="passwordError" class="error-message"></small>
@@ -33,144 +33,142 @@
             </div>
 
             <div class="input-group">
-                <label for="confirm-password">Confirmer le mot de passe</label>
+                <label for="confirm-password">Confirm Password</label>
                 <div class="password-container">
-                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirmez votre mot de passe" required>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
                     <i class="bx bx-hide toggle-password"></i>
                 </div>
                 <small id="confirmPasswordError" class="error-message"></small>
             </div>
 
-            <button type="submit" class="form-button">S'inscrire</button>
+            <button type="submit" class="form-button">Sign Up</button>
         </form>
 
-        <p class="form-footer">Déjà un compte ? <a href="connection.html" class="link">Se connecter</a></p>
+        <p class="form-footer">Already have an account? <a href="connection.html" class="link">Log in</a></p>
     </div>
 
     <div id="theme-toggle">
-        <button id="theme-toggle-btn" title="Changer le thème">
+        <button id="theme-toggle-btn" title="Change Theme">
             <i class="bx bx-sun"></i>
         </button>
     </div>
 
     <script>
-        // Afficher/masquer les mots de passe
-document.querySelectorAll(".toggle-password").forEach(icon => {
-    icon.addEventListener("click", () => {
-        const input = icon.previousElementSibling;
-        input.type = input.type === "password" ? "text" : "password";
-        icon.classList.toggle("bx-hide");
-        icon.classList.toggle("bx-show");
-    });
-});
-
-// Validation de la force du mot de passe
-function validatePassword(password) {
-    const minLength = 10;
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-    return password.length >= minLength && hasUpperCase && hasLowerCase && hasSpecialChar;
-}
-
-// Calcul de la force du mot de passe
-function updatePasswordStrength(password) {
-    const strengthBar = document.getElementById('passwordStrength');
-    let strength = 0;
-
-    if (password.length >= 10) strength += 1; // Longueur minimum
-    if (/[A-Z]/.test(password)) strength += 1; // Majuscule
-    if (/[a-z]/.test(password)) strength += 1; // Minuscule
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength += 1; // Caractère spécial
-
-    // Mise à jour de la barre de progression
-    strengthBar.style.width = (strength * 25) + '%';
-    strengthBar.className = 'password-strength'; // Reset
-
-    if (strength === 4) {
-        strengthBar.classList.add('valid');
-    } else if (strength >= 2) {
-        strengthBar.classList.add('medium');
-    } else {
-        strengthBar.classList.add('weak');
-    }
-}
-
-// Événement sur le champ de mot de passe
-document.getElementById('password').addEventListener('input', (e) => {
-    updatePasswordStrength(e.target.value);
-});
-
-
-// Validation du formulaire
-document.getElementById('signup-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirm-password').value;
-    const passwordError = document.getElementById('passwordError');
-    const confirmPasswordError = document.getElementById('confirmPasswordError');
-
-    passwordError.textContent = '';
-    confirmPasswordError.textContent = '';
-
-    if (!validatePassword(password)) {
-        passwordError.textContent = 'Le mot de passe doit contenir au moins 10 caractères, une majuscule, une minuscule et un caractère spécial.';
-        return;
-    }
-
-    if (password !== confirmPassword) {
-        confirmPasswordError.textContent = 'Les mots de passe ne correspondent pas.';
-        return;
-    }
-
-    try {
-        const checkResponse = await fetch('http://localhost:3000/check-user', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, email })
+        // Show/Hide passwords
+        document.querySelectorAll(".toggle-password").forEach(icon => {
+            icon.addEventListener("click", () => {
+                const input = icon.previousElementSibling;
+                input.type = input.type === "password" ? "text" : "password";
+                icon.classList.toggle("bx-hide");
+                icon.classList.toggle("bx-show");
+            });
         });
 
-        if (!checkResponse.ok) {
-            const { message } = await checkResponse.json();
-            alert(`Erreur: ${message}`);
-            return;
+        // Validate password strength
+        function validatePassword(password) {
+            const minLength = 10;
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasLowerCase = /[a-z]/.test(password);
+            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+            return password.length >= minLength && hasUpperCase && hasLowerCase && hasSpecialChar;
         }
 
-        const response = await fetch('http://localhost:3000/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, email, password })
+        // Update password strength
+        function updatePasswordStrength(password) {
+            const strengthBar = document.getElementById('passwordStrength');
+            let strength = 0;
+
+            if (password.length >= 10) strength += 1; // Minimum length
+            if (/[A-Z]/.test(password)) strength += 1; // Uppercase
+            if (/[a-z]/.test(password)) strength += 1; // Lowercase
+            if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength += 1; // Special character
+
+            // Update progress bar
+            strengthBar.style.width = (strength * 25) + '%';
+            strengthBar.className = 'password-strength'; // Reset
+
+            if (strength === 4) {
+                strengthBar.classList.add('valid');
+            } else if (strength >= 2) {
+                strengthBar.classList.add('medium');
+            } else {
+                strengthBar.classList.add('weak');
+            }
+        }
+
+        // Password input event
+        document.getElementById('password').addEventListener('input', (e) => {
+            updatePasswordStrength(e.target.value);
         });
 
-        if (!response.ok) {
-            const { message } = await response.json();
-            alert(`Erreur: ${message}`);
-        } else {
-            window.location.href = 'connection.html';
+        // Form validation
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const passwordError = document.getElementById('passwordError');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+            passwordError.textContent = '';
+            confirmPasswordError.textContent = '';
+
+            if (!validatePassword(password)) {
+                passwordError.textContent = 'Password must be at least 10 characters long and include an uppercase letter, a lowercase letter, and a special character.';
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                confirmPasswordError.textContent = 'Passwords do not match.';
+                return;
+            }
+
+            try {
+                const checkResponse = await fetch('http://localhost:3000/check-user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email })
+                });
+
+                if (!checkResponse.ok) {
+                    const { message } = await checkResponse.json();
+                    alert(`Error: ${message}`);
+                    return;
+                }
+
+                const response = await fetch('http://localhost:3000/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                if (!response.ok) {
+                    const { message } = await response.json();
+                    alert(`Error: ${message}`);
+                } else {
+                    window.location.href = 'connection.html';
+                }
+            } catch (error) {
+                alert(`Server connection error: ${error.message}`);
+            }
+        });
+
+        // Theme toggle
+        const themeToggleButton = document.getElementById("theme-toggle-btn");
+        const body = document.body;
+
+        themeToggleButton.addEventListener("click", () => {
+            body.classList.toggle("dark-theme");
+            const isDarkTheme = body.classList.contains("dark-theme");
+            localStorage.setItem("theme", isDarkTheme ? "dark-theme" : "light-theme");
+        });
+
+        if (localStorage.getItem("theme") === "dark-theme") {
+            body.classList.add("dark-theme");
         }
-    } catch (error) {
-        alert(`Erreur de connexion au serveur: ${error.message}`);
-    }
-});
-
-// Changement de thème
-const themeToggleButton = document.getElementById("theme-toggle-btn");
-const body = document.body;
-
-themeToggleButton.addEventListener("click", () => {
-    body.classList.toggle("dark-theme");
-    const isDarkTheme = body.classList.contains("dark-theme");
-    localStorage.setItem("theme", isDarkTheme ? "dark-theme" : "light-theme");
-});
-
-if (localStorage.getItem("theme") === "dark-theme") {
-    body.classList.add("dark-theme");
-}
-
     </script>
 </body>
 </html>

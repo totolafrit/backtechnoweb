@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détails de la Commande</title>
+    <title>Order Details</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="order-details.css">
 </head>
 <body>
-    <!-- En-tête -->
+    <!-- Header -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Logo">
         </div>
         <nav>
             <ul class="nav-menu">
-                <li><a href="index.html">Accueil</a></li>
-                <li><a href="aboutus.html">À propos</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="project.html">Services</a></li>
-                <li><a href="actualites.html">Les Infos-Vertes</a></li>
+                <li><a href="actualites.html">Green News</a></li>
                 <li>
                     <a href="fakepanier.html"><i class="bx bx-cart"></i></a>
                     <a id="user-link"><i class="bx bxs-user-circle"></i></a>
@@ -28,36 +28,36 @@
         </nav>
     </header>
 
-    <!-- Contenu principal -->
+    <!-- Main Content -->
     <main>
         <section id="order-details-section">
-            <h1>Détails de la Commande #12345</h1>
-            <p>Date : 01/12/2024</p>
-            <p>Total : 45,90€</p>
+            <h1>Order Details #12345</h1>
+            <p>Date: 12/01/2024</p>
+            <p>Total: €45.90</p>
 
             <div class="order-items">
                 <div class="order-item">
-                    <p><strong>Article :</strong> Produit A</p>
-                    <p><strong>Quantité :</strong> 2</p>
-                    <p><strong>Prix :</strong> 15,00€</p>
+                    <p><strong>Item:</strong> Product A</p>
+                    <p><strong>Quantity:</strong> 2</p>
+                    <p><strong>Price:</strong> €15.00</p>
                 </div>
                 <div class="order-item">
-                    <p><strong>Article :</strong> Produit B</p>
-                    <p><strong>Quantité :</strong> 1</p>
-                    <p><strong>Prix :</strong> 15,90€</p>
+                    <p><strong>Item:</strong> Product B</p>
+                    <p><strong>Quantity:</strong> 1</p>
+                    <p><strong>Price:</strong> €15.90</p>
                 </div>
             </div>
 
             <div class="actions">
-                <button onclick="goBack()" class="btn">Retour à mon compte</button>
-                <button onclick="generatePDF()" class="btn pdf-btn">Télécharger la facture</button>
+                <button onclick="goBack()" class="btn">Back to My Account</button>
+                <button onclick="generatePDF()" class="btn pdf-btn">Download Invoice</button>
             </div>
         </section>
     </main>
 
-    <!-- Pied de page -->
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 L'Arbre Envie - Tous droits réservés</p>
+        <p>&copy; 2024 L'Arbre Envie - All Rights Reserved</p>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -71,28 +71,28 @@
             const doc = new jsPDF();
 
             doc.setFontSize(18);
-            doc.text("Facture - Commande #12345", 20, 20);
+            doc.text("Invoice - Order #12345", 20, 20);
 
             doc.setFontSize(14);
-            doc.text("Date : 01/12/2024", 20, 40);
-            doc.text("Total : 45,90€", 20, 50);
+            doc.text("Date: 12/01/2024", 20, 40);
+            doc.text("Total: €45.90", 20, 50);
 
             doc.setFontSize(12);
-            doc.text("Détails de la commande :", 20, 70);
+            doc.text("Order Details:", 20, 70);
 
-            doc.text("- Produit A : Quantité 2, Prix 30,00€", 20, 80);
-            doc.text("- Produit B : Quantité 1, Prix 15,90€", 20, 90);
+            doc.text("- Product A: Quantity 2, Price €30.00", 20, 80);
+            doc.text("- Product B: Quantity 1, Price €15.90", 20, 90);
 
             doc.setFontSize(10);
-            doc.text("Merci pour votre achat !", 20, 120);
+            doc.text("Thank you for your purchase!", 20, 120);
 
-            doc.save("facture-commande-12345.pdf");
+            doc.save("invoice-order-12345.pdf");
         }
     </script>
 
-    <!-- Bouton de changement de thème -->
+    <!-- Theme Toggle Button -->
     <div id="theme-toggle">
-        <button id="theme-toggle-btn" title="Changer le thème">
+        <button id="theme-toggle-btn" title="Change Theme">
             <i class="bx bx-sun"></i>
         </button>
     </div>
